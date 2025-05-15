@@ -1,0 +1,152 @@
+body{
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+.bank-layout {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 4fr; 
+  grid-template-rows: 1fr 5fr; 
+  grid-template-areas: 
+    "sidebar header"
+    "sidebar main";
+}
+
+/* Sidebar: ocupa toda la izquierda desde arriba hasta abajo */
+.sidebar {
+  grid-area: sidebar;
+  background-color: #143163;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+/* Logo del banco */
+.logo {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3vh 2vh;
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.logo h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Opciones del menú */
+.principal-options, .extra-options {
+  padding: 0 10px;
+}
+
+.principal-options {
+  margin-bottom: 1em;
+}
+
+.option-container {
+  display: flex;
+  align-items: center;
+  margin: 1.2em 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.option-container:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  opacity: .5;
+}
+
+.option-container p {
+    color: white;
+    text-decoration: none;
+    font-size: .8em;
+}
+
+
+.icon {
+  width: 2em;
+  height: 2em;
+  margin-right: 2em;
+  background-color: transparent;
+}
+
+/* Estilos para el switch */
+.switch-container {
+  display: flex;
+  align-items: center;
+  padding: 12px 10px;
+  margin-top: 20px;
+}
+
+.switch {
+  width: 50px;
+  height: 25px;
+  background: #3a4a63;
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-right: 12px;
+}
+
+.switch-circle {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  transition: left 0.3s;
+}
+
+.switch-container p {
+  font-size: .8em;
+  margin: 0;
+}
+
+/* Header: ocupa la parte superior a la derecha */
+.encabezado {
+  grid-area: header;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 30px;
+  justify-content: space-between;
+  
+}
+.perfil{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+}
+
+.perfil-icon {
+  width: 2em;
+  height: 2em;
+  margin-right: 0.5em;
+}
+
+/* Contenido principal */
+.contenido {
+  grid-area: main;
+  background-color: #f5f7fa;
+  padding: 20px;
+  overflow-y: auto;
+}
+
