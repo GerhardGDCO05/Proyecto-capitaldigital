@@ -67,8 +67,7 @@
               const response = await usuarioService.guardarUsuario(usuario.value);
               console.log("Usuario registrado:", response.data);
               alert("¡Registro exitoso!");
-              window.open('/proyecto-bank/components/bank?popup=true');
-              window.close();
+              this.$router.push('/bank?popup=true');
             } catch (error) {
               console.error("Error al registrar usuario:", error);
               if (error.response && error.response.data) {

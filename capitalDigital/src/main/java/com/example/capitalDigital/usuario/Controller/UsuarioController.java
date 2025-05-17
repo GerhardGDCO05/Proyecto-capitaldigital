@@ -32,24 +32,51 @@ public class UsuarioController {
         if (result.hasErrors()) {
             Map<String, String> errores = new HashMap<>();
             result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
-
-            System.out.println("Errores detectados: " + errores);  // Ver errores en la consola de Spring Boot
-            return ResponseEntity.badRequest().body(errores);  // Enviar errores al frontend
+            return ResponseEntity.badRequest().body(errores);
         }
 
         UsuarioModel nuevoUsuario = usuarioServices.guardarUsuario(usuario);
         return ResponseEntity.ok(nuevoUsuario);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerUsuarioPorId(@PathVariable("id") Long id) {
-        Optional<UsuarioModel> usuario = usuarioServices.obtenerPorId(id);
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> obtenerUsuarioPorEmail(@PathVariable String email) {
+        System.out.println("Recibí en el controlador: " + email);
+        Optional<UsuarioModel> usuario = usuarioServices.obtenerPorEmail(email);
         return usuario.isPresent() ? ResponseEntity.ok(usuario.get()) : ResponseEntity.status(404).body("Usuario no encontrado.");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarPorId(@PathVariable("id") Long id) {
-        boolean ok = usuarioServices.eliminarUsuario(id);
-        return ok ? ResponseEntity.ok("Se eliminó el usuario con id: " + id) : ResponseEntity.status(404).body("No se pudo eliminar el usuario con id: " + id);
+    @PutMapping("/email/{email}")
+    public ResponseEntity<?> modificarUsuarioPorEmail(@PathVariable("email") String email, @Valid @RequestBody UsuarioModel usuarioActualizado, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errores);
+        }
+
+        Optional<UsuarioModel> usuarioExistente = usuarioServices.obtenerPorEmail(email);
+        if (usuarioExistente.isEmpty()) {
+            return ResponseEntity.status(404).body("Usuario no encontrado.");
+        }
+
+        UsuarioModel usuario = usuarioExistente.get();
+        usuario.setNombre(usuarioActualizado.getNombre());
+        usuario.setApellido(usuarioActualizado.getApellido());
+        usuario.setDocumento(usuarioActualizado.getDocumento());
+        usuario.setNumeroDocumento(usuarioActualizado.getNumeroDocumento());
+        usuario.setEstado(usuarioActualizado.getEstado());
+        usuario.setDireccion(usuarioActualizado.getDireccion());
+        usuario.setEmail(usuarioActualizado.getEmail());
+        usuario.setCodigoPostal(usuarioActualizado.getCodigoPostal());
+        usuario.setCuentas(usuarioActualizado.getCuentas());
+
+        UsuarioModel usuarioGuardado = usuarioServices.guardarUsuario(usuario);
+        return ResponseEntity.ok(usuarioGuardado);
+    }
+
+    @DeleteMapping("/email/{email}")
+    public ResponseEntity<String> eliminarUsuarioPorEmail(@PathVariable("email") String email) {
+        boolean ok = usuarioServices.eliminarUsuarioPorEmail(email);
+        return ok ? ResponseEntity.ok("Se eliminó el usuario con email: " + email) : ResponseEntity.status(404).body("No se pudo eliminar el usuario con email: " + email);
     }
 }

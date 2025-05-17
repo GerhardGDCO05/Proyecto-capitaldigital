@@ -3,7 +3,6 @@ package com.example.capitalDigital.usuario.services;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.capitalDigital.usuario.models.UsuarioModel;
 import com.example.capitalDigital.usuario.repositories.UsuarioRepository;
@@ -19,7 +18,7 @@ public class UsuarioServices {
 
     public UsuarioModel guardarUsuario(UsuarioModel usuario) {
         try {
-            System.out.println("Datos recibidos en el backend: " + usuario);  // ✅ Ver qué llega realmente
+            System.out.println("Datos recibidos en el backend: " + usuario);
             if (usuario.getCuentas() != null && !usuario.getCuentas().isEmpty()) {
                 usuario.getCuentas().forEach(cuenta -> cuenta.setUsuario(usuario));
             }
@@ -30,16 +29,22 @@ public class UsuarioServices {
             return null;
         }
     }
-    
 
-    public Optional<UsuarioModel> obtenerPorId(Long id) {
-        return usuarioRepository.findById(id);
+    public Optional<UsuarioModel> obtenerPorEmail(String email) {
+        System.out.println("Buscando usuario con email: " + email);
+        Optional<UsuarioModel> usuario = usuarioRepository.findByEmail(email);
+        System.out.println("Usuario encontrado: " + usuario.orElse(null));
+        return usuario;
     }
 
-    public boolean eliminarUsuario(Long id) {
+    public boolean eliminarUsuarioPorEmail(String email) {
         try {
-            usuarioRepository.deleteById(id);
-            return true;
+            Optional<UsuarioModel> usuario = usuarioRepository.findByEmail(email);
+            if (usuario.isPresent()) {
+                usuarioRepository.delete(usuario.get());
+                return true;
+            }
+            return false;
         } catch (Exception err) {
             return false;
         }
