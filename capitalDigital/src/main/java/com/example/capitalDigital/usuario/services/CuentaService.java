@@ -1,5 +1,7 @@
 package com.example.capitalDigital.usuario.services;
 
+import com.example.capitalDigital.usuario.repositories.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,28 +14,39 @@ public class CuentaService {
 
     @Autowired
     private CuentaRepository cuentaRepository;
-
     // Guardar cuenta
     public CuentaModel guardarCuenta(CuentaModel cuenta) {
         return cuentaRepository.save(cuenta);
     }
 
-    // Obtener cuenta por ID
-    public Optional<CuentaModel> obtenerCuentaPorId(Long id) {
-        return cuentaRepository.findById(id);
+    public List<CuentaModel> obtenerCuentasPorEmail(String email) {
+        return cuentaRepository.findByUsuarioEmail(email);
     }
 
-    // Obtener todas las cuentas de un usuario
-    public List<CuentaModel> obtenerCuentasPorUsuarioId(Long usuarioId) {
-        return cuentaRepository.findByUsuarioId(usuarioId);
-    }
-
-    // Eliminar cuenta por ID
-    public boolean eliminarCuentaPorId(Long id) {
-        if (cuentaRepository.existsById(id)) {
-            cuentaRepository.deleteById(id);
+    @Transactional
+    public boolean eliminarCuentasPorEmail(String email) {
+        List<CuentaModel> cuentas = cuentaRepository.findByUsuarioEmail(email);
+        if (!cuentas.isEmpty()) {
+            cuentaRepository.deleteAll(cuentas);
             return true;
         }
         return false;
     }
+
+    @Transactional
+    public CuentaModel modificarCuentaPorEmail(String email, Long cuentaId, CuentaModel cuentaActualizada) {
+        List<CuentaModel> cuentas = cuentaRepository.findByUsuarioEmail(email);
+        Optional<CuentaModel> cuentaOptional = cuentas.stream()
+                .filter(cuenta -> cuenta.getId().equals(cuentaId))
+                .findFirst();
+
+        if (cuentaOptional.isPresent()) {
+            CuentaModel cuentaExistente = cuentaOptional.get();
+            cuentaExistente.setBanco(cuentaActualizada.getBanco());
+            cuentaExistente.setNumeroCuenta(cuentaActualizada.getNumeroCuenta());
+            return cuentaRepository.save(cuentaExistente);
+        }
+        return null;
+    }
 }
+

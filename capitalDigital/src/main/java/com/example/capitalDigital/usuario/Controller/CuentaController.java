@@ -24,7 +24,6 @@ public class CuentaController {
 
     @Autowired
     private CuentaService cuentaServices;
-
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -47,65 +46,44 @@ public class CuentaController {
         CuentaModel nuevaCuenta = cuentaServices.guardarCuenta(cuenta);
         return ResponseEntity.ok(nuevaCuenta);
     }
-
-    // Modificar cuenta existente por usuarioId y cuentaId
-    @PutMapping("/{usuarioId}/modificar/{cuentaId}")
-    public ResponseEntity<?> modificarCuenta(
-            @PathVariable Long usuarioId,
-            @PathVariable Long cuentaId,
-            @Valid @RequestBody CuentaModel cuentaActualizada,
-            BindingResult result) {
-
-        if (result.hasErrors()) {
-            Map<String, String> errores = new HashMap<>();
-            result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errores);
-        }
-
-        Optional<UsuarioModel> usuarioOptional = usuarioRepository.findById(usuarioId);
+    @PostMapping("/usuario/{email}/agregar")
+    public ResponseEntity<?> agregarCuentaPorEmail(@PathVariable String email, @Valid @RequestBody CuentaModel cuenta) {
+        Optional<UsuarioModel> usuarioOptional = usuarioRepository.findByEmail(email);
         if (usuarioOptional.isEmpty()) {
             return ResponseEntity.status(404).body("Usuario no encontrado.");
         }
 
-        Optional<CuentaModel> cuentaOptional = cuentaServices.obtenerCuentaPorId(cuentaId);
-        if (cuentaOptional.isEmpty() || !cuentaOptional.get().getUsuario().getId().equals(usuarioId)) {
-            return ResponseEntity.status(404).body("Cuenta no encontrada o no pertenece a este usuario.");
-        }
-
-        CuentaModel cuentaExistente = cuentaOptional.get();
-        cuentaExistente.setBanco(cuentaActualizada.getBanco());
-        cuentaExistente.setNumeroCuenta(cuentaActualizada.getNumeroCuenta());
-
-        CuentaModel cuentaGuardada = cuentaServices.guardarCuenta(cuentaExistente);
-        return ResponseEntity.ok(cuentaGuardada);
+        UsuarioModel usuario = usuarioOptional.get();
+        cuenta.setUsuario(usuario);
+        CuentaModel nuevaCuenta = cuentaServices.guardarCuenta(cuenta);
+        return ResponseEntity.ok(nuevaCuenta);
     }
 
-    // Eliminar cuenta por usuarioId y cuentaId
-    @DeleteMapping("/{usuarioId}/eliminar/{cuentaId}")
-    public ResponseEntity<String> eliminarCuenta(
-            @PathVariable Long usuarioId,
-            @PathVariable Long cuentaId) {
-
-        Optional<CuentaModel> cuentaOptional = cuentaServices.obtenerCuentaPorId(cuentaId);
-        if (cuentaOptional.isEmpty() || !cuentaOptional.get().getUsuario().getId().equals(usuarioId)) {
-            return ResponseEntity.status(404).body("Cuenta no encontrada o no pertenece a este usuario.");
-        }
-
-        boolean eliminado = cuentaServices.eliminarCuentaPorId(cuentaId);
-        return eliminado ? ResponseEntity.ok("Cuenta eliminada correctamente.") : ResponseEntity.status(500).body("Error al eliminar la cuenta.");
+    //  Obtener cuentas por email del usuario
+    @GetMapping("/usuario/{email}")
+    public ResponseEntity<?> obtenerCuentasPorEmail(@PathVariable String email) {
+        List<CuentaModel> cuentas = cuentaServices.obtenerCuentasPorEmail(email);
+        return cuentas.isEmpty() ? ResponseEntity.status(404).body("No se encontraron cuentas.")
+                : ResponseEntity.ok(cuentas);
     }
 
-    // Obtener todas las cuentas de un usuario
-    @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<?> obtenerCuentasPorUsuario(@PathVariable Long usuarioId) {
-        List<CuentaModel> cuentas = cuentaServices.obtenerCuentasPorUsuarioId(usuarioId);
-        return ResponseEntity.ok(cuentas);
+    //  Modificar cuenta por email
+    @PutMapping("/usuario/{email}/modificar/{cuentaId}")
+    public ResponseEntity<?> modificarCuentaPorEmail(
+            @PathVariable String email,
+            @PathVariable Long cuentaId,
+            @Valid @RequestBody CuentaModel cuentaActualizada) {
+
+        CuentaModel cuenta = cuentaServices.modificarCuentaPorEmail(email, cuentaId, cuentaActualizada);
+        return cuenta != null ? ResponseEntity.ok(cuenta)
+                : ResponseEntity.status(404).body("Cuenta no encontrada.");
     }
 
-    // Obtener cuenta por ID
-    @GetMapping("/{cuentaId}")
-    public ResponseEntity<?> obtenerCuentaPorId(@PathVariable Long cuentaId) {
-        Optional<CuentaModel> cuenta = cuentaServices.obtenerCuentaPorId(cuentaId);
-        return cuenta.isPresent() ? ResponseEntity.ok(cuenta.get()): ResponseEntity.status(404).body("Cuenta no encontrada.");
+    //  Eliminar todas las cuentas de un usuario por email
+    @DeleteMapping("/usuario/{email}/eliminar")
+    public ResponseEntity<?> eliminarCuentasPorEmail(@PathVariable String email) {
+        boolean eliminado = cuentaServices.eliminarCuentasPorEmail(email);
+        return eliminado ? ResponseEntity.ok("Cuentas eliminadas correctamente.")
+                : ResponseEntity.status(404).body("No se encontraron cuentas para eliminar.");
     }
 }

@@ -10,11 +10,31 @@ export default {
     return apiClient.post("/usuario", usuario);
   },
 
-  obtenerUsuarioPorId(id) {
-    return apiClient.get(`/usuario/${id}`);
+  obtenerUsuarioPorEmail(email) {
+    return apiClient.get(`/usuario/${email}`);
   },
 
-  eliminarUsuario(id) {
-    return apiClient.delete(`/usuario/${id}`);
+  modificarUsuarioPorEmail(){
+    return apiClient.put(`/usuario/${email}`)
+  },
+
+  eliminarUsuario(email) {
+    return apiClient.delete(`/usuario/${email}`);
+  },
+
+  agregarCuentaPorEmail(email, cuenta) {
+    return apiClient.post(`/cuenta/usuario/${email}/agregar`, cuenta);
+  },
+
+  modificarCuentaPorEmail(email,cuenta){
+    return apiClient.put(`/cuenta/usuario/${email}/agregar`, cuenta);
+  },
+
+  obtenerCuentaPorEmail(email,cuenta){
+    return apiClient.get(`/cuenta/usuario/${email}/agregar`, cuenta);
+  },
+
+  eliminarCuentaPorEmail(email,cuenta){
+    return apiClient.get(`/cuenta/usuario/${email}/agregar`, cuenta);
   }
 };

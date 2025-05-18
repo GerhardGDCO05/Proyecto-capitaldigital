@@ -1,89 +1,97 @@
 <script>
-  import '../assets/registro.css';
-  import { ref } from "vue";
-  import usuarioService from "../services/usuarioService"; 
-      export default{
-        name: 'Registro',
-        data() {
-            return {
-              aceptaTerminos: false,
-              recordarme: false,
-              options: ['Cedula', 'Pasaporte', 'Option 3', 'Option 4'],
-              states: ['Miranda', 'Dtto Capital', 'Aragua', 'Carabobo'],
-              banks: ['Provincial', 'BDV', 'BNC', 'Mercantil']
-            }
-        },
-        setup() {
-          const usuario = ref({
-            nombre: "",
-            apellido: "",
-            numeroDocumento: "",
-            direccion: "",
-            codigoPostal: "",
-            email: "",
-            password: "",
-            cuentas: [],  // Aquí se guardarán todas las cuentas
-            estado: "",
-            documento: ""
-          });
+import '../assets/registro.css';
+import { ref } from "vue";
+import { useRouter } from 'vue-router';
+import usuarioService from "../services/usuarioService";
 
-          // Objeto intermedio que vincula los campos del formulario para la cuenta bancaria.
-          const nuevaCuenta = ref({
-            banco: "",
-            numeroCuenta: ""
-          });
+export default{
+  name: 'Registro',
+  data() {
+    return {
+      aceptaTerminos: false,
+      recordarme: false,
+      options: ['Cedula', 'Pasaporte', 'Option 3', 'Option 4'],
+      states: ['Miranda', 'Dtto Capital', 'Aragua', 'Carabobo'],
+      banks: ['Provincial', 'BDV', 'BNC', 'Mercantil']
+    }
+  },
+  setup() {
+    const router = useRouter();
 
-          const aceptaTerminos = ref(false);
-          const erroresBackend = ref({});
+    const usuario = ref({
+      nombre: "",
+      apellido: "",
+      numeroDocumento: "",
+      direccion: "",
+      codigoPostal: "",
+      email: "",
+      password: "",
+      cuentas: [], // Aquí se guardarán todas las cuentas
+      estado: "",
+      documento: ""
+    });
 
-          const registrarUsuario = async () => {
-            // Si no se aceptan términos, no se continúa.
-            if (!aceptaTerminos.value) {
-              alert("Debe aceptar los términos y condiciones.");
-              return;
-            }
+    // Objeto intermedio que vincula los campos del formulario para la cuenta bancaria.
+    const nuevaCuenta = ref({
+      banco: "",
+      numeroCuenta: ""
+    });
 
-            // Si existen datos en nuevaCuenta (es decir, los campos de banco y cuenta fueron completados),
-            // se agregan a la lista 'cuentas' del usuario.
-            if (nuevaCuenta.value.banco && nuevaCuenta.value.numeroCuenta) {
-              usuario.value.cuentas.push({
-                banco: nuevaCuenta.value.banco,
-                numeroCuenta: nuevaCuenta.value.numeroCuenta
-              });
-              // Limpiar el objeto intermedio después de agregar la cuenta.
-              nuevaCuenta.value.banco = "";
-              nuevaCuenta.value.numeroCuenta = "";
-            }
+    const aceptaTerminos = ref(false);
+    const erroresBackend = ref({});
 
-            // Verificar que se haya agregado al menos una cuenta en la lista 'cuentas'
-            if (usuario.value.cuentas.length === 0) {
-              alert("Debes proporcionar al menos un banco y un número de cuenta antes de registrarte.");
-              return;
-            }
+    const registrarUsuario = async () => {
+      // Si no se aceptan términos, no se continúa.
+      if (!aceptaTerminos.value) {
+        alert("Debe aceptar los términos y condiciones.");
+        return;
+      }
 
-            console.log("Datos enviados al backend:", JSON.stringify(usuario.value));
+      // Si existen datos en nuevaCuenta (es decir, los campos de banco y cuenta fueron completados),
+      // se agregan a la lista 'cuentas' del usuario.
+      if (nuevaCuenta.value.banco && nuevaCuenta.value.numeroCuenta) {
+        usuario.value.cuentas.push({
+          banco: nuevaCuenta.value.banco,
+          numeroCuenta: nuevaCuenta.value.numeroCuenta
+        });
+        // Limpiar el objeto intermedio después de agregar la cuenta.
+        nuevaCuenta.value.banco = "";
+        nuevaCuenta.value.numeroCuenta = "";
+      }
 
-            try {
-              const response = await usuarioService.guardarUsuario(usuario.value);
-              console.log("Usuario registrado:", response.data);
-              alert("¡Registro exitoso!");
-              this.$router.push('/bank?popup=true');
-            } catch (error) {
-              console.error("Error al registrar usuario:", error);
-              if (error.response && error.response.data) {
-                erroresBackend.value = error.response.data;
-                const mensajesError = Object.values(erroresBackend.value).join("\n"); // Convierte errores en texto legible
-                alert("Error al registrar usuario:\n" + mensajesError); 
-              } else {
-                alert("Error desconocido al registrar usuario.");
-              }
-            }
-          };
+      // Verificar que se haya agregado al menos una cuenta en la lista 'cuentas'
+      if (usuario.value.cuentas.length === 0) {
+        alert("Debes proporcionar al menos un banco y un número de cuenta antes de registrarte.");
+        return;
+      }
 
-          return { usuario, nuevaCuenta, aceptaTerminos, registrarUsuario, erroresBackend };
+      console.log("Datos enviados al backend:", JSON.stringify(usuario.value));
+
+      try {
+        const response = await usuarioService.guardarUsuario(usuario.value);
+        alert("¡Registro exitoso!");
+        router.push('/bank?popup=true');
+      } catch (error) {
+        console.error("Error al registrar usuario:", error);
+        if (error.response && error.response.data) {
+          erroresBackend.value = error.response.data;
+          const mensajesError = Object.values(erroresBackend.value).join("\n");
+          alert("Error al registrar usuario:\n" + mensajesError);
+        } else {
+          alert("Error desconocido al registrar usuario.");
         }
-
+      }
     };
+
+    return {
+      usuario,
+      nuevaCuenta,
+      aceptaTerminos,
+      registrarUsuario,
+      erroresBackend
+    };
+  }
+};
 </script>
 <template>
     <section id="registro-modal" class="registro-modal">

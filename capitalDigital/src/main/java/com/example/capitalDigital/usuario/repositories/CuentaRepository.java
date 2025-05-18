@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface CuentaRepository extends JpaRepository<CuentaModel, Long> {
-    // Método para buscar cuentas por ID de usuario
-    List<CuentaModel> findByUsuarioId(Long usuarioId);
+    List<CuentaModel> findByUsuarioEmail(String email); 
 }
