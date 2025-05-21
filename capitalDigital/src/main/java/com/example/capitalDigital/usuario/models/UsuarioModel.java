@@ -134,7 +134,7 @@ public class UsuarioModel {
 
     public void setNumeroCuenta(String numeroCuenta) {this.numeroCuenta = numeroCuenta;}
 
-    // Método toString
+    //Método toString
     @Override
     public String toString() {
         return "UsuarioModel{" +

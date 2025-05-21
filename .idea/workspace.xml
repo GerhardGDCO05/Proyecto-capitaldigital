@@ -5,17 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f11bff62-7b3f-4c20-a59a-f7380585c7b0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/Controller/CuentaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/Controller/CuentaController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/Controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/Controller/UsuarioController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/models/CuentaModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/models/CuentaModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/models/UsuarioModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/models/UsuarioModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/repositories/CuentaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/repositories/CuentaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/services/CuentaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/services/CuentaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/services/UsuarioServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/services/UsuarioServices.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proyecto-bank/src/components/registrar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/components/registrar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/services/usuarioService.js" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/services/usuarioService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +56,7 @@
       <option name="presentableId" value="Default" />
       <updated>1747519738150</updated>
       <workItem from="1747519753351" duration="7219000" />
-      <workItem from="1747771734482" duration="12274000" />
+      <workItem from="1747771734482" duration="12806000" />
     </task>
     <servers />
   </component>

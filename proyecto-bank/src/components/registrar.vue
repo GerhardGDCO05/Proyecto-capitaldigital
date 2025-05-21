@@ -48,7 +48,7 @@ export default{
       const confirmEmail = document.getElementById("confir-email");
       const confirmPassword=document.getElementById("confirm-password");
 
-      // 🔹 Si los correos están vacíos, poner borde rojo
+      //  Si los correos están vacíos, poner borde rojo
       if (usuario.value.email.trim() === "" || confirmEmail.value.trim() === "") {
         alert("Debe ingresar ambos correos electrónicos.");
         confirmEmail.style.borderBottom = "2px solid #a00d";
@@ -56,7 +56,7 @@ export default{
         return;
       }
 
-      // 🔹 Si los correos no coinciden, poner borde rojo
+      //  Si los correos no coinciden, poner borde rojo
       if (usuario.value.email !== confirmEmail.value) {
         alert("Los correos electrónicos no coinciden.");
         confirmEmail.style.borderBottom = "2px solid #a00d";
@@ -67,7 +67,7 @@ export default{
         email.style.borderBottom = "2px solid green";
       }
 
-      // 🔹 Validación de contraseña vacía
+      //  Validación de contraseña vacía
       if (usuario.value.password.trim() === "" || confirmPassword.value.trim() === "") {
         alert("Debe ingresar y confirmar la contraseña.");
         confirmPassword.style.borderBottom = "2px solid red";
@@ -75,7 +75,7 @@ export default{
         return;
       }
 
-      // 🔹 Si las contraseñas no coinciden, poner borde rojo
+      // Si las contraseñas no coinciden, poner borde rojo
       if (usuario.value.password !== confirmPassword.value) {
         alert("Las contraseñas deben coincidir.");
         confirmPassword.style.borderBottom = "2px solid red";

@@ -34,7 +34,6 @@ public class UsuarioController {
             result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errores);
         }
-
         try {
             UsuarioModel nuevoUsuario = usuarioServices.guardarUsuario(usuario);
             return ResponseEntity.ok(nuevoUsuario);
