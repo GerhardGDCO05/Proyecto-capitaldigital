@@ -22,7 +22,7 @@ export default {
     return apiClient.delete(`/usuario/${email}`);
   },
 
-  agregarCuentaPorEmail(email, cuenta) {
+  /*agregarCuentaPorEmail(email, cuenta) {
     return apiClient.post(`/cuenta/usuario/${email}/agregar`, cuenta);
   },
 
@@ -36,5 +36,5 @@ export default {
 
   eliminarCuentaPorEmail(email,cuenta){
     return apiClient.get(`/cuenta/usuario/${email}/agregar`, cuenta);
-  }
+  }*/
 };

@@ -1,4 +1,4 @@
-package com.example.capitalDigital.usuario.services;
+/*package com.example.capitalDigital.usuario.services;
 
 import com.example.capitalDigital.usuario.repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -48,5 +48,5 @@ public class CuentaService {
         }
         return null;
     }
-}
+}*/
 

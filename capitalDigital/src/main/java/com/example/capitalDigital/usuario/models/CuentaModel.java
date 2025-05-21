@@ -1,4 +1,4 @@
-package com.example.capitalDigital.usuario.models;
+/*package com.example.capitalDigital.usuario.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -67,4 +67,4 @@ public class CuentaModel {
     public void setUsuario(UsuarioModel usuario) {
         this.usuario = usuario;
     }
-}
+}*/

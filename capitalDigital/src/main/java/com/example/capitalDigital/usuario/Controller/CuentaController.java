@@ -1,4 +1,4 @@
-package com.example.capitalDigital.usuario.Controller;
+/*package com.example.capitalDigital.usuario.Controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -86,4 +86,4 @@ public class CuentaController {
         return eliminado ? ResponseEntity.ok("Cuentas eliminadas correctamente.")
                 : ResponseEntity.status(404).body("No se encontraron cuentas para eliminar.");
     }
-}
+}*/

@@ -19,9 +19,16 @@ public class UsuarioServices {
     public UsuarioModel guardarUsuario(UsuarioModel usuario) {
         try {
             System.out.println("Datos recibidos en el backend: " + usuario);
-            if (usuario.getCuentas() != null && !usuario.getCuentas().isEmpty()) {
-                usuario.getCuentas().forEach(cuenta -> cuenta.setUsuario(usuario));
+
+            // Validación: Verificar si el email ya está registrado
+            Optional<UsuarioModel> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
+            if (usuarioExistente.isPresent()) {
+                throw new RuntimeException("El email ya está en uso.");
             }
+            if (usuario.getFechaNacimiento() == null) {
+                throw new RuntimeException("Ingrese Una Fecha Valida");
+            }
+
             return usuarioRepository.save(usuario);
         } catch (Exception e) {
             System.err.println("Error al guardar usuario: " + e.getMessage());
@@ -46,6 +53,7 @@ public class UsuarioServices {
             }
             return false;
         } catch (Exception err) {
+            System.err.println("Error al eliminar usuario: " + err.getMessage());
             return false;
         }
     }

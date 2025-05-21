@@ -35,8 +35,12 @@ public class UsuarioController {
             return ResponseEntity.badRequest().body(errores);
         }
 
-        UsuarioModel nuevoUsuario = usuarioServices.guardarUsuario(usuario);
-        return ResponseEntity.ok(nuevoUsuario);
+        try {
+            UsuarioModel nuevoUsuario = usuarioServices.guardarUsuario(usuario);
+            return ResponseEntity.ok(nuevoUsuario);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage())); // Devuelve error si el email ya está en uso
+        }
     }
 
     @GetMapping("/email/{email}")
@@ -64,11 +68,12 @@ public class UsuarioController {
         usuario.setApellido(usuarioActualizado.getApellido());
         usuario.setDocumento(usuarioActualizado.getDocumento());
         usuario.setNumeroDocumento(usuarioActualizado.getNumeroDocumento());
-        usuario.setEstado(usuarioActualizado.getEstado());
+        usuario.setFechaNacimiento(usuarioActualizado.getFechaNacimiento());
         usuario.setDireccion(usuarioActualizado.getDireccion());
         usuario.setEmail(usuarioActualizado.getEmail());
         usuario.setCodigoPostal(usuarioActualizado.getCodigoPostal());
-        usuario.setCuentas(usuarioActualizado.getCuentas());
+        usuario.setBanco(usuarioActualizado.getBanco());
+        usuario.setNumeroCuenta(usuarioActualizado.getNumeroCuenta());
 
         UsuarioModel usuarioGuardado = usuarioServices.guardarUsuario(usuario);
         return ResponseEntity.ok(usuarioGuardado);

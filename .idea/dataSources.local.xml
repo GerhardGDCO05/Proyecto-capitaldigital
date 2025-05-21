@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="IU-251.25410.129">
+    <data-source name="capitaldigital@capitaldigital.mysql.database.azure.com" uuid="fb08bde9-1a25-48db-b9a2-4b16c0d1e572">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="AZURE" />
+      <user-name>capitalDigitalDB</user-name>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>

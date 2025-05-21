@@ -11,7 +11,6 @@ export default{
       aceptaTerminos: false,
       recordarme: false,
       options: ['Cedula', 'Pasaporte', 'Option 3', 'Option 4'],
-      states: ['Miranda', 'Dtto Capital', 'Aragua', 'Carabobo'],
       banks: ['Provincial', 'BDV', 'BNC', 'Mercantil']
     }
   },
@@ -26,43 +25,65 @@ export default{
       codigoPostal: "",
       email: "",
       password: "",
-      cuentas: [], // Aquí se guardarán todas las cuentas
-      estado: "",
-      documento: ""
-    });
-
-    // Objeto intermedio que vincula los campos del formulario para la cuenta bancaria.
-    const nuevaCuenta = ref({
       banco: "",
-      numeroCuenta: ""
+      numeroCuenta: "",
+      fechaNacimiento: "",
+      documento: ""
     });
 
     const aceptaTerminos = ref(false);
     const erroresBackend = ref({});
 
     const registrarUsuario = async () => {
+
       // Si no se aceptan términos, no se continúa.
       if (!aceptaTerminos.value) {
         alert("Debe aceptar los términos y condiciones.");
         return;
       }
 
-      // Si existen datos en nuevaCuenta (es decir, los campos de banco y cuenta fueron completados),
-      // se agregan a la lista 'cuentas' del usuario.
-      if (nuevaCuenta.value.banco && nuevaCuenta.value.numeroCuenta) {
-        usuario.value.cuentas.push({
-          banco: nuevaCuenta.value.banco,
-          numeroCuenta: nuevaCuenta.value.numeroCuenta
-        });
-        // Limpiar el objeto intermedio después de agregar la cuenta.
-        nuevaCuenta.value.banco = "";
-        nuevaCuenta.value.numeroCuenta = "";
+      // confirmar si son iguales los correos
+      const email=document.getElementById("email");
+      const password=document.getElementById("password");
+      const confirmEmail = document.getElementById("confir-email");
+      const confirmPassword=document.getElementById("confirm-password");
+
+      // 🔹 Si los correos están vacíos, poner borde rojo
+      if (usuario.value.email.trim() === "" || confirmEmail.value.trim() === "") {
+        alert("Debe ingresar ambos correos electrónicos.");
+        confirmEmail.style.borderBottom = "2px solid #a00d";
+        email.style.borderBottom = "2px solid #a00d";
+        return;
       }
 
-      // Verificar que se haya agregado al menos una cuenta en la lista 'cuentas'
-      if (usuario.value.cuentas.length === 0) {
-        alert("Debes proporcionar al menos un banco y un número de cuenta antes de registrarte.");
+      // 🔹 Si los correos no coinciden, poner borde rojo
+      if (usuario.value.email !== confirmEmail.value) {
+        alert("Los correos electrónicos no coinciden.");
+        confirmEmail.style.borderBottom = "2px solid #a00d";
+        email.style.borderBottom = "2px solid #a00d";
         return;
+      } else {
+        confirmEmail.style.borderBottom = "2px solid green";
+        email.style.borderBottom = "2px solid green";
+      }
+
+      // 🔹 Validación de contraseña vacía
+      if (usuario.value.password.trim() === "" || confirmPassword.value.trim() === "") {
+        alert("Debe ingresar y confirmar la contraseña.");
+        confirmPassword.style.borderBottom = "2px solid red";
+        password.style.borderBottom = "2px solid red";
+        return;
+      }
+
+      // 🔹 Si las contraseñas no coinciden, poner borde rojo
+      if (usuario.value.password !== confirmPassword.value) {
+        alert("Las contraseñas deben coincidir.");
+        confirmPassword.style.borderBottom = "2px solid red";
+        password.style.borderBottom = "2px solid red";
+        return;
+      } else {
+        confirmPassword.style.borderBottom = "2px solid green";
+        password.style.borderBottom = "2px solid green";
       }
 
       console.log("Datos enviados al backend:", JSON.stringify(usuario.value));
@@ -85,7 +106,6 @@ export default{
 
     return {
       usuario,
-      nuevaCuenta,
       aceptaTerminos,
       registrarUsuario,
       erroresBackend
@@ -129,13 +149,10 @@ export default{
           <!------------------------------------------>
           
           <div class="camp-regist">
-            <label for="estado">Estado</label>
-            <select class=" cb" id="combo-box" v-model="usuario.estado">
-              <option class="datos-regist" v-for="state in states" :key="state" :value="state">
-                {{ state }}
-              </option>
-            </select>
+            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            <input class="cb datos-regist" type="date" id="fechaNacimiento" v-model="usuario.fechaNacimiento" />
           </div>
+
           <div class="camp-regist direccion-container">
             <!-- Campo para la dirección -->
             <label for="direccion">Dirección</label>
@@ -183,14 +200,14 @@ export default{
             <legend>Datos Bancarios</legend>
             <div class="info-bank">
               <label for="banco">Banco</label>
-              <select class="cb" id="combo-box" v-model="nuevaCuenta.banco">
+              <select class="cb" id="combo-box" v-model="usuario.banco">
                 <option class="datos-regist" v-for="bank in banks" :key="bank" :value="bank">
                   {{ bank }}
                 </option>
               </select>
               <div class="Num-cuenta">
                 <label for="numero_cuenta">Numero de Cuenta</label>
-                <input class="number-cuenta datos-regist" type="text" id="numero_cuenta" v-model="nuevaCuenta.numeroCuenta" />
+                <input class="number-cuenta datos-regist" type="text" id="numero_cuenta" v-model="usuario.numeroCuenta" />
               </div>
             </div>
             <div class="aceptar-terms-condiciones">

@@ -1,9 +1,6 @@
 package com.example.capitalDigital.usuario.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.time.LocalDate;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -15,7 +12,7 @@ public class UsuarioModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id;  // Cambiado de long a Long
+    private Long id;
 
     @NotBlank(message = "El nombre no puede estar vacío")
     @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
@@ -26,7 +23,6 @@ public class UsuarioModel {
     private String apellido;
 
     @NotBlank(message = "El documento no puede estar vacío")
-    @Size(max = 20, message = "El documento no puede tener más de 20 caracteres")
     private String documento;
 
     @NotBlank(message = "El número de documento no puede estar vacío")
@@ -34,9 +30,8 @@ public class UsuarioModel {
     @Size(min = 5, max = 20, message = "El número de documento debe tener entre 5 y 20 caracteres")
     private String numeroDocumento;
 
-    @NotBlank(message = "El estado no puede estar vacío")
-    @Size(max = 30, message = "El estado no puede tener más de 30 caracteres")
-    private String estado;
+    @NotNull(message = "La Fecha de Nacimiento no puede estar vacía")
+    private LocalDate fechaNacimiento;
 
     @NotBlank(message = "La dirección no puede estar vacía")
     @Size(max = 100, message = "La dirección no puede tener más de 100 caracteres")
@@ -57,148 +52,87 @@ public class UsuarioModel {
     @Size(min = 6, max = 20, message = "La contraseña debe tener entre 6 y 20 caracteres")
     private String password;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<CuentaModel> cuentas = new ArrayList<>();
+    @NotBlank(message = "El nombre del banco no puede estar vacío")
+    private String banco;
+
+    @NotBlank(message = "El número de cuenta no puede estar vacío")
+    @Pattern(regexp = "^[0-9]+$", message = "El número de cuenta debe contener solo números")
+    @Size(min = 18, message = "El número de cuenta debe tener al menos 18 dígitos")
+    @Size(max = 20, message = "El número de cuenta debe tener máximo 20 dígitos")
+    private String numeroCuenta;
 
     // Constructor vacío
     public UsuarioModel() {
     }
 
-    // Constructor completo
-    public UsuarioModel(Long id, String nombre, String apellido, String documento, String numeroDocumento, String estado,
-                        String direccion, String codigoPostal, String email, String password, List<CuentaModel> cuentas) {
+    public UsuarioModel(Long id, String nombre,
+                        String apellido, String documento,
+                        String numeroDocumento,
+                        LocalDate fechaNacimiento,
+                        String direccion, String codigoPostal,
+                        String email, String password,
+                        String banco, String numeroCuenta) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.documento = documento;
         this.numeroDocumento = numeroDocumento;
-        this.estado = estado;
+        this.fechaNacimiento = fechaNacimiento;
         this.direccion = direccion;
         this.codigoPostal = codigoPostal;
         this.email = email;
         this.password = password;
-        this.cuentas = cuentas;
+        this.banco = banco;
+        this.numeroCuenta = numeroCuenta;
     }
 
-    // Constructor sin ID (para creación de nuevos usuarios)
-    public UsuarioModel(String nombre, String apellido, String documento, String numeroDocumento, String estado,
-                        String direccion, String codigoPostal, String email, String password, List<CuentaModel> cuentas) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.documento = documento;
-        this.numeroDocumento = numeroDocumento;
-        this.estado = estado;
-        this.direccion = direccion;
-        this.codigoPostal = codigoPostal;
-        this.email = email;
-        this.password = password;
-        this.cuentas = cuentas;
-    }
+    public Long getId() {return id;}
 
-    // Constructor sin ID y sin cuentas (para creación de nuevos usuarios sin cuentas)
-    public UsuarioModel(String nombre, String apellido, String documento, String numeroDocumento, String estado,
-                        String direccion, String codigoPostal, String email, String password) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.documento = documento;
-        this.numeroDocumento = numeroDocumento;
-        this.estado = estado;
-        this.direccion = direccion;
-        this.codigoPostal = codigoPostal;
-        this.email = email;
-        this.password = password;
-        this.cuentas = new ArrayList<>();
-    }
+    public void setId(Long id) {this.id = id;}
 
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
+    public String getNombre() {return nombre;}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setNombre(String nombre) {this.nombre = nombre;}
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getApellido() {return apellido;}
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public void setApellido(String apellido) {this.apellido = apellido;}
 
-    public String getApellido() {
-        return apellido;
-    }
+    public String getDocumento() {return documento;}
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
+    public void setDocumento(String documento) {this.documento = documento;}
 
-    public String getDocumento() {
-        return documento;
-    }
+    public String getNumeroDocumento() {return numeroDocumento;}
 
-    public void setDocumento(String documento) {
-        this.documento = documento;
-    }
+    public void setNumeroDocumento(String numeroDocumento) {this.numeroDocumento = numeroDocumento;}
 
-    public String getNumeroDocumento() {
-        return numeroDocumento;
-    }
+    public LocalDate getFechaNacimiento() {return fechaNacimiento;}
 
-    public void setNumeroDocumento(String numeroDocumento) {
-        this.numeroDocumento = numeroDocumento;
-    }
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {this.fechaNacimiento = fechaNacimiento;}
 
-    public String getEstado() {
-        return estado;
-    }
+    public String getDireccion() {return direccion;}
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    public void setDireccion(String direccion) {this.direccion = direccion;}
 
-    public String getDireccion() {
-        return direccion;
-    }
+    public String getCodigoPostal() {return codigoPostal;}
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
+    public void setCodigoPostal(String codigoPostal) {this.codigoPostal = codigoPostal;}
 
-    public String getCodigoPostal() {
-        return codigoPostal;
-    }
+    public String getEmail() {return email;}
 
-    public void setCodigoPostal(String codigoPostal) {
-        this.codigoPostal = codigoPostal;
-    }
+    public void setEmail(String email) {this.email = email;}
 
-    public String getEmail() {
-        return email;
-    }
+    public String getPassword() {return password;}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setPassword(String password) {this.password = password;}
 
-    public String getPassword() {
-        return password;
-    }
+    public String getBanco() {return banco;}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setBanco(String banco) {this.banco = banco;}
 
-    public List<CuentaModel> getCuentas() {
-        return cuentas;
-    }
+    public String getNumeroCuenta() {return numeroCuenta;}
 
-    public void setCuentas(List<CuentaModel> cuentas) {
-        this.cuentas = cuentas;
-    }
+    public void setNumeroCuenta(String numeroCuenta) {this.numeroCuenta = numeroCuenta;}
 
     // Método toString
     @Override
@@ -209,12 +143,13 @@ public class UsuarioModel {
                 ", apellido='" + apellido + '\'' +
                 ", documento='" + documento + '\'' +
                 ", numeroDocumento='" + numeroDocumento + '\'' +
-                ", estado='" + estado + '\'' +
+                ", fechaNacimiento='" + fechaNacimiento + '\'' +
                 ", direccion='" + direccion + '\'' +
                 ", codigoPostal='" + codigoPostal + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", cuentas=" + cuentas +
+                ", banco=" + banco +'\'' +
+                ",numeroCuenta="+numeroCuenta+'\''+
                 '}';
     }
 }
