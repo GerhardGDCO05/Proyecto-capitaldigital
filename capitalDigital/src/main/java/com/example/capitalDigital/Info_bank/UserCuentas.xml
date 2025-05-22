@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<usuarios>
+    
+  
+  <usuario numeroDocumento="30313726">
+        
+    <cuenta>
+            
+      <banco>Mercantil</banco>
+            
+      <numeroCuenta>01231235412354758545</numeroCuenta>
+          
+    </cuenta>
+      
+    <cuenta>
+      <banco>BDV</banco>
+      <numeroCuenta>01020212321545212321</numeroCuenta>
+    </cuenta>
+  </usuario>
+  
+</usuarios>

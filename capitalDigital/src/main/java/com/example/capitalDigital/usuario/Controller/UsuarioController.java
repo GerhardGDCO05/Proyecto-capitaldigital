@@ -22,10 +22,10 @@ public class UsuarioController {
     @Autowired
     UsuarioServices usuarioServices;
 
-    @GetMapping()
+    /*@GetMapping()
     public ResponseEntity<ArrayList<UsuarioModel>> obtenerUsuarios() {
         return ResponseEntity.ok(usuarioServices.obtenerUsuarios());
-    }
+    } */
 
     @PostMapping()
     public ResponseEntity<?> guardarUsuario(@Valid @RequestBody UsuarioModel usuario, BindingResult result) {
@@ -42,22 +42,23 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<?> obtenerUsuarioPorEmail(@PathVariable String email) {
-        System.out.println("Recibí en el controlador: " + email);
-        Optional<UsuarioModel> usuario = usuarioServices.obtenerPorEmail(email);
+    @GetMapping("/numeroDocumento/{numeroDocumento}")
+    public ResponseEntity<?> obtenerUsuarioPorNumeroDocumento(@PathVariable String numeroDocumento) {
+        System.out.println("Recibí en el controlador: " + numeroDocumento);
+        Optional<UsuarioModel> usuario = usuarioServices.obtenerPorNumeroDocumento(numeroDocumento);
         return usuario.isPresent() ? ResponseEntity.ok(usuario.get()) : ResponseEntity.status(404).body("Usuario no encontrado.");
     }
 
-    @PutMapping("/email/{email}")
-    public ResponseEntity<?> modificarUsuarioPorEmail(@PathVariable("email") String email, @Valid @RequestBody UsuarioModel usuarioActualizado, BindingResult result) {
+
+    @PutMapping("/numeroDocumento/{numeroDocumento}")
+    public ResponseEntity<?> modificarUsuarioPorNumeroDocumento(@PathVariable("numeroDocumento") String numeroDocumento, @Valid @RequestBody UsuarioModel usuarioActualizado, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errores = new HashMap<>();
             result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errores);
         }
 
-        Optional<UsuarioModel> usuarioExistente = usuarioServices.obtenerPorEmail(email);
+        Optional<UsuarioModel> usuarioExistente = usuarioServices.obtenerPorNumeroDocumento(numeroDocumento);
         if (usuarioExistente.isEmpty()) {
             return ResponseEntity.status(404).body("Usuario no encontrado.");
         }
@@ -78,9 +79,9 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioGuardado);
     }
 
-    @DeleteMapping("/email/{email}")
-    public ResponseEntity<String> eliminarUsuarioPorEmail(@PathVariable("email") String email) {
-        boolean ok = usuarioServices.eliminarUsuarioPorEmail(email);
-        return ok ? ResponseEntity.ok("Se eliminó el usuario con email: " + email) : ResponseEntity.status(404).body("No se pudo eliminar el usuario con email: " + email);
+    @DeleteMapping("/numeroDocumento/{numeroDocumento}")
+    public ResponseEntity<String> eliminarUsuarioPorNumeroDocumento(@PathVariable("numeroDocumento") String numeroDocumento) {
+        boolean ok = usuarioServices.eliminarUsuarioPorNumeroDocumento(numeroDocumento);
+        return ok ? ResponseEntity.ok("Se eliminó el usuario con email: " + numeroDocumento) : ResponseEntity.status(404).body("No se pudo eliminar el usuario con email: " + numeroDocumento);
     }
 }

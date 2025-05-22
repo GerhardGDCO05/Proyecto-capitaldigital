@@ -25,11 +25,12 @@ public class UsuarioModel {
     @NotBlank(message = "El documento no puede estar vacío")
     private String documento;
 
+    @Column(name = "numero_documento", unique = true, nullable = false)
     @NotBlank(message = "El número de documento no puede estar vacío")
     @Pattern(regexp = "^[0-9]+$", message = "El número de documento debe contener solo números")
     @Size(min = 5, max = 20, message = "El número de documento debe tener entre 5 y 20 caracteres")
     private String numeroDocumento;
-
+    
     @NotNull(message = "La Fecha de Nacimiento no puede estar vacía")
     private LocalDate fechaNacimiento;
 
@@ -57,8 +58,7 @@ public class UsuarioModel {
 
     @NotBlank(message = "El número de cuenta no puede estar vacío")
     @Pattern(regexp = "^[0-9]+$", message = "El número de cuenta debe contener solo números")
-    @Size(min = 18, message = "El número de cuenta debe tener al menos 18 dígitos")
-    @Size(max = 20, message = "El número de cuenta debe tener máximo 20 dígitos")
+    @Size(min = 20, max = 20, message = "El número de cuenta debe tener 20 dígitos")
     private String numeroCuenta;
 
     // Constructor vacío

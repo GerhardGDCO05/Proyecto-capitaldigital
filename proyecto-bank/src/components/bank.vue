@@ -4,64 +4,67 @@ import usuarioService from "../services/usuarioService";
 import "../assets/bank.css";
 import "../assets/registro.css";
 
-
 export default {
   name: "Bank",
 
-  data() {
-    return {
-      aceptaTerminos: false,
-      recordarme: false,
-      options: ['Cedula', 'Pasaporte', 'Option 3', 'Option 4'],
-      states: ['Miranda', 'Dtto Capital', 'Aragua', 'Carabobo'],
-      banks: ['Provincial', 'BDV', 'BNC', 'Mercantil'] 
-    };
-  },
-
   setup() {
-    const option = ref('Vista General');
-    const userName = ref('Simon Manjoud');
+    const option = ref("Vista General");
+    const userName = ref("Simon Manjoud");
+    const numeroDocumento = ref("");
+    const cuenta = ref({ banco: "", numeroCuenta: "" });
+    const usuario = ref({});
+    const banks = ref(["BBVA", "BDV", "BNC", "Mercantil"]);
 
     const cambiarOption = (opcion) => {
       option.value = opcion;
     };
 
-    const usuarioCuenta = ref({
-      correo: "",
-      cuentas: []
-    });
-
-    const addCuenta = ref({
-      banco: "",
-      numeroCuenta: ""
-    });
-
-    const agregar = async () => {
+    const buscar = async () => {
       try {
-        if (!usuarioCuenta.value.correo) {
-          alert("Debe ingresar un email válido.");
+        if (!numeroDocumento.value) {
+          alert("Debe ingresar un número de documento válido.");
           return;
         }
-        if (!addCuenta.value.banco || !addCuenta.value.numeroCuenta) {
-          alert("Debe ingresar un banco y número de cuenta.");
-          return;
-        }
-
-        const response = await usuarioService.agregarCuentaPorEmail(usuarioCuenta.value.correo, addCuenta.value);
-        alert("Cuenta agregada exitosamente!");
-
-        // Limpia los datos después de agregar la cuenta
-        addCuenta.value.banco = "";
-        addCuenta.value.numeroCuenta = "";
-
+        const response = await usuarioService.obtenerUsuarioPorNumeroDocumento(numeroDocumento.value);
+        usuario.value = response.data;
       } catch (error) {
-        console.error("Error al agregar cuenta:", error);
-        alert("Error al agregar la cuenta: " + (error.response?.data || error.message));
+        console.error("Error al buscar", error);
+        alert("Error al buscar " + (error.response?.data || error.message));
       }
     };
 
-    return { option, cambiarOption, userName, usuarioCuenta, addCuenta, agregar };
-  }
+    const agregar = async () => {
+      try {
+        if (!cuenta.value.banco || !cuenta.value.numeroCuenta) {
+          alert("Debe seleccionar un banco y ingresar un número de cuenta.");
+          return;
+        }
+
+        const response = await usuarioService.agregarCuentaPorNumeroDocumento(usuario.value.numeroDocumento, cuenta.value);
+
+        alert("Cuenta registrada correctamente!");
+
+      } catch (error) {
+        console.error("Error al registrar cuenta:", error);
+
+        // Verifica si hay una respuesta con validaciones del backend
+        if (error.response && error.response.data) {
+          const errores = error.response.data;
+
+          if (errores.numeroCuenta) {
+            alert("Error: " + errores.numeroCuenta);
+          } else {
+            alert("Error al registrar cuenta: " + JSON.stringify(errores));
+          }
+        } else {
+          alert("Error desconocido al registrar la cuenta.");
+        }
+      }
+    };
+
+
+    return { option, cambiarOption, userName, numeroDocumento, usuario, banks, cuenta, agregar, buscar };
+  },
 };
 </script>
 
@@ -127,27 +130,45 @@ export default {
         <main class="contenido">
         <!-- Contenido principal -->
             <section class="settings">
-                <h3>Agregar cuenta</h3>
-                <div class="info-bank">
-                    <label for="banco">Banco</label>
-                    <select class="cb" id="combo-box" v-model="addCuenta.banco">
-                        <option class="datos-regist" v-for="bank in banks" :key="bank" :value="bank">
-                        {{ bank }}
-                        </option>
-                    </select>
-                    <div class="Num-cuenta">
-                        <label for="numero_cuenta">Numero de Cuenta</label>
-                        <input class="number-cuenta datos-regist" type="text" id="numero_cuenta" v-model="addCuenta.numeroCuenta" />
-                    </div>
-                </div>
-                <label for="email">email</label>
-                <input class="number-cuenta datos-regist" type="email" id="correo" v-model="usuarioCuenta.correo" />
+
+                <label for="numeroDocumento">Numero de documento</label>
+                <input class="number-cuenta datos-regist" type="text" id="correo" v-model="numeroDocumento" />
             </section>
-            <Button @click="agregar" class="login-button">Guardar</Button>
+            <Button @click="buscar" class="login-button">Buscar</Button>
+            <div class="prueba">
+              <h3>Información del Usuario</h3>
+              <div v-if="usuario">
+                
+                <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+                <p><strong>Apellido:</strong> {{ usuario.apellido }}</p>
+                <p><strong>Tipo de Documento:</strong> {{ usuario.documento }}</p>
+                <p><strong>Número de Documento:</strong> {{ usuario.numeroDocumento }}</p>
+                <p><strong>Fecha de Nacimiento:</strong> {{ usuario.fechaNacimiento }}</p>
+                <p><strong>Dirección:</strong> {{ usuario.direccion }}</p>
+                <p><strong>Código Postal:</strong> {{ usuario.codigoPostal }}</p>
+                <p><strong>Email:</strong> {{ usuario.email }}</p>
+                <p><strong>Banco:</strong> {{ usuario.banco }}</p>
+                <p><strong>Número de Cuenta:</strong> {{ usuario.numeroCuenta }}</p>
+              </div>
+            </div>
+
+            <div class="prueba">
+                <h3>Registrar cuenta</h3>
+                
+                <!-- Selección de banco -->
+                <label for="banco">Banco:</label>
+                <select class="cb" id="banco" v-model="cuenta.banco">
+                    <option v-for="bank in banks" :key="bank" :value="bank">{{ bank }}</option>
+                </select>
+
+                <!-- Número de cuenta -->
+                <label for="numeroCuenta">Número de Cuenta:</label>
+                <input class="number-cuenta datos-regist" type="text" id="numeroCuenta" v-model="cuenta.numeroCuenta" />
+
+                <div class="continuar-button">
+                    <a @click="agregar" class="custom-button">>>> Continuar</a>
+                </div>
+            </div>
         </main>
     </article>
 </template>
-
-<style scoped>
-
-</style>

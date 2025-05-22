@@ -10,31 +10,31 @@ export default {
     return apiClient.post("/usuario", usuario);
   },
 
-  obtenerUsuarioPorEmail(email) {
-    return apiClient.get(`/usuario/${email}`);
+  obtenerUsuarioPorNumeroDocumento(numeroDocumento) {
+    return apiClient.get(`/usuario/numeroDocumento/${numeroDocumento}`);
   },
 
-  modificarUsuarioPorEmail(){
-    return apiClient.put(`/usuario/${email}`)
+  modificarUsuarioPorNumeroDocumento(numeroDocumento){
+    return apiClient.put(`/usuario/numeroDocumento/${numeroDocumento}`)
   },
 
-  eliminarUsuario(email) {
-    return apiClient.delete(`/usuario/${email}`);
+  eliminarUsuarioPorNumeroDocumento(numeroDocumento) {
+    return apiClient.delete(`/usuario/numeroDocumento/${numeroDocumento}`);
+  },
+  agregarCuentaPorNumeroDocumento(numeroDocumento, cuenta) {
+    return apiClient.post(`/cuenta/numeroDocumento/${numeroDocumento}`, cuenta);
   },
 
-  /*agregarCuentaPorEmail(email, cuenta) {
-    return apiClient.post(`/cuenta/usuario/${email}/agregar`, cuenta);
+  modificarCuentaPorNumeroDocumento(numeroDocumento, numeroCuenta, cuenta) {
+    return apiClient.put(`/cuenta/numeroDocumento/${numeroDocumento}/numeroCuenta/${numeroCuenta}`, cuenta);
   },
 
-  modificarCuentaPorEmail(email,cuenta){
-    return apiClient.put(`/cuenta/usuario/${email}/agregar`, cuenta);
+  obtenerCuentaPorNumeroDocumento(numeroDocumento) {
+    return apiClient.get(`/cuenta/numeroDocumento/${numeroDocumento}`);
   },
 
-  obtenerCuentaPorEmail(email,cuenta){
-    return apiClient.get(`/cuenta/usuario/${email}/agregar`, cuenta);
-  },
+  eliminarCuentaPorNumeroDocumento(numeroDocumento, numeroCuenta) {
+    return apiClient.delete(`/cuenta/numeroDocumento/${numeroDocumento}/numeroCuenta/${numeroCuenta}`); 
+  }
 
-  eliminarCuentaPorEmail(email,cuenta){
-    return apiClient.get(`/cuenta/usuario/${email}/agregar`, cuenta);
-  }*/
 };

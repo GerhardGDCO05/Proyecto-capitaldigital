@@ -1,89 +1,136 @@
-/*package com.example.capitalDigital.usuario.Controller;
+package com.example.capitalDigital.usuario.Controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+import com.example.capitalDigital.usuario.models.CuentaModel;
+import com.example.capitalDigital.usuario.services.CuentaService;
+import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import com.example.capitalDigital.usuario.models.CuentaModel;
-import com.example.capitalDigital.usuario.models.UsuarioModel;
-import com.example.capitalDigital.usuario.services.CuentaService;
-import com.example.capitalDigital.usuario.repositories.UsuarioRepository;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cuenta")
-@CrossOrigin(origins = "http://localhost:5173")
+@Validated 
 public class CuentaController {
 
-    @Autowired
-    private CuentaService cuentaServices;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final CuentaService cuentaService;
 
-    // Agregar nueva cuenta por usuarioId
-    @PostMapping("/{usuarioId}/agregar")
-    public ResponseEntity<?> agregarCuenta(@PathVariable Long usuarioId, @Valid @RequestBody CuentaModel cuenta, BindingResult result) {
-        if (result.hasErrors()) {
-            Map<String, String> errores = new HashMap<>();
-            result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errores);
+    public CuentaController(CuentaService cuentaService) {
+        this.cuentaService = cuentaService;
+    }
+
+    @PostMapping("/numeroDocumento/{numeroDocumento}")
+    public ResponseEntity<?> agregarCuentaEnXML(@PathVariable String numeroDocumento, @Valid @RequestBody CuentaModel cuenta) {
+        try {
+            System.out.println("Recibiendo petición POST para documento: " + numeroDocumento);
+            System.out.println("Datos de cuenta: Banco=" + cuenta.getBanco() + ", Número=" + cuenta.getNumeroCuenta());
+
+            boolean guardado = cuentaService.guardarCuentaEnXML(numeroDocumento, cuenta);
+
+            if (guardado) {
+                return ResponseEntity.ok("Cuenta guardada correctamente en XML");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("La cuenta podría ya existir o el número de cuenta no es válido para el banco especificado");
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el controlador POST: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error interno del servidor: " + e.getMessage());
         }
+    }
 
-        Optional<UsuarioModel> usuarioOptional = usuarioRepository.findById(usuarioId);
-        if (usuarioOptional.isEmpty()) {
-            return ResponseEntity.status(404).body("Usuario no encontrado.");
+    @GetMapping("/numeroDocumento/{numeroDocumento}")
+    public ResponseEntity<?> obtenerCuentasPorNumeroDocumento(@PathVariable String numeroDocumento) {
+        try {
+            System.out.println("Recibiendo petición GET para documento: " + numeroDocumento);
+
+            List<CuentaModel> cuentas = cuentaService.obtenerCuentasPorNumeroDocumento(numeroDocumento);
+
+            if (cuentas.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontraron cuentas para el documento: " + numeroDocumento);
+            } else {
+                return ResponseEntity.ok(cuentas);
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el controlador GET: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error interno del servidor: " + e.getMessage());
         }
-
-        UsuarioModel usuario = usuarioOptional.get();
-        cuenta.setUsuario(usuario);
-        CuentaModel nuevaCuenta = cuentaServices.guardarCuenta(cuenta);
-        return ResponseEntity.ok(nuevaCuenta);
     }
-    @PostMapping("/usuario/{email}/agregar")
-    public ResponseEntity<?> agregarCuentaPorEmail(@PathVariable String email, @Valid @RequestBody CuentaModel cuenta) {
-        Optional<UsuarioModel> usuarioOptional = usuarioRepository.findByEmail(email);
-        if (usuarioOptional.isEmpty()) {
-            return ResponseEntity.status(404).body("Usuario no encontrado.");
+    @GetMapping("/todas")
+    public ResponseEntity<?> obtenerTodasLasCuentas() {
+        try {
+            System.out.println("Recibiendo petición GET para todas las cuentas");
+
+            List<CuentaModel> cuentas = cuentaService.obtenerTodasLasCuentas();
+
+            if (cuentas.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontraron cuentas registradas");
+            } else {
+                return ResponseEntity.ok(cuentas);
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el controlador GET todas: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error interno del servidor: " + e.getMessage());
         }
-
-        UsuarioModel usuario = usuarioOptional.get();
-        cuenta.setUsuario(usuario);
-        CuentaModel nuevaCuenta = cuentaServices.guardarCuenta(cuenta);
-        return ResponseEntity.ok(nuevaCuenta);
     }
 
-    //  Obtener cuentas por email del usuario
-    @GetMapping("/usuario/{email}")
-    public ResponseEntity<?> obtenerCuentasPorEmail(@PathVariable String email) {
-        List<CuentaModel> cuentas = cuentaServices.obtenerCuentasPorEmail(email);
-        return cuentas.isEmpty() ? ResponseEntity.status(404).body("No se encontraron cuentas.")
-                : ResponseEntity.ok(cuentas);
+    @PutMapping("/numeroDocumento/{numeroDocumento}/numeroCuenta/{numeroCuenta}")
+    public ResponseEntity<?> modificarCuentaEnXML(@PathVariable String numeroDocumento,@PathVariable String numeroCuenta,@Valid @RequestBody CuentaModel cuenta) {
+        try {
+            System.out.println("Recibiendo petición PUT para documento: " + numeroDocumento + ", cuenta: " + numeroCuenta);
+
+            boolean modificado = cuentaService.modificarCuentaEnXML(numeroDocumento, numeroCuenta, cuenta);
+
+            if (modificado) {
+                return ResponseEntity.ok("Cuenta modificada correctamente.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Cuenta no encontrada para el documento: " + numeroDocumento +" o el nuevo número de cuenta no es válido para el banco especificado");
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el controlador PUT: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error interno del servidor: " + e.getMessage());
+        }
     }
 
-    //  Modificar cuenta por email
-    @PutMapping("/usuario/{email}/modificar/{cuentaId}")
-    public ResponseEntity<?> modificarCuentaPorEmail(
-            @PathVariable String email,
-            @PathVariable Long cuentaId,
-            @Valid @RequestBody CuentaModel cuentaActualizada) {
+    @DeleteMapping("/numeroDocumento/{numeroDocumento}/numeroCuenta/{numeroCuenta}")
+    public ResponseEntity<?> eliminarCuentaEnXML(@PathVariable String numeroDocumento, @PathVariable String numeroCuenta) {
+        try {
+            System.out.println("Recibiendo petición DELETE para documento: " + numeroDocumento + ", cuenta: " + numeroCuenta);
 
-        CuentaModel cuenta = cuentaServices.modificarCuentaPorEmail(email, cuentaId, cuentaActualizada);
-        return cuenta != null ? ResponseEntity.ok(cuenta)
-                : ResponseEntity.status(404).body("Cuenta no encontrada.");
+            boolean eliminado = cuentaService.eliminarCuentaEnXML(numeroDocumento, numeroCuenta);
+
+            if (eliminado) {
+                return ResponseEntity.ok("Cuenta eliminada correctamente.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Cuenta no encontrada para el documento: " + numeroDocumento);
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el controlador DELETE: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error interno del servidor: " + e.getMessage());
+        }
     }
 
-    //  Eliminar todas las cuentas de un usuario por email
-    @DeleteMapping("/usuario/{email}/eliminar")
-    public ResponseEntity<?> eliminarCuentasPorEmail(@PathVariable String email) {
-        boolean eliminado = cuentaServices.eliminarCuentasPorEmail(email);
-        return eliminado ? ResponseEntity.ok("Cuentas eliminadas correctamente.")
-                : ResponseEntity.status(404).body("No se encontraron cuentas para eliminar.");
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errores = new HashMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errores.put(error.getField(), error.getDefaultMessage()); // ✅ Captura mensajes personalizados
+        }
+        return ResponseEntity.badRequest().body(errores);
     }
-}*/
+
+}

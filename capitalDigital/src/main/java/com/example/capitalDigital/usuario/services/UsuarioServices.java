@@ -37,16 +37,16 @@ public class UsuarioServices {
         }
     }
 
-    public Optional<UsuarioModel> obtenerPorEmail(String email) {
-        System.out.println("Buscando usuario con email: " + email);
-        Optional<UsuarioModel> usuario = usuarioRepository.findByEmail(email);
+    public Optional<UsuarioModel> obtenerPorNumeroDocumento(String numeroDocumento) {
+        System.out.println("Buscando usuario con numero de documento: " + numeroDocumento);
+        Optional<UsuarioModel> usuario = usuarioRepository.findByNumeroDocumento(numeroDocumento);
         System.out.println("Usuario encontrado: " + usuario.orElse(null));
         return usuario;
     }
 
-    public boolean eliminarUsuarioPorEmail(String email) {
+    public boolean eliminarUsuarioPorNumeroDocumento(String numeroDocumento) {
         try {
-            Optional<UsuarioModel> usuario = usuarioRepository.findByEmail(email);
+            Optional<UsuarioModel> usuario = usuarioRepository.findByNumeroDocumento(numeroDocumento);
             if (usuario.isPresent()) {
                 usuarioRepository.delete(usuario.get());
                 return true;

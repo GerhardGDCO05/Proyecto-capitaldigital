@@ -7,6 +7,6 @@ import com.example.capitalDigital.usuario.models.UsuarioModel;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioModel, Long> {
-    // Método para buscar por email
     Optional<UsuarioModel> findByEmail(String email);
+    Optional<UsuarioModel> findByNumeroDocumento(String numeroDocumento);  // ✅ Corrección
 }
