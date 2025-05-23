@@ -11,7 +11,8 @@
     },
     methods: {
       abrirbank() {
-        this.$router.push({ path: '/bank', query: { popup: 'true' } });
+        this.$router.push({ path: '/bank/vistageneral', query: { popup: 'true' } });
+        console.log("SIP")
       },
       
       abrirRegistro() {
@@ -39,7 +40,7 @@
     }
 
     // Automatically change image every 10 seconds
-    setInterval(showNext, 10000);
+    setInterval(showNext, 30000);
   });
 
 
@@ -55,45 +56,40 @@
 
     <!-- Si no es popup, muestra la aplicación normal -->
     <template v-else>
-
+      <Layout />
       <main>
-        <div class="titulo">
-          <img class="bank-icon" src="../public/bankicon.ico" alt="logo banco">
-          <h1>MANJOUD BANK</h1>
-        </div>
+
         <header class="header">
           <nav class="nav-bar">
             <div class="cap-social">
               <img class="bank-icon" src="../bankicon.ico" alt="logo banco">
-              <p class="nav-text cap-social-text">CAPITAL</p> 
+              <p class="nav-text cap-social-text">CAPITAL</p>
               <p class="nav-text cap-social-text">SOCIAL</p>
             </div>
             <a @click="abrirRegistro" class="links">Registrar</a>
             <a @click="" class="links">Conócenos</a>
             <a href="#" class="links preguntas-frecuentes">Preguntas Frecuentes</a>
           </nav>
-          <div class="carrusel-container">
-            <div class="login" id="login">
-              <h2>Inicio de Sesion</h2>
-              <div class="login-data-container">
-                <label for="identificacion">Documento</label>
-                <select class=" cb cb-login" id="combo-box" v-model="selectedOption">
-                  <option class="datos-login" v-for="option in options" :key="option" :value="option">
-                    {{ option }}
-                  </option>
-                </select>
-              </div>
-              <input type='text' class="login-data" placeholder="N- de documento">
-              <input type='password' class="login-data" placeholder="Password">
-              <Button @click="abrirbank" class="login-button">INGRESAR</Button>
-              <div class="recordarme">
-                <a href="#">¿Olvidaste tu contraseña?</a>
-                <input class="checkbox-remenber" type="checkbox" id="remenber" v-model="recordarme" />
-                <label class="label-remenber" for="remenber">Recordarme</label>
-              </div>
+          <div class="carrusel-container"> <!-- Contenedor del formulario de inicio de sesion -->
+            <div class="login-container">
+                <input type="checkbox" id="signup_toggle">
+                <form class="form">
+                  <div class="form_front">
+                    <div class="form_details">Iniciar Sesión</div>
+                    <input placeholder="Número de documento" class="input" type="text">
+                    <input placeholder="Contraseña" class="input" type="text">
+                    <button @click="abrirbank" type="button" class="btn">Ingresar</button>
+                    <span class="switch">¿No tienes cuenta?
+                    <label class="signup_tog" for="signup_toggle">
+                        Regístrate
+                    </label>
+                    </span>
+                  </div>
+
+                </form>
             </div>
             <div class="carrusel">
-              <div class="carrusel-item"><img src="https://media.istockphoto.com/id/542727462/es/foto/horizonte-de-houston-texas.jpg?s=612x612&w=0&k=20&c=ZtuiuLR6C48V8jUy_Ws4qyoWrhT6F1wlS_hfxQ5DTjE=" alt="paisaje"></div>
+              <div class="carrusel-item"><img src="@/images/ValleArribaWpp.jpg" alt="paisaje"></div>
 
                 <div class="carrusel-item"><img src="https://media.istockphoto.com/id/517188688/es/foto/paisaje-de-monta%C3%B1a.jpg?s=612x612&w=0&k=20&c=EnSd5sJdxih_svZHscQ5Hfzr3RSOdXO9MpdmKK4CMTs=" alt="Image 2"></div>
 
@@ -202,7 +198,7 @@
             </div>
           </div>
           <div class="derechos-reservados">
-            <p>© 2025-Actua Capital Digital, S.A. Todos los derechos reservados</p>
+            <p>© 2025-Actual Capital Digital, S.A. Todos los derechos reservados</p>
           </div>
 
         </footer>

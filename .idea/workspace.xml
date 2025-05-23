@@ -5,24 +5,65 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f11bff62-7b3f-4c20-a59a-f7380585c7b0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/Controller/CuentaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/Controller/CuentaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/repositories/CuentaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/repositories/CuentaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/services/CuentaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/capitalDigital/src/main/java/com/example/capitalDigital/usuario/services/CuentaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/components/bank.vue" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/components/bank.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/components/registrar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/components/registrar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/services/usuarioService.js" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/services/usuarioService.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/assets/perfil.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/components/Bank.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/components/bankcomponents/Cuentas.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/components/bankcomponents/Sidebar.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/components/bankcomponents/VistaGeneral.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/components/bankcomponents/perfil/Perfil.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/image-removebg-preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/images/ValleArribaWpp.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/thumbnail_large.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proyecto-bank/src/view/Layout.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proyecto-bank/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proyecto-bank/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/assets/bank.css" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/assets/bank.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/assets/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/assets/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/components/bank.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/components/registrar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/components/Registrar.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proyecto-bank/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto-bank/src/router/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Vue Composition API Component" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "SimonM177"
+  }
 }]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/GerhardGDCO05/Proyecto-capitaldigital",
+    "accountId": "2f50cc45-0bfd-449b-92dc-45ad72ee9d41"
+  }
+}]]></component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="true" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2xF2qhbALWdA6TIBMSFfAv74q4B" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -31,17 +72,59 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "Spring Boot.CapitalDigitalApplication.executor": "Run",
+    "git-widget-placeholder": "SimonM",
+    "go.import.settings.migrated": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/Users/simon/OneDrive/Escritorio/Proyecto-capitaldigital",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "npm.serve.executor": "Run",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.1.1.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "vue.recent.templates": [
+      "Vue Composition API Component"
+    ]
   }
 }]]></component>
+  <component name="RunManager" selected="npm.serve">
+    <configuration name="CapitalDigitalApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="demo" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.capitalDigital.CapitalDigitalApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="serve" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/proyecto-bank/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="npm.serve" />
+      <item itemvalue="Spring Boot.CapitalDigitalApplication" />
+    </list>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -58,10 +141,31 @@
       <option name="presentableId" value="Default" />
       <updated>1747519738150</updated>
       <workItem from="1747519753351" duration="7219000" />
+      <workItem from="1747792513888" duration="4967000" />
+      <workItem from="1747840126686" duration="4427000" />
+      <workItem from="1747863135596" duration="12481000" />
+      <workItem from="1747906694562" duration="190000" />
+      <workItem from="1747953000068" duration="11637000" />
+      <workItem from="1748037376874" duration="4872000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>false</integration-enabled>
+    <settings-migrated>true</settings-migrated>
   </component>
 </project>
