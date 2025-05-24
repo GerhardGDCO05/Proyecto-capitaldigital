@@ -84,18 +84,20 @@ public class CuentaController {
         }
     }
 
-    @PutMapping("/numeroDocumento/{numeroDocumento}/numeroCuenta/{numeroCuenta}")
-    public ResponseEntity<?> modificarCuentaEnXML(@PathVariable String numeroDocumento,@PathVariable String numeroCuenta,@Valid @RequestBody CuentaModel cuenta) {
+    @PutMapping("/numeroDocumento/{numeroDocumento}/nombreCuenta/{nombreCuenta}")
+    public ResponseEntity<?> modificarCuentaEnXML(@PathVariable String numeroDocumento, @PathVariable String nombreCuenta, @Valid @RequestBody CuentaModel cuenta) {
         try {
-            System.out.println("Recibiendo petición PUT para documento: " + numeroDocumento + ", cuenta: " + numeroCuenta);
+            System.out.println("Recibiendo petición PUT para documento: " + numeroDocumento + ", cuenta: " + nombreCuenta);
+            System.out.println("Datos de cuenta: Banco=" + cuenta.getBanco() + ", Número=" + cuenta.getNumeroCuenta() + ", Nombre=" + cuenta.getNombreCuenta());
 
-            boolean modificado = cuentaService.modificarCuentaEnXML(numeroDocumento, numeroCuenta, cuenta);
+            boolean modificado = cuentaService.modificarCuentaEnXML(numeroDocumento, nombreCuenta, cuenta);
 
             if (modificado) {
-                return ResponseEntity.ok("Cuenta modificada correctamente.");
+                return ResponseEntity.ok("Cuenta modificada correctamente. Nombre de cuenta actualizado: " + cuenta.getNombreCuenta());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Cuenta no encontrada para el documento: " + numeroDocumento +" o el nuevo número de cuenta no es válido para el banco especificado");
+                    .body("Cuenta no encontrada para el documento: " + numeroDocumento +
+                        " o el nuevo número de cuenta no es válido para el banco especificado.");
             }
         } catch (Exception e) {
             System.err.println("Error en el controlador PUT: " + e.getMessage());
@@ -103,6 +105,7 @@ public class CuentaController {
                 .body("Error interno del servidor: " + e.getMessage());
         }
     }
+
 
     @DeleteMapping("/numeroDocumento/{numeroDocumento}/numeroCuenta/{numeroCuenta}")
     public ResponseEntity<?> eliminarCuentaEnXML(@PathVariable String numeroDocumento, @PathVariable String numeroCuenta) {

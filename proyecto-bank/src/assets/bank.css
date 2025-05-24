@@ -152,7 +152,7 @@ body{
 
 .prueba{
   width: 50%;
-  height: 80%;
+  height: 100%;
   background-color: #143163;
   color: #ffff;
   border: 4px solid #000;
@@ -169,4 +169,11 @@ body{
 
 .user-info strong {
   color: #b40b0b;
+}
+.cuentasmostrar ul li{
+  font-size: 2vh;
+  margin-bottom: 3vh;
+}
+.prueba1{
+  margin-bottom: 10vh;
 }

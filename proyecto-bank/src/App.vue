@@ -1,48 +1,62 @@
 <script>
-  import './assets/main.css';
+import './assets/main.css';
+import { ref } from "vue";
+import usuarioService from './services/usuarioService';
+import { useRouter } from 'vue-router';
 
-  export default {
-    name: 'App',
-    data() {
-      return {
-        recordarme: false,
-        options: ['Cedula', 'Pasaporte', 'Option 3', 'Option 4'],
+export default {
+  name: 'App',
+  setup() {
+    const router = useRouter(); 
+    const options = ref(['Cedula', 'Pasaporte', 'Option 3', 'Option 4']);
+    const selectedOption = ref(options.value[0]); 
+    const numeroDocumento = ref("");
+    const clave = ref("");
+    const usuario = ref({});
+    const cuentas = ref([]);
+
+    const abrirbank = async () => {
+      if (!numeroDocumento.value || !clave.value) {
+        alert("Debe ingresar un número de documento y clave válida.");
+        return;
       }
-    },
-    methods: {
-      abrirbank() {
-        this.$router.push({ path: '/bank', query: { popup: 'true' } });
-      },
-      
-      abrirRegistro() {
-        this.$router.push({ path: '/registrar', query: { popup: 'true' } });
+
+      try {
+        const responseUsuario = await usuarioService.obtenerUsuarioPorNumeroDocumento(numeroDocumento.value);
+        const responseCuentas = await usuarioService.obtenerCuentaPorNumeroDocumento(numeroDocumento.value);
+
+        usuario.value = responseUsuario.data;
+        cuentas.value = responseCuentas.data;
+
+        if (usuario.value && usuario.value.numeroDocumento) {
+          if (usuario.value.password === clave.value) {
+            router.push({ 
+              path: '/bank', 
+              query: { 
+                usuario: JSON.stringify(usuario.value), 
+                cuentas: JSON.stringify(cuentas.value), 
+                popup: 'true' 
+              } 
+            });
+          } else {
+            alert("Error: Clave Incorrecta.");
+          }
+        } else {
+          alert("Error: No se encontró información del usuario.");
+        }
+      } catch (error) {
+        console.error("Error al obtener usuario:", error);
+        alert("Error del servidor: " + JSON.stringify(error.response?.data || error.message));
       }
-    },
-  };
+    };
 
-  document.addEventListener('DOMContentLoaded', function() {
-    let currentIndex = 0;
-    const items = document.querySelectorAll('.carrusel-item');
-    const totalItems = items.length;
+    const abrirRegistro = () => {
+      router.push({ path: '/registrar', query: { popup: 'true' } }); 
+    };
 
-    function showNext() {
-      currentIndex = (currentIndex + 1) % totalItems;
-      updateCarrusel();
-    }
-
-    function updateCarrusel() {
-      const carruselElement = document.querySelector('.carrusel');
-      if (carruselElement) {
-        const offset = -currentIndex * 100;
-        carruselElement.style.transform = `translateX(${offset}%)`;
-      }
-    }
-
-    // Automatically change image every 10 seconds
-    setInterval(showNext, 10000);
-  });
-
-
+    return { router, options, selectedOption, numeroDocumento, clave, usuario, cuentas, abrirbank, abrirRegistro };
+  },
+};
 
 </script>
 
@@ -83,12 +97,12 @@
                   </option>
                 </select>
               </div>
-              <input type='text' class="login-data" placeholder="N- de documento">
-              <input type='password' class="login-data" placeholder="Password">
+              <input type='text' class="login-data" placeholder="N- de documento" v-model="numeroDocumento">
+              <input type="password" class="login-data" placeholder="Password" v-show="true" v-model="clave">
               <Button @click="abrirbank" class="login-button">INGRESAR</Button>
               <div class="recordarme">
                 <a href="#">¿Olvidaste tu contraseña?</a>
-                <input class="checkbox-remenber" type="checkbox" id="remenber" v-model="recordarme" />
+                <input class="checkbox-remenber" type="checkbox" id="remenber" />
                 <label class="label-remenber" for="remenber">Recordarme</label>
               </div>
             </div>

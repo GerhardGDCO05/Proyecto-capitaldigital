@@ -25,8 +25,8 @@ export default {
     return apiClient.post(`/cuenta/numeroDocumento/${numeroDocumento}`, cuenta);
   },
 
-  modificarCuentaPorNumeroDocumento(numeroDocumento, numeroCuenta, cuenta) {
-    return apiClient.put(`/cuenta/numeroDocumento/${numeroDocumento}/numeroCuenta/${numeroCuenta}`, cuenta);
+  modificarCuentaPorNumeroDocumento(numeroDocumento, nombreCuenta, cuenta) {
+    return apiClient.put(`/cuenta/numeroDocumento/${numeroDocumento}/nombreCuenta/${nombreCuenta}`, cuenta);
   },
 
   obtenerCuentaPorNumeroDocumento(numeroDocumento) {

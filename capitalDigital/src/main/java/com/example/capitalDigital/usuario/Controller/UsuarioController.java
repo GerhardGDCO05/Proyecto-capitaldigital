@@ -22,11 +22,6 @@ public class UsuarioController {
     @Autowired
     UsuarioServices usuarioServices;
 
-    /*@GetMapping()
-    public ResponseEntity<ArrayList<UsuarioModel>> obtenerUsuarios() {
-        return ResponseEntity.ok(usuarioServices.obtenerUsuarios());
-    } */
-
     @PostMapping()
     public ResponseEntity<?> guardarUsuario(@Valid @RequestBody UsuarioModel usuario, BindingResult result) {
         if (result.hasErrors()) {
@@ -74,6 +69,7 @@ public class UsuarioController {
         usuario.setCodigoPostal(usuarioActualizado.getCodigoPostal());
         usuario.setBanco(usuarioActualizado.getBanco());
         usuario.setNumeroCuenta(usuarioActualizado.getNumeroCuenta());
+        usuario.setPassword(usuarioActualizado.getPassword());
 
         UsuarioModel usuarioGuardado = usuarioServices.guardarUsuario(usuario);
         return ResponseEntity.ok(usuarioGuardado);
@@ -82,6 +78,6 @@ public class UsuarioController {
     @DeleteMapping("/numeroDocumento/{numeroDocumento}")
     public ResponseEntity<String> eliminarUsuarioPorNumeroDocumento(@PathVariable("numeroDocumento") String numeroDocumento) {
         boolean ok = usuarioServices.eliminarUsuarioPorNumeroDocumento(numeroDocumento);
-        return ok ? ResponseEntity.ok("Se eliminó el usuario con email: " + numeroDocumento) : ResponseEntity.status(404).body("No se pudo eliminar el usuario con email: " + numeroDocumento);
+        return ok ? ResponseEntity.ok("Se eliminó el usuario con numero de documento: " + numeroDocumento) : ResponseEntity.status(404).body("No se pudo eliminar el usuario con numero de documento: " + numeroDocumento);
     }
 }

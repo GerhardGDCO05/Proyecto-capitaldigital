@@ -1,19 +1,86 @@
 <script>
-import { ref } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import usuarioService from "../services/usuarioService";
 import "../assets/bank.css";
 import "../assets/registro.css";
+import { useRoute } from "vue-router";
+import { watch } from "vue";
 
 export default {
   name: "Bank",
 
   setup() {
+    const route = useRoute();
     const option = ref("Vista General");
     const userName = ref("Simon Manjoud");
     const numeroDocumento = ref("");
     const cuenta = ref({ banco: "", numeroCuenta: "" });
-    const usuario = ref({});
     const banks = ref(["BBVA", "BDV", "BNC", "Mercantil"]);
+    
+    // Inicialización más robusta
+    const usuario = ref({});
+    const cuentas = ref([]);
+
+    // Función para parsear datos de forma segura
+    const parseJsonSafely = (jsonString, defaultValue = []) => {
+      if (!jsonString) return defaultValue;
+      try {
+        const parsed = JSON.parse(jsonString);
+        return Array.isArray(parsed) ? parsed : defaultValue;
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        return defaultValue;
+      }
+    };
+
+    // Inicializar datos desde route.query
+    const initializeData = () => {
+      if (route.query.usuario) {
+        try {
+          usuario.value = JSON.parse(route.query.usuario);
+        } catch (error) {
+          console.error("Error parsing usuario:", error);
+          usuario.value = {};
+        }
+      }
+
+      if (route.query.cuentas) {
+        const parsedCuentas = parseJsonSafely(route.query.cuentas, []);
+        cuentas.value = [...parsedCuentas]; // Crear una nueva referencia
+        console.log("Cuentas inicializadas:", cuentas.value);
+      }
+    };
+
+    // Inicializar al montar el componente
+    initializeData();
+
+    // Watch mejorado con deep y immediate
+    watch(
+      () => route.query.cuentas, 
+      (newValue) => {
+        console.log("Watch activado - nuevo valor:", newValue);
+        if (newValue) {
+          const parsedCuentas = parseJsonSafely(newValue, []);
+          // Forzar reactividad creando una nueva referencia
+          cuentas.value = [...parsedCuentas];
+          console.log("Cuentas actualizadas en Bank.vue:", cuentas.value);
+          
+          // Forzar re-render si es necesario
+          nextTick(() => {
+            console.log("NextTick - cuentas:", cuentas.value);
+          });
+        } else {
+          cuentas.value = [];
+        }
+      },
+      { immediate: true, deep: true }
+    );
+
+    // Computed para garantizar reactividad
+    const cuentasReactivas = computed(() => {
+      console.log("Computed cuentasReactivas ejecutado:", cuentas.value);
+      return cuentas.value || [];
+    });
 
     const cambiarOption = (opcion) => {
       option.value = opcion;
@@ -44,10 +111,14 @@ export default {
 
         alert("Cuenta registrada correctamente!");
 
+        // Opcional: Actualizar la lista local después de agregar
+        if (response.data && response.data.cuentas) {
+          cuentas.value = [...response.data.cuentas];
+        }
+
       } catch (error) {
         console.error("Error al registrar cuenta:", error);
 
-        // Verifica si hay una respuesta con validaciones del backend
         if (error.response && error.response.data) {
           const errores = error.response.data;
 
@@ -62,12 +133,22 @@ export default {
       }
     };
 
-
-    return { option, cambiarOption, userName, numeroDocumento, usuario, banks, cuenta, agregar, buscar };
+    return { 
+      option, 
+      cambiarOption, 
+      userName, 
+      numeroDocumento, 
+      usuario, 
+      banks, 
+      cuenta, 
+      agregar, 
+      buscar,
+      cuentas,
+      cuentasReactivas
+    };
   },
 };
 </script>
-
 
 <template>
     <article class="bank-layout">
@@ -75,7 +156,7 @@ export default {
             <h2>{{ option }}</h2>
             <div class="perfil">
                 <img class="perfil-icon" src="../../public/usuario.png" alt="User Icon">
-                <h3>{{ userName }}</h3>
+                <h3>{{ usuario.nombre }}</h3>
             </div>
         </header>
         <aside class="sidebar">
@@ -128,16 +209,14 @@ export default {
         </aside>
 
         <main class="contenido">
-        <!-- Contenido principal -->
             <section class="settings">
-
                 <label for="numeroDocumento">Numero de documento</label>
                 <input class="number-cuenta datos-regist" type="text" id="correo" v-model="numeroDocumento" />
             </section>
             <Button @click="buscar" class="login-button">Buscar</Button>
-            <div class="prueba">
-              <h3>Información del Usuario</h3>
-              <div v-if="usuario">
+
+            <div class="prueba1 prueba">
+                <h3>Información del Usuario</h3>
                 
                 <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
                 <p><strong>Apellido:</strong> {{ usuario.apellido }}</p>
@@ -149,10 +228,21 @@ export default {
                 <p><strong>Email:</strong> {{ usuario.email }}</p>
                 <p><strong>Banco:</strong> {{ usuario.banco }}</p>
                 <p><strong>Número de Cuenta:</strong> {{ usuario.numeroCuenta }}</p>
-              </div>
+
+                <h4>Cuentas Registradas ({{ cuentasReactivas.length }})</h4>
+                
+                <!-- Versión con computed -->
+                <div class="cuentasmostrar">
+                    <ul>
+                        <li v-for="(cuenta, index) in cuentasReactivas" :key="`cuenta-${index}-${cuenta.numeroCuenta}`">
+                            <strong>Nombre de Cuenta:</strong> {{ cuenta.nombreCuenta }} - <strong>Banco:</strong> {{ cuenta.banco }} - <strong>Número de Cuenta:</strong> {{ cuenta.numeroCuenta }}
+                        </li>
+                    </ul>
+                </div>
+
             </div>
 
-            <div class="prueba">
+            <div class="prueba2 prueba">
                 <h3>Registrar cuenta</h3>
                 
                 <!-- Selección de banco -->

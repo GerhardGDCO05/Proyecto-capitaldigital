@@ -27,7 +27,7 @@ public class CuentaService {
     public boolean guardarCuentaEnXML(String numeroDocumento, CuentaModel cuenta) {
         try {
             System.out.println("Iniciando guardado de cuenta para documento: " + numeroDocumento);
-            System.out.println("Datos de cuenta: Banco=" + cuenta.getBanco() + ", Número=" + cuenta.getNumeroCuenta());
+            System.out.println("Datos de cuenta: Banco=" + cuenta.getBanco() + ", Número=" + cuenta.getNumeroCuenta() + ", Nombre=" + cuenta.getNombreCuenta());
 
             // Validar el número de cuenta según el banco
             if (!bancoService.validarNumeroCuenta(cuenta.getBanco(), cuenta.getNumeroCuenta())) {
@@ -58,6 +58,7 @@ public class CuentaService {
             Element cuentaElement = doc.createElement("cuenta");
             cuentaElement.appendChild(crearElemento(doc, "banco", cuenta.getBanco()));
             cuentaElement.appendChild(crearElemento(doc, "numeroCuenta", cuenta.getNumeroCuenta()));
+            cuentaElement.appendChild(crearElemento(doc, "nombreCuenta", cuenta.getNombreCuenta()));
 
             usuarioNode.appendChild(cuentaElement);
             guardarCambiosEnXML(doc);
@@ -103,7 +104,8 @@ public class CuentaService {
                     Element cuentaElement = (Element) listaCuentas.item(i);
                     String banco = getElementTextContent(cuentaElement, "banco");
                     String numeroCuenta = getElementTextContent(cuentaElement, "numeroCuenta");
-                    cuentas.add(new CuentaModel(banco, numeroCuenta));
+                    String nombreCuenta = getElementTextContent(cuentaElement, "nombreCuenta"); 
+                    cuentas.add(new CuentaModel(banco, numeroCuenta, nombreCuenta));
                 }
             } else {
                 System.out.println("Usuario no encontrado");
@@ -132,7 +134,8 @@ public class CuentaService {
                     Element cuentaElement = (Element) listaCuentas.item(j);
                     String banco = getElementTextContent(cuentaElement, "banco");
                     String numeroCuenta = getElementTextContent(cuentaElement, "numeroCuenta");
-                    cuentas.add(new CuentaModel(banco, numeroCuenta));
+                    String nombreCuenta = getElementTextContent(cuentaElement, "nombreCuenta"); 
+                    cuentas.add(new CuentaModel(banco, numeroCuenta, nombreCuenta));
                 }
             }
 
@@ -146,16 +149,11 @@ public class CuentaService {
         }
     }
 
-    // Modificar cuenta en XML (PUT)
-    public boolean modificarCuentaEnXML(String numeroDocumento, String numeroCuenta, CuentaModel nuevaCuenta) {
+    // Modificar nombre de cuenta en XML (PUT)
+    public boolean modificarCuentaEnXML(String numeroDocumento, String nombreCuenta, CuentaModel nuevaCuenta) {
         try {
-            System.out.println("Modificando cuenta: " + numeroCuenta + " para documento: " + numeroDocumento);
-
-            // Validar el nuevo número de cuenta según el banco
-            if (!bancoService.validarNumeroCuenta(nuevaCuenta.getBanco(), nuevaCuenta.getNumeroCuenta())) {
-                System.out.println("Número de cuenta inválido para el banco especificado");
-                return false;
-            }
+            System.out.println("Modificando nombre de cuenta para documento: " + numeroDocumento + ", cuenta: " + nombreCuenta);
+            System.out.println("Nuevo nombre de cuenta: " + nuevaCuenta.getNombreCuenta());
 
             Document doc = obtenerDocumentoXML();
             Node usuarioNode = encontrarNodoUsuario(doc, numeroDocumento);
@@ -165,26 +163,27 @@ public class CuentaService {
 
                 for (int i = 0; i < cuentas.getLength(); i++) {
                     Element cuentaElement = (Element) cuentas.item(i);
-                    String numCuentaActual = getElementTextContent(cuentaElement, "numeroCuenta");
+                    String nombreCuentaActual = getElementTextContent(cuentaElement, "nombreCuenta");
 
-                    if (numCuentaActual.equals(numeroCuenta)) {
-                        setElementTextContent(doc, cuentaElement, "banco", nuevaCuenta.getBanco());
-                        setElementTextContent(doc, cuentaElement, "numeroCuenta", nuevaCuenta.getNumeroCuenta());
+                    if (nombreCuentaActual.equals(nombreCuenta)) { 
+                        setElementTextContent(doc, cuentaElement, "nombreCuenta", nuevaCuenta.getNombreCuenta()); 
                         guardarCambiosEnXML(doc);
-                        System.out.println("Cuenta modificada exitosamente");
+                        System.out.println("Nombre de cuenta modificado exitosamente.");
                         return true;
                     }
                 }
-                System.out.println("Cuenta no encontrada para modificar");
+                System.out.println("Cuenta no encontrada para modificar.");
             } else {
-                System.out.println("Usuario no encontrado para modificar cuenta");
+                System.out.println("Usuario no encontrado para modificar cuenta.");
             }
         } catch (Exception e) {
-            System.err.println("Error al modificar cuenta: " + e.getMessage());
+            System.err.println("Error al modificar nombre de cuenta: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
     }
+
+
 
     // Eliminar cuenta en XML (DELETE)
     public boolean eliminarCuentaEnXML(String numeroDocumento, String numeroCuenta) {

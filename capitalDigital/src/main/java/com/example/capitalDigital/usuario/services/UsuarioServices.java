@@ -20,13 +20,17 @@ public class UsuarioServices {
         try {
             System.out.println("Datos recibidos en el backend: " + usuario);
 
-            // Validación: Verificar si el email ya está registrado
-            Optional<UsuarioModel> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
-            if (usuarioExistente.isPresent()) {
-                throw new RuntimeException("El email ya está en uso.");
+            Optional<UsuarioModel> usuarioExistente = usuarioRepository.findByNumeroDocumento(usuario.getNumeroDocumento());
+
+            if (usuarioExistente.isEmpty()) { // Solo validar email si el usuario no existe aún
+                Optional<UsuarioModel> emailExistente = usuarioRepository.findByEmail(usuario.getEmail());
+                if (emailExistente.isPresent()) {
+                    throw new RuntimeException("El email ya está en uso.");
+                }
             }
+
             if (usuario.getFechaNacimiento() == null) {
-                throw new RuntimeException("Ingrese Una Fecha Valida");
+                throw new RuntimeException("Ingrese una fecha válida.");
             }
 
             return usuarioRepository.save(usuario);

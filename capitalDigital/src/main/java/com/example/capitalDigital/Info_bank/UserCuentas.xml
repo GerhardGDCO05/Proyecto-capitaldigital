@@ -1,21 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <usuarios>
-    
+          
+
+  
+  
   
   <usuario numeroDocumento="30313726">
-        
+                
+    
+    
+    <cuenta>
+                        
+      
+      
+      <banco>MERCANTIL</banco>
+                        
+      
+      
+      <numeroCuenta>01230230123545521587</numeroCuenta>
+                        
+      
+      
+      <nombreCuenta>Simonsito</nombreCuenta>
+                      
+    
+    
+    </cuenta>
+              
+  
+    
     <cuenta>
             
-      <banco>Mercantil</banco>
+      <banco>BDV</banco>
             
-      <numeroCuenta>01231235412354758545</numeroCuenta>
+      <numeroCuenta>01021021023542547854</numeroCuenta>
+            
+      <nombreCuenta>ANITA</nombreCuenta>
           
     </cuenta>
       
     <cuenta>
-      <banco>BDV</banco>
-      <numeroCuenta>01020212321545212321</numeroCuenta>
+      <banco>BBVA</banco>
+      <numeroCuenta>01111881005511088454</numeroCuenta>
+      <nombreCuenta>SEBASTIAN</nombreCuenta>
     </cuenta>
   </usuario>
-  
+      
+
+
 </usuarios>
