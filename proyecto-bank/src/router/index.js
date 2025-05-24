@@ -37,6 +37,7 @@ const routes = [
         name: 'Perfil',
         component: () => import('@/components/bankcomponents/perfil/Perfil.vue'),
         query: {popup: 'true'},
+        props: route => ({usuario: route.query.usuario ? JSON.parse(route.query.usuario) : {}})
       },
       {
         path: 'agregarcuenta',

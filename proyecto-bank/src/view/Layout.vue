@@ -11,26 +11,39 @@
 
 <script>
 import Sidebar from "@/components/bankcomponents/Sidebar.vue";
+import { useRoute } from 'vue-router';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 export default {
   components: { Sidebar },
-  data() {
-    return {
-      isSidebarActive: false,
-    };
 
-  },
-  mounted() {
-    window.addEventListener("toggle-sidebar", this.handleToggle);
-  },
-  beforeUnmount() {
-    window.removeEventListener("toggle-sidebar", this.handleToggle);
-  },
-  methods: {
-    handleToggle(event) {
-      this.isSidebarActive = event.detail;
-    },
-  },
+  setup() {
+    const route = useRoute();
+    const usuario = ref({});
+    const cuentas = ref([]);
+    const isSidebarActive = ref(false);
+
+    // Capturar datos de la URL al cargar Layout.vue
+    onMounted(() => {
+      usuario.value = JSON.parse(route.query.usuario || '{}');
+      cuentas.value = JSON.parse(route.query.cuentas || '[]');
+
+      console.log("Datos recibidos en Layout.vue:", usuario.value, cuentas.value);
+      
+      window.addEventListener("toggle-sidebar", (event) => {
+        isSidebarActive.value = event.detail;
+      });
+    });
+
+    // Eliminar el evento al desmontar el componente
+    onUnmounted(() => {
+      window.removeEventListener("toggle-sidebar", (event) => {
+        isSidebarActive.value = false;
+      });
+    });
+
+    return { usuario, cuentas, isSidebarActive };
+  }
 };
 </script>
 

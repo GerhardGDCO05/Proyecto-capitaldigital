@@ -3,6 +3,14 @@ import $ from 'jquery';
 
 export default {
   name: "Sidebar",
+  props: {
+    usuario: Object,
+    cuentas: Array
+  },
+  mounted() {
+    console.log("Usuario en Sidebar:", this.usuario);
+    console.log("Cuentas en Sidebar:", this.cuentas);
+  },
 
   mounted() {
     // Agregar eventos jQuery
@@ -175,10 +183,10 @@ export default {
             </a>
           </li>
           <li>
-            <router-link :to="{ name: 'Perfil', query: { popup: 'true' } }">
+            <router-link :to="{ name: 'Perfil', query: { usuario: JSON.stringify(usuario) } }">
               <i class="ri-account-circle-fill"></i>
               <span class="text">Perfil</span>
-            </router-link>
+            </router-link>  
           </li>
           <li>
             <a href="#">

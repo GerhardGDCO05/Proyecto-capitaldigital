@@ -113,8 +113,8 @@ export default {
                 <form class="form">
                   <div class="form_front">
                     <div class="form_details">Iniciar Sesión</div>
-                    <input placeholder="Número de documento" class="input" type="text">
-                    <input placeholder="Contraseña" class="input" type="text">
+                    <input placeholder="Número de documento" class="input" type="text" v-model="numeroDocumento">
+                    <input placeholder="Contraseña" class="input" type="text" v-model="clave">
                     <button @click="abrirbank" type="button" class="btn">Ingresar</button>
                     <span class="switch">¿No tienes cuenta?
                     <label class="signup_tog" for="signup_toggle">
