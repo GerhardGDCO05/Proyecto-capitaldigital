@@ -72,9 +72,9 @@ export default {
               </a>
               <ul class="sub-menu">
                 <li>
-                  <a href="#">
-                    <span>Mostrar Cuentas</span>
-                  </a>
+                  <router-link :to="{ name: 'MostrarCuentas', query: { popup: 'true' } }">
+                    <span class="text">Mostrar Cuentas</span>
+                  </router-link>
                 </li>
                 <li>
                   <router-link :to="{ name: 'AgregarCuenta', query: { popup: 'true' } }">
