@@ -50,7 +50,8 @@
 <template>
   <div id="app">
     <template v-if="$route.query.popup==='true'">
-          <router-view />
+      <router-view :key="$route.fullPath" />
+         <!--<router-view />-->
     </template>
 
 

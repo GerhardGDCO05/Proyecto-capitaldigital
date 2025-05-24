@@ -77,9 +77,9 @@ export default {
                   </a>
                 </li>
                 <li>
-                  <a href="#">
-                    <span>Añadir Cuenta</span>
-                  </a>
+                  <router-link :to="{ name: 'AgregarCuenta', query: { popup: 'true' } }">
+                    <span class="text">Añadir Cuenta</span>
+                  </router-link>
                 </li>
                 <li>
                   <a href="#">
@@ -94,6 +94,30 @@ export default {
                 <span class="text">Tarjetas</span>
               </a>
             </li>
+            <li>
+              <a href="#">
+                <i class="ri-wallet-2-line"></i>
+                <span class="text">Metas financieras</span>
+                <i class="ri-arrow-down-s-line"></i>
+              </a>
+              <ul class="sub-menu">
+                <li>
+                  <a href="#">
+                    <span>Crear meta financiera</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <span>Mostrar metas financiera</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <span>Eliminar meta financiera</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
           </ul>
           <p class="title">Movimientos</p>
           <ul>
@@ -104,6 +128,11 @@ export default {
                 <i class="ri-arrow-down-s-line"></i>
               </a>
               <ul class="sub-menu">
+                <li>
+                  <router-link :to="{ name: 'Beneficiarios', query: { popup: 'true' } }">
+                    <span class="text">Beneficiarios</span>
+                  </router-link>
+                </li>
                 <li>
                   <a href="#">
                     <span>Realizar transferencia</span>
@@ -191,7 +220,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background-color: rgb(8, 96, 164);
+  background-color: rgba(16, 55, 128, 1);
   padding: 24px;
   border-radius: 0 30px 30px 0;
   transition: all 0.3s;

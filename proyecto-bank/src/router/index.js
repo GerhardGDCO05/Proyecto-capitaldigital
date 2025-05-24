@@ -38,6 +38,18 @@ const routes = [
         component: () => import('@/components/bankcomponents/perfil/Perfil.vue'),
         query: {popup: 'true'},
       },
+      {
+        path: 'agregarcuenta',
+        name: 'AgregarCuenta',
+        component: () => import('@/components/bankcomponents/cuentas/AgregarCuenta.vue'),
+        query: {popup: 'true'},
+      },
+      {
+        path: 'beneficiarios',
+        name: 'Beneficiarios',
+        component: () => import('@/components/bankcomponents/transacciones/Beneficiarios.vue'),
+        query: {popup: 'true'},
+      }
     ]
   },
 ];

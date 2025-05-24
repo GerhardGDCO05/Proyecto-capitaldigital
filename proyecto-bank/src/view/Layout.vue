@@ -3,6 +3,7 @@
   <div class="layout">
     <Sidebar />
     <div class="main-content" :class="{ 'sidebar-active': isSidebarActive }">
+
       <router-view /> <!-- Aquí se cargan los distintos componentes -->
     </div>
   </div>
@@ -17,6 +18,7 @@ export default {
     return {
       isSidebarActive: false,
     };
+
   },
   mounted() {
     window.addEventListener("toggle-sidebar", this.handleToggle);

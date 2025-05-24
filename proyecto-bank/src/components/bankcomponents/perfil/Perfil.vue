@@ -1,9 +1,9 @@
 <script>
-import '@/assets/perfil.css';
+
 </script>
 
 <template>
-<header class="header">
+<header class="header" :key="$route.fullPath">
     <h1>Perfil</h1>
 </header>
 <main>
@@ -185,7 +185,6 @@ import '@/assets/perfil.css';
   border-bottom: 2px solid black;
 }
 
-/* From Uiverse.io by ammarsaa */
 .form-perfil {
   position: absolute;
   display: flex;
@@ -318,7 +317,6 @@ p {
 /*----------------------*/
 
 /*---BOTON GUARDAR CAMBIOS---*/
-/* From Uiverse.io by NorthFishHasNa */
 .continuebtn {
   position: relative;
   left: 88%;
