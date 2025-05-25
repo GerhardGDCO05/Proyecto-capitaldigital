@@ -54,7 +54,7 @@ public class AddBeneficiary {
                 Element holderName = (Element) nameList.item(0);
                 if (holderName.getTextContent().equals(holder)){
 
-                    NodeList beneficiaries = holderName.getElementsByTagName("beneficiary");
+                    NodeList beneficiaries = element.getElementsByTagName("beneficiary");
                     for (int j = 0; j < beneficiaries.getLength(); j++) {
                         Element beneficiary = (Element) beneficiaries.item(j);
                         String existingAccountNumber = beneficiary.getElementsByTagName("accountNumber").item(0).getTextContent();
