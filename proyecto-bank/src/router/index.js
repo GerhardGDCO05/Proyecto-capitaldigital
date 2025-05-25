@@ -50,6 +50,12 @@ const routes = [
         name: 'Beneficiarios',
         component: () => import('@/components/bankcomponents/transacciones/Beneficiarios.vue'),
         query: {popup: 'true'},
+      },
+      {
+        path: 'mostrarcuentas',
+        name: 'MostrarCuentas',
+        component: () => import('@/components/bankcomponents/cuentas/MostrarCuenta.vue'),
+        query: {popup: 'true'},
       }
     ]
   },
