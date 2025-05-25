@@ -20,22 +20,24 @@ import javax.xml.transform.stream.StreamResult;
 import org.xml.sax.SAXException;
 
 import com.example.capitalDigital.Validation_bank.ValidateBeneficiaryInfo;
+import com.example.capitalDigital.Validation_bank.ValidateUniqueAccountNumber;
 
-public class AddBeneficiary {
+public class ModifyBeneficiary {
     /**
-     * Agrega nuevo beneficiario al directorio de un usuario
+     * modifica el beneficiario asociado a la cuenta de un usuario
      * @param beneficiaryName Nombre del beneficiario
      * @param ID Número de identificacion del beneficiario
      * @param accountNumber Numero de cuenta bancaria del beneficiario
      * @param Bank Banco de la cuenta bancaria
      * @param path  Ruta RELATIVA del archivo .xml
      * @param holder Nombre del usuario de la cuenta bancaria a guardar el beneficiario
-     * @return true si se agrego el beneficiario exitosamente en el xml, false en caso contrario
+     * @return true si se modifico el beneficiario exitosamente en el xml, false en caso contrario
      */
-    public boolean addBeneficiary(String beneficiaryName, String ID, String accountNumber,String Bank, String path,String holder) {
+    public boolean modifyBeneficiary(String beneficiaryName, String ID,String accountNumber,String Bank, String path,String holder, String oldAccountNumber) {
+        ValidateUniqueAccountNumber validateUniqueAccountNumber = new ValidateUniqueAccountNumber();
+        if(!validateUniqueAccountNumber.validateUniqueAccountNumber(accountNumber,holder,path)) return false; //validar que no haya otro beneficiario con el mismo numero de cuenta
         ValidateBeneficiaryInfo validateBeneficiaryInfo = new ValidateBeneficiaryInfo();
-        if (!validateBeneficiaryInfo.validateInfo(beneficiaryName,ID,Bank,accountNumber)) return false; //si los datos no son validos entonces no guarda el beneficiario
-
+        validateBeneficiaryInfo.validateInfo(beneficiaryName,ID,Bank,accountNumber);
         try{
             //Abrir y parsear el archivo .xml
             DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
@@ -46,61 +48,34 @@ public class AddBeneficiary {
             NodeList nList = doc.getElementsByTagName("holder"); //obtener etiquetas del .xml denominadas holder
             boolean found = false;
 
-            //Buscar el holder a guardar el beneficiario
             for (int i = 0; i < nList.getLength(); i++) {
                 Element element = (Element) nList.item(i);
 
                 NodeList nameList = element.getElementsByTagName("holderName"); //obtener etiquetas del .xml denominadas holderName
                 Element holderName = (Element) nameList.item(0);
-                if (holderName.getTextContent().equals(holder)){
+                if (holderName.getTextContent().equals(holder)) { //si se encuentra el holder, se procede a buscar el beneficiario a modificar
 
                     NodeList beneficiaries = element.getElementsByTagName("beneficiary");
                     for (int j = 0; j < beneficiaries.getLength(); j++) {
                         Element beneficiary = (Element) beneficiaries.item(j);
                         String existingAccountNumber = beneficiary.getElementsByTagName("accountNumber").item(0).getTextContent();
 
-                        if (existingAccountNumber.equals(accountNumber)) { //si ya hay un beneficiario con el mismo nro de cuenta, no agregar beneficiario al xml
-                            return false;
+                        if (existingAccountNumber.equals(oldAccountNumber)) { //si ya hay un beneficiario con el mismo nro de cuenta, es el beneficiario a modificar
+                            element.getElementsByTagName("beneficiaryName").item(j).setTextContent(beneficiaryName);
+                            element.getElementsByTagName("ID").item(j).setTextContent(ID);
+                            element.getElementsByTagName("accountNumber").item(j).setTextContent(accountNumber);
+                            element.getElementsByTagName("bank").item(j).setTextContent(Bank);
                         }
 
                     }
-                    //guardar nuevo beneficiario
-                    Element newBeneficiary = doc.createElement("beneficiary");
-
-                    Element beneficiaryNametxt = doc.createElement("beneficiaryName");
-                    beneficiaryNametxt.appendChild(doc.createTextNode(beneficiaryName));
-                    newBeneficiary.appendChild(beneficiaryNametxt);
-
-                    Element IDtxt = doc.createElement("ID");
-                    IDtxt.appendChild(doc.createTextNode(ID));
-                    newBeneficiary.appendChild(IDtxt);
-
-                    Element accountNumbertxt = doc.createElement("accountNumber");
-                    accountNumbertxt.appendChild(doc.createTextNode(accountNumber));
-                    newBeneficiary.appendChild(accountNumbertxt);
-
-                    Element Banktxt = doc.createElement("bank");
-                    Banktxt.appendChild(doc.createTextNode(Bank));
-                    newBeneficiary.appendChild(Banktxt);
-
-                    nList.item(i).appendChild(newBeneficiary);
-
-                    found = true;
-                    break;
                 }
-
             }
-
-            if (!found) return false;
-            //actualizar archivo .xml
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(path));
+            StreamResult result = new StreamResult(path);
             transformer.transform(source, result);
             return true;
-
-            //manejo de excepciones
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -112,6 +87,6 @@ public class AddBeneficiary {
         } catch (TransformerException e) {
             throw new RuntimeException(e);
         }
-    }
 
+    }
 }
