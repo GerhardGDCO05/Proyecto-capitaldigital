@@ -2,6 +2,7 @@ import ModificarBeneficiario from "@/components/bankcomponents/transacciones/cru
 import apiClient from "./apiClient";
 
 export default {
+  //usuario
   obtenerUsuarios() {
     return apiClient.get("/usuario");
   },
@@ -22,6 +23,8 @@ export default {
   eliminarUsuarioPorNumeroDocumento(numeroDocumento) {
     return apiClient.delete(`/usuario/numeroDocumento/${numeroDocumento}`);
   },
+
+  //cuentas
   agregarCuentaPorNumeroDocumento(numeroDocumento, cuenta) {
     return apiClient.post(`/cuenta/numeroDocumento/${numeroDocumento}`, cuenta);
   },
@@ -37,7 +40,8 @@ export default {
   eliminarCuentaPorNumeroDocumento(numeroDocumento, numeroCuenta) {
     return apiClient.delete(`/cuenta/numeroDocumento/${numeroDocumento}/numeroCuenta/${numeroCuenta}`); 
   },
-
+  
+  //beneficiario
   agregarBeneficiario(holder){
     return apiClient.post(`/beneficiaries/${holder}`); 
   },

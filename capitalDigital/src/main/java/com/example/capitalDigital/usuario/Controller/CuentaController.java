@@ -53,11 +53,12 @@ public class CuentaController {
             List<CuentaModel> cuentas = cuentaService.obtenerCuentasPorNumeroDocumento(numeroDocumento);
 
             if (cuentas.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se encontraron cuentas para el documento: " + numeroDocumento);
+                System.out.println("El usuario no posee cuentas extras registradas.");
+                return ResponseEntity.ok("No tiene cuentas secundarias registradas.");
             } else {
                 return ResponseEntity.ok(cuentas);
             }
+
         } catch (Exception e) {
             System.err.println("Error en el controlador GET: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
