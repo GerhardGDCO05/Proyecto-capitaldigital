@@ -1,3 +1,4 @@
+import ModificarBeneficiario from "@/components/bankcomponents/transacciones/crudbeneficiarios/ModificarBeneficiario.vue";
 import apiClient from "./apiClient";
 
 export default {
@@ -35,6 +36,25 @@ export default {
 
   eliminarCuentaPorNumeroDocumento(numeroDocumento, numeroCuenta) {
     return apiClient.delete(`/cuenta/numeroDocumento/${numeroDocumento}/numeroCuenta/${numeroCuenta}`); 
-  }
+  },
 
+  agregarBeneficiario(holder){
+    return apiClient.post(`/beneficiaries/${holder}`); 
+  },
+
+  ModificarBeneficiario(holder, numeroCuentaBeneficiario) {
+    return apiClient.put(`/beneficiaries/${holder}/${numeroCuentaBeneficiario}`);
+  },
+
+  obtenerTodosLosBeneficiarios(holder) {
+    return apiClient.get(`/beneficiaries/${holder}`);
+  },
+
+  obtenerBeneficiarioEspecifico(holder,numeroCuenta) {
+    return apiClient.get(`/beneficiaries/${holder}/${numeroCuenta}`);
+  },
+
+  eliminarBeneficiario(holder, numeroCuenta) {
+    return apiClient.delete(`/beneficiaries/${holder}/${numeroCuenta}`);
+  } 
 };

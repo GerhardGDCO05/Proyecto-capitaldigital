@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -22,6 +23,7 @@ import org.xml.sax.SAXException;
 import com.example.capitalDigital.Validation_bank.ValidateBeneficiaryInfo;
 import com.example.capitalDigital.Validation_bank.ValidateUniqueAccountNumber;
 
+@Component
 public class ModifyBeneficiary {
     /**
      * modifica el beneficiario asociado a la cuenta de un usuario

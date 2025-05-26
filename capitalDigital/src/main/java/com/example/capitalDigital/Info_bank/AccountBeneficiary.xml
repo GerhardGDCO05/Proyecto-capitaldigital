@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<holders>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><holders>
     <holder>
         <holderName>Simonsito</holderName>
         <beneficiary>
             <beneficiaryName>Juan Perez</beneficiaryName>
-            <accountNumber>01230230171255521341</accountNumber>
-            <bank>MERCANTIL</bank>
-            <ID>30343891</ID>
+            <accountNumber>01231110023215412654</accountNumber>
+            <bank>Mercantil</bank>
+            <ID>10336111</ID>
         </beneficiary>
         <beneficiary>
             <beneficiaryName>Jesus Miranda</beneficiaryName>
@@ -14,7 +13,7 @@
             <bank>BDV</bank>
             <ID>6981321</ID>
         </beneficiary>
-    </holder>
+    <beneficiary><beneficiaryName>Miguel Correa</beneficiaryName><ID>12102032</ID><accountNumber>01021230111233698745</accountNumber><bank>BDV</bank></beneficiary></holder>
     <holder>
         <holderName>ANITA</holderName>
         <beneficiary>
@@ -44,5 +43,5 @@
             <bank>BBVA</bank>
             <ID>11231651</ID>
         </beneficiary>
-    </holder>
-</holders>
+    </holder>    
+<holder><holderName>Gerhard</holderName><beneficiary><beneficiaryName>Marco Castro</beneficiaryName><ID>11232002</ID><accountNumber>01113213325548785466</accountNumber><bank>BBVA</bank></beneficiary></holder></holders>

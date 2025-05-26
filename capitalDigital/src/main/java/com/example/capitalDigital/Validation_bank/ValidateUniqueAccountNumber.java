@@ -1,8 +1,8 @@
 package com.example.capitalDigital.Validation_bank;
 
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -10,7 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-
+@Component
 public class ValidateUniqueAccountNumber {
     public boolean validateUniqueAccountNumber(String accountNumber, String holder,String path ) {
         try{
