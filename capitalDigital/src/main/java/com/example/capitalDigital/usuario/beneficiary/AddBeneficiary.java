@@ -30,6 +30,7 @@ public class AddBeneficiary {
      * @param Bank Banco de la cuenta bancaria
      * @param path  Ruta RELATIVA del archivo .xml
      * @param holder Nombre del usuario de la cuenta bancaria a guardar el beneficiario
+     * @param holderIdentification numero de identificacion del holder de la cuenta
      * @return true si se agrego el beneficiario exitosamente en el xml, false en caso contrario
      */
     public boolean addBeneficiary(String beneficiaryName, String ID, String accountNumber,String Bank, String path,String holder,String holderIdentification) {
