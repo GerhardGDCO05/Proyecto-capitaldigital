@@ -32,7 +32,7 @@ public class AddBeneficiary {
      * @param holder Nombre del usuario de la cuenta bancaria a guardar el beneficiario
      * @return true si se agrego el beneficiario exitosamente en el xml, false en caso contrario
      */
-    public boolean addBeneficiary(String beneficiaryName, String ID, String accountNumber,String Bank, String path,String holder) {
+    public boolean addBeneficiary(String beneficiaryName, String ID, String accountNumber,String Bank, String path,String holder,String holderIdentification) {
         ValidateBeneficiaryInfo validateBeneficiaryInfo = new ValidateBeneficiaryInfo();
         if (!validateBeneficiaryInfo.validateInfo(beneficiaryName,ID,Bank,accountNumber)) return false; //si los datos no son validos entonces no guarda el beneficiario
 
@@ -50,9 +50,11 @@ public class AddBeneficiary {
             for (int i = 0; i < nList.getLength(); i++) {
                 Element element = (Element) nList.item(i);
 
-                NodeList nameList = element.getElementsByTagName("holderName"); //obtener etiquetas del .xml denominadas holderName
-                Element holderName = (Element) nameList.item(0);
-                if (holderName.getTextContent().equals(holder)){
+                NodeList holderNameList = element.getElementsByTagName("holderName"); //obtener etiquetas del .xml denominadas holderName
+                NodeList holderIDList = element.getElementsByTagName("holderID"); //obtener etiquetas del .xml denominadas holderID
+                Element holderName = (Element) holderNameList.item(0);
+                Element holderID = (Element) holderIDList.item(0);
+                if (holderName.getTextContent().equals(holder) && holderID.getTextContent().equals(holderIdentification)) {
 
                     NodeList beneficiaries = element.getElementsByTagName("beneficiary");
                     for (int j = 0; j < beneficiaries.getLength(); j++) {

@@ -31,9 +31,10 @@ public class ModifyBeneficiary {
      * @param Bank Banco de la cuenta bancaria
      * @param path  Ruta RELATIVA del archivo .xml
      * @param holder Nombre del usuario de la cuenta bancaria a guardar el beneficiario
+     * @param oldAccountNumber Numero antiguo de cuenta del beneficiario
      * @return true si se modifico el beneficiario exitosamente en el xml, false en caso contrario
      */
-    public boolean modifyBeneficiary(String beneficiaryName, String ID,String accountNumber,String Bank, String path,String holder, String oldAccountNumber) {
+    public boolean modifyBeneficiary(String beneficiaryName, String ID,String accountNumber,String Bank, String path,String holder, String oldAccountNumber, String holderIdentification) {
         ValidateUniqueAccountNumber validateUniqueAccountNumber = new ValidateUniqueAccountNumber();
         if(!validateUniqueAccountNumber.validateUniqueAccountNumber(accountNumber,holder,path)) return false; //validar que no haya otro beneficiario con el mismo numero de cuenta
         ValidateBeneficiaryInfo validateBeneficiaryInfo = new ValidateBeneficiaryInfo();
@@ -51,9 +52,11 @@ public class ModifyBeneficiary {
             for (int i = 0; i < nList.getLength(); i++) {
                 Element element = (Element) nList.item(i);
 
-                NodeList nameList = element.getElementsByTagName("holderName"); //obtener etiquetas del .xml denominadas holderName
-                Element holderName = (Element) nameList.item(0);
-                if (holderName.getTextContent().equals(holder)) { //si se encuentra el holder, se procede a buscar el beneficiario a modificar
+                NodeList holderNameList = element.getElementsByTagName("holderName"); //obtener etiquetas del .xml denominadas holderName
+                NodeList holderIDList = element.getElementsByTagName("holderID"); //obtener etiquetas del .xml denominadas holderID
+                Element holderName = (Element) holderNameList.item(0);
+                Element holderID = (Element) holderIDList.item(0);
+                if (holderName.getTextContent().equals(holder) && holderID.getTextContent().equals(holderIdentification)) { //si se encuentra el holder, se procede a buscar el beneficiario a modificar
 
                     NodeList beneficiaries = element.getElementsByTagName("beneficiary");
                     for (int j = 0; j < beneficiaries.getLength(); j++) {

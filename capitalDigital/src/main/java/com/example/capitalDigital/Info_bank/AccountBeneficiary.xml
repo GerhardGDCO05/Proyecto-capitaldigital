@@ -2,6 +2,7 @@
 <holders>
     <holder>
         <holderName>Simonsito</holderName>
+        <holderID>30313726</holderID>
         <beneficiary>
             <beneficiaryName>Juan Perez</beneficiaryName>
             <accountNumber>01230230171255521341</accountNumber>
@@ -17,6 +18,7 @@
     </holder>
     <holder>
         <holderName>ANITA</holderName>
+        <holderID>30345678</holderID>
         <beneficiary>
             <beneficiaryName>Pedro Sanchez</beneficiaryName>
             <accountNumber>01111819035511082375</accountNumber>
@@ -32,6 +34,7 @@
     </holder>
     <holder>
         <holderName>SEBASTIAN</holderName>
+        <holderID>31456789</holderID>
         <beneficiary>
             <beneficiaryName>Oscar Rodriguez</beneficiaryName>
             <accountNumber>01021079088234541212</accountNumber>
