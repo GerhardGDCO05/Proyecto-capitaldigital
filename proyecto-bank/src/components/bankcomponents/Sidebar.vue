@@ -7,10 +7,6 @@ export default {
     usuario: Object,
     cuentas: Array
   },
-  mounted() {
-    console.log("Usuario en Sidebar:", this.usuario);
-    console.log("Cuentas en Sidebar:", this.cuentas);
-  },
 
   mounted() {
     // Agregar eventos jQuery
@@ -110,14 +106,14 @@ export default {
               </a>
               <ul class="sub-menu">
                 <li>
-                  <a href="#">
+                  <router-link :to="{ name: 'CrearMeta', query: { popup: 'true' } }">
                     <span>Crear meta financiera</span>
-                  </a>
+                  </router-link>
                 </li>
                 <li>
-                  <a href="#">
-                    <span>Mostrar metas financiera</span>
-                  </a>
+                  <router-link :to="{ name: 'MostrarMetas', query: { popup: 'true' } }">
+                    <span>Mostrar meta financiera</span>
+                  </router-link>
                 </li>
                 <li>
                   <a href="#">
@@ -182,11 +178,11 @@ export default {
               <span class="text">Ayuda</span>
             </a>
           </li>
-          <li>
-            <router-link :to="{ name: 'Perfil', query: { usuario: JSON.stringify(usuario) } }">
+          <li v-if="usuario && usuario.nombre">
+            <router-link :to="{ name: 'Perfil', query: { popup: 'true' } }">
               <i class="ri-account-circle-fill"></i>
-              <span class="text">Perfil</span>
-            </router-link>  
+              <span class="text">{{ usuario.nombre }}</span>
+            </router-link>
           </li>
           <li>
             <a href="#">

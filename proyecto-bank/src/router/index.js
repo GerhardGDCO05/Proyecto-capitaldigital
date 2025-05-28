@@ -56,6 +56,30 @@ const routes = [
         name: 'MostrarCuentas',
         component: () => import('@/components/bankcomponents/cuentas/MostrarCuenta.vue'),
         query: {popup: 'true'},
+      },
+      {
+        path: 'crearmeta',
+        name: 'CrearMeta',
+        component: () => import('@/components/bankcomponents/metasfinancieras/CrearMetas.vue'),
+        query: {popup: 'true'},
+      },
+      {
+        path: 'metas',
+        name: 'MostrarMetas',
+        component: () => import('@/components/bankcomponents/metasfinancieras/MostrarMetas.vue'),
+        query: {popup: 'true'},
+      },
+      {
+        path: 'modificar-beneficiario/:accountNumber',
+        name: 'ModificarBeneficiario',
+        component: () => import('@/components/bankcomponents/transacciones/crudbeneficiarios/ModificarBeneficiario.vue'),
+        props: true
+      },
+      {
+        path: 'editar-cuenta/:numeroCuenta',
+        name: 'EditarCuenta',
+        component: () => import('@/components/bankcomponents/cuentas/EditarCuenta.vue'),
+        query: {popup: 'true'}
       }
     ]
   },

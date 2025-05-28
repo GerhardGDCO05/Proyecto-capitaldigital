@@ -1,31 +1,152 @@
-<script setup lang="ts">
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import { useUsuarioStore } from '@/stores/useUsuarioStore'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
+// Estado reactivo
+const showModal = ref(false)
+const cuentaSeleccionada = ref(null)
+
+const usuarioStore = useUsuarioStore()
+const documento = usuarioStore.usuario.numeroDocumento
+
+const cuentasXML = ref([])
+const cuentasConSaldo = ref([])
+
+// Logos de bancos
+const logosBancos = {
+  'BBVA': new URL('@/images/BBVAprovinciallogo.png', import.meta.url).href,
+  'BDV': new URL('@/images/Banco_de_Venezuela_logo.png', import.meta.url).href,
+  'Mercantil': new URL('@/images/Mercantil.png', import.meta.url).href,
+  default: new URL('@/images/bank-default.png', import.meta.url).href
+}
+
+// Función para obtener cuentas del XML desde Spring Boot
+const fetchCuentasXML = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8080/cuenta/numeroDocumento/${documento}`)
+    cuentasXML.value = response.data
+  } catch (error) {
+    console.error("Error al cargar cuentas del XML", error)
+  }
+}
+
+// Función para parsear el archivo TXT
+const parseTXT = async () => {
+  try {
+    const response = await fetch('/data/ListaCuentasDetalladasBancos.txt')
+    const texto = await response.text()
+
+    const bloques = texto.split('-*-*-*-*-*').filter(bloque => bloque.trim())
+    const datosTXT = {}
+
+    bloques.forEach(bloque => {
+      const lineas = bloque.trim().split('\n')
+      const cuenta = {}
+      lineas.forEach(linea => {
+        const [clave, valor] = linea.split(':')
+        if (clave && valor) {
+          cuenta[clave.trim()] = valor.trim()
+        }
+      })
+      if (cuenta.NCuenta) {
+        datosTXT[cuenta.NCuenta] = {
+          tipoCuenta: cuenta.TipoCuenta || 'Desconocido',
+          saldo: cuenta.Saldo || '0 Bs'
+        }
+      }
+    })
+
+    return datosTXT
+  } catch (error) {
+    console.error('Error al leer cuentas.txt:', error)
+    return {}
+  }
+}
+
+// Cargar y combinar datos
+onMounted(async () => {
+  if (!documento) {
+    alert("⚠️ No hay usuario logueado")
+    return
+  }
+
+  await fetchCuentasXML()
+  const datosTXT = await parseTXT()
+
+  // Combinar datos del XML con los del TXT
+  cuentasConSaldo.value = cuentasXML.value.map(cuenta => ({
+    ...cuenta,
+    saldo: datosTXT[cuenta.numeroCuenta]?.saldo || 'No disponible',
+    tipoCuenta: datosTXT[cuenta.numeroCuenta]?.tipoCuenta || 'Desconocido'
+  }))
+})
+
+function irAEditarCuenta(cuenta) {
+  if (!cuenta) {
+    alert("⚠️ Seleccione una cuenta válida antes de continuar.")
+    return
+  }
+
+  router.push({
+    name: 'EditarCuenta',
+    query: { popup: 'true' },
+    params: {
+      numeroCuenta: cuenta.numeroCuenta,
+      nombreCuenta: cuenta.nombreCuenta
+    }
+  })
+}
 </script>
 
 <template>
-  <header class="header" :key="$route.fullPath">
+  <header class="header">
     <h1>Cuentas</h1>
   </header>
 
   <div class="contenedor-cuentas-globales">
+
+    <!-- Cuentas Corrientes -->
     <div class="contenedor-cuentascorrientes">
       <h2 class="title">Cuentas Corrientes</h2>
       <div class="contenedor-cuentas">
-        <button class="cuenta-corriente">
-          <img src="@/images/BBVAprovinciallogo.png" width="150" height="100">
+        <button v-for="cuenta in cuentasConSaldo.filter(c => c.tipoCuenta === 'Corriente')" :key="cuenta.numeroCuenta" class="cuenta-corriente">
+          <img
+              :src="logosBancos[cuenta.banco] || logosBancos.default"
+              width="150"
+              height="100"
+          >
           <div class="info-cuenta">
-            <span class="numero-cuenta">0105-***********************</span>
-            <span class="saldo">20.000,00 Bs</span>
+            <span class="numero-cuenta">{{ cuenta.numeroCuenta }}</span>
+            <span class="saldo">{{ cuenta.saldo }} Bs</span>
           </div>
           <div class="arrow-wrapper">
             <div class="arrow"></div>
           </div>
+
+          <button class="editar-btn" @click.stop="irAEditarCuenta(cuenta)">
+            Editar
+          </button>
         </button>
-        <button class="cuenta-corriente">
-          <img src="@/images/Banco_de_Venezuela_logo.png" width="150" height="50">
+
+      </div>
+    </div>
+
+    <!-- Cuentas de Ahorro -->
+    <div class="contenedor-cuentasahorro">
+      <h2 class="title">Cuentas de Ahorro</h2>
+      <div class="contenedor-cuentas">
+        <button v-for="cuenta in cuentasConSaldo.filter(c => c.tipoCuenta === 'Ahorro')" :key="cuenta.numeroCuenta" class="cuenta-ahorro">
+          <img
+              :src="logosBancos[cuenta.banco] || logosBancos.default"
+              width="150"
+              height="100"
+          >
           <div class="info-cuenta">
-            <span class="numero-cuenta">0105-***********************</span>
-            <span class="saldo">20.000,00 Bs</span>
+            <span class="numero-cuenta">{{ cuenta.numeroCuenta }}</span>
+            <span class="saldo">{{ cuenta.saldo }} Bs</span>
           </div>
           <div class="arrow-wrapper">
             <div class="arrow"></div>
@@ -34,31 +155,6 @@
       </div>
     </div>
 
-    <div class="contenedor-cuentasahorro">
-      <h2 class="title">Cuentas de Ahorro</h2>
-      <div class="contenedor-cuentas">
-        <button class="cuenta-ahorro">
-          <img src="@/images/BBVAprovinciallogo.png" width="150" height="100">
-          <div class="info-cuenta">
-            <span class="numero-cuenta">0105-***********************</span>
-            <span class="saldo">20.000,00 Bs</span>
-          </div>
-          <div class="arrow-wrapper">
-            <div class="arrow"></div>
-          </div>
-        </button>
-        <button class="cuenta-ahorro">
-          <img src="@/images/Banco_de_Venezuela_logo.png" width="150" height="50">
-          <div class="info-cuenta">
-            <span class="numero-cuenta">0105-***********************</span>
-            <span class="saldo">20.000,00 Bs</span>
-          </div>
-          <div class="arrow-wrapper">
-            <div class="arrow"></div>
-          </div>
-        </button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -140,6 +236,7 @@
   justify-content: space-between;
   align-items: center;
   flex-grow: 1;
+  gap: 20px;
 }
 .numero-cuenta,
 .saldo {

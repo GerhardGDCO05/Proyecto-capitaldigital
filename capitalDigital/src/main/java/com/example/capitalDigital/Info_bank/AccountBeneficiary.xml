@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><usuarios>
+            
+    
+    <usuario numeroDocumento="30313726">
+                        
+        
+        <beneficiary>
+                                    
+            
+            <beneficiaryName>Juan Perez</beneficiaryName>
+                                    
+            
+            <accountNumber>01231110023215412654</accountNumber>
+                                    
+            
+            <bank>Mercantil</bank>
+                                    
+            
+            <ID>10336111</ID>
+                                
+        
+        </beneficiary>
+                        
+        
+        <beneficiary>
+                                    
+            
+            <beneficiaryName>Jesus Miranda</beneficiaryName>
+                                    
+            
+            <accountNumber>01021021087922545123</accountNumber>
+                                    
+            
+            <bank>BDV</bank>
+                                    
+            
+            <ID>6981321</ID>
+                                
+        
+        </beneficiary>
+                        
+        
+        <beneficiary>
+                                    
+            
+            <beneficiaryName>Miguel Correa</beneficiaryName>
+                                    
+            
+            <accountNumber>01021230111233698745</accountNumber>
+                                    
+            
+            <bank>BDV</bank>
+                                    
+            
+            <ID>12102032</ID>
+                                
+        
+        </beneficiary>
+                        
+        
+        <beneficiary>
+                                    
+            
+            <beneficiaryName>Sebastián Pérez</beneficiaryName>
+                                    
+            
+            <accountNumber>01021230111233698710</accountNumber>
+                                    
+            
+            <bank>Mercantil</bank>
+                                    
+            
+            <ID>12102033</ID>
+                                
+        
+        </beneficiary>
+                        
+        
+        <beneficiary>
+                                    
+            
+            <beneficiaryName>Simón Manjoud</beneficiaryName>
+                                    
+            
+            <accountNumber>01021230111233698710</accountNumber>
+                                    
+            
+            <bank>BBVA Provincial</bank>
+                                    
+            
+            <ID>12102033</ID>
+                                
+        
+        </beneficiary>
+                    
+        
+        <beneficiary>
+                        
+            <beneficiaryName>JJesús</beneficiaryName>
+                        
+            <ID/>
+                        
+            <accountNumber>01231110023215412653</accountNumber>
+                        
+            <bank>Mercantil</bank>
+                    
+        </beneficiary>
+            
+        <beneficiary>
+            <beneficiaryName>María</beneficiaryName>
+            <ID/>
+            <accountNumber>01021230111233698745</accountNumber>
+            <bank>BDV</bank>
+        </beneficiary>
+    </usuario>
+        
+
+</usuarios>

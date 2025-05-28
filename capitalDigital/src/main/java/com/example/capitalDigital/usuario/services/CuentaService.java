@@ -1,18 +1,26 @@
 package com.example.capitalDigital.usuario.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.w3c.dom.*;
-
-import com.example.capitalDigital.Validation_bank.BancoService;
-import com.example.capitalDigital.usuario.models.CuentaModel;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.example.capitalDigital.Validation_bank.BancoService;
+import com.example.capitalDigital.usuario.models.CuentaModel;
 
 @Service
 public class CuentaService {
@@ -21,7 +29,7 @@ public class CuentaService {
     private BancoService bancoService;
 
     // Ruta específica para el archivo XML de cuentas
-    private static final String XML_FILE = "C:\\Users\\Usuario\\Desktop\\proyecto IS\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\info_bank\\UserCuentas.xml";
+    private static final String XML_FILE = "C:\\Users\\simon\\OneDrive\\Escritorio\\CapitalDigitalISProyect\\Proyecto-capitaldigital\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\UserCuentas.xml";
 
     // Guardar cuenta en XML (POST)
     public boolean guardarCuentaEnXML(String numeroDocumento, CuentaModel cuenta) {
@@ -327,5 +335,32 @@ public class CuentaService {
         Element element = doc.createElement(nombre);
         element.appendChild(doc.createTextNode(valor != null ? valor : ""));
         return element;
+    }
+
+    public boolean modificarNombreCuenta(String documento, String oldNombre, String nuevoNombre) {
+        try {
+            Document doc = obtenerDocumentoXML();
+            Node usuarioNode = encontrarNodoUsuario(doc, documento);
+
+            if (usuarioNode != null) {
+                NodeList cuentas = ((Element) usuarioNode).getElementsByTagName("cuenta");
+                for (int i = 0; i < cuentas.getLength(); i++) {
+                    Element cuentaElement = (Element) cuentas.item(i);
+                    String nombreActual = getElementTextContent(cuentaElement, "nombreCuenta");
+
+                    if (nombreActual.equals(oldNombre)) {
+                        setElementTextContent(doc, cuentaElement, "nombreCuenta", nuevoNombre);
+                        guardarCambiosEnXML(doc);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
