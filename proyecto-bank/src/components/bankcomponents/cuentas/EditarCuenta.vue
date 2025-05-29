@@ -125,7 +125,7 @@ async function guardarCambios() {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 50%;
+  top: 10%;
   left: 50%;
   max-width: 500px;
   height: 500px;

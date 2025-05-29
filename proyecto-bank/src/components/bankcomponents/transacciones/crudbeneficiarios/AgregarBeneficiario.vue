@@ -17,7 +17,7 @@ const bancoSeleccionado = ref<{ nombre: string | null; imagen: string | null }>(
 
 // Lista de bancos disponibles
 const bancos = [
-  { nombre: 'BBVA Provincial', logo: '/src/images/BBVAprovinciallogo.png' },
+  { nombre: 'BBVA', logo: '/src/images/BBVAprovinciallogo.png' },
   { nombre: 'BDV', logo: '/src/images/Banco_de_Venezuela_logo.png' },
   { nombre: 'Mercantil', logo: '/src/images/Mercantil.png' }
 ]
@@ -101,7 +101,7 @@ function agregarBeneficiario() {
 
       <ul class="list webkit-scrollbar" role="list" dir="auto">
         <li class="listitem" role="listitem">
-          <button type="button" class="button" @click="seleccionarBanco('BBVA Provincial')">
+          <button type="button" class="button" @click="seleccionarBanco('BBVA')">
             <img src="@/images/BBVAprovinciallogo.png" width="60" height="30" />
             <span>BBVA Provincial</span>
           </button>

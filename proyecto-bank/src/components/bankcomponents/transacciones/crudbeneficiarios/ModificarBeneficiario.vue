@@ -20,7 +20,7 @@ const numeroCuenta = ref('')
 const bancoSeleccionado = ref('')
 
 // Lista de bancos disponibles
-const bancos = ['BBVA Provincial', 'BDV', 'Mercantil']
+const bancos = ['BBVA', 'BDV', 'Mercantil']
 
 const usuarioStore = useUsuarioStore()
 const documento = usuarioStore.usuario.numeroDocumento
@@ -105,15 +105,15 @@ async function guardarCambios() {
 
     <form @submit.prevent="guardarCambios" class="form">
       <!-- Campo Nombre -->
-      <label for="nombre">Nombre:</label>
+      <label for="nombre">Nombre</label>
       <input id="nombre" v-model="nombre" type="text" placeholder="Nombre del beneficiario" required />
 
-      <!-- Campo Cuenta (solo lectura o editable según quieras) -->
-      <label>Número de cuenta:</label>
-      <input :value="route.params.accountNumber" />
+      <!-- Campo Cuenta -->
+      <label>Número de cuenta</label>
+      <input v-model="numeroCuenta" type="text" placeholder="Ingrese nuevo número de cuenta" required />
 
       <!-- Selección de Banco -->
-      <label>Banco:</label>
+      <label>Banco</label>
       <select v-model="bancoSeleccionado" required>
         <option v-for="banco in bancos" :key="banco" :value="banco">
           {{ banco }}
@@ -139,7 +139,7 @@ async function guardarCambios() {
   top: -100vh;
   width: 80%;
   height: 100%;
-  background-color: rgb(255, 255, 255);
+  background-color: #fff;
   border-bottom: 2px solid black;
 }
 
@@ -147,33 +147,35 @@ async function guardarCambios() {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 20%;
+  left: 40%;
   max-width: 500px;
-  height: 500px;
-  margin: 2rem auto;
-  padding: 20px;
+  width: 100%;
+  padding: 2rem;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   color: black;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Espaciado automático entre campos */
+}
+
 .form label {
-  display: block;
-  margin-top: 1rem;
   font-weight: bold;
+  margin-bottom: 4px;
 }
 
 .form input,
 .form select {
   width: 100%;
   padding: 10px;
-  margin-top: 4px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  display: block;
 }
 
 .form select {

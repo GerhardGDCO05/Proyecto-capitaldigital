@@ -15,6 +15,12 @@ export const useUsuarioStore = defineStore('usuario', {
         clearUsuario() {
             this.usuario = null;
             this.cuentas = [];
+        },
+        actualizarUsuario(nuevosDatos) {
+            this.usuario = {
+                ...this.usuario,
+                ...nuevosDatos
+            };
         }
     },
     // Persistencia con localStorage

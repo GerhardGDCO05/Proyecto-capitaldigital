@@ -10,20 +10,31 @@ export default {
 
     const handleInput = (e) => {
       let value = e.target.value.replace(/[^0-9]/g, '')
+
+      if (!value) {
+        metaEdit.value.montoRequerido = 0
+        metaEdit.value.displayMonto = '0,00 Bs'
+        return
+      }
+
+      const digits = value.split('').reverse()
       let integerPart = ''
       let decimalPart = ''
 
-      for (let i = 0; i < value.length; i++) {
+      for (let i = 0; i < digits.length; i++) {
         if (i < 2) {
-          decimalPart = value[i] + decimalPart
+          decimalPart = digits[i] + decimalPart
         } else {
-          integerPart = value[i] + integerPart
+          integerPart = digits[i] + integerPart
         }
       }
 
       while (decimalPart.length < 2) decimalPart += '0'
+
       const formattedInteger = parseInt(integerPart || '0', 10).toLocaleString('es-VE')
-      metaEdit.value.montoRequerido = parseFloat(`${integerPart}.${decimalPart}`)
+      const parsedValue = parseFloat(`${integerPart || 0}.${decimalPart || '00'}`)
+
+      metaEdit.value.montoRequerido = parsedValue
       metaEdit.value.displayMonto = `${formattedInteger},${decimalPart} Bs`
     }
 

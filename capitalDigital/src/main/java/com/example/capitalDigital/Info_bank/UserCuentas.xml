@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <usuarios>
-                                    
+                                                          
 
   
   
@@ -18,8 +18,30 @@
   
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <usuario numeroDocumento="30313726">
-                                                                    
+                                                                                                                
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -36,7 +58,18 @@
     
     
     <cuenta>
-                                                                                                      
+                                                                                                                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -53,7 +86,18 @@
       
       
       <banco>MERCANTIL</banco>
-                                                                                                      
+                                                                                                                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -70,7 +114,18 @@
       
       
       <numeroCuenta>01230230123545521587</numeroCuenta>
-                                                                                                      
+                                                                                                                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -87,7 +142,18 @@
       
       
       <nombreCuenta>Simonsito</nombreCuenta>
-                                                                                                    
+                                                                                                                                                                      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -104,7 +170,7 @@
     
     
     </cuenta>
-                                                                  
+                                                                                                              
   
     
     
@@ -120,8 +186,30 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <cuenta>
-                                                                                          
+                                                                                                                                                            
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -136,7 +224,18 @@
       
       
       <banco>BDV</banco>
-                                                                                          
+                                                                                                                                                            
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -151,7 +250,18 @@
       
       
       <numeroCuenta>01021021023542547854</numeroCuenta>
-                                                                                          
+                                                                                                                                                            
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -166,7 +276,18 @@
       
       
       <nombreCuenta>ANITA</nombreCuenta>
-                                                                                        
+                                                                                                                                                          
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -181,7 +302,18 @@
     
     
     </cuenta>
-                                                          
+                                                                                                      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -196,7 +328,18 @@
     
     
     <cuenta>
-                                                                                    
+                                                                                                                                                      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -210,7 +353,18 @@
       
       
       <banco>BBVA</banco>
-                                                                                    
+                                                                                                                                                      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -224,7 +378,18 @@
       
       
       <numeroCuenta>01111881005511088454</numeroCuenta>
-                                                                                    
+                                                                                                                                                      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -238,6 +403,485 @@
       
       
       <nombreCuenta>SEBASTIAN</nombreCuenta>
+                                                                                                                                                    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </cuenta>
+                                                                                                  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <cuenta>
+                                                                                                                                                
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <banco>Mercantil</banco>
+                                                                                                                                                
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numeroCuenta>01230230123545521586</numeroCuenta>
+                                                                                                                                                
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <nombreCuenta>Cuenta Prueba 2</nombreCuenta>
+                                                                                                                                              
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </cuenta>
+                                                                                              
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <cuenta>
+                                                                                                                                          
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <banco>Mercantil</banco>
+                                                                                                                                          
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numeroCuenta>01230230123545521589</numeroCuenta>
+                                                                                                                                          
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <nombreCuenta>Cuenta Ejemplo 4</nombreCuenta>
+                                                                                                                                        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </cuenta>
+                                                                                          
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <cuenta>
+                                                                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <banco>Mercantil</banco>
+                                                                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numeroCuenta>01230230123545521588</numeroCuenta>
+                                                                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <nombreCuenta>Prueba de cuenta 4</nombreCuenta>
+                                                                                                                                  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </cuenta>
+                                                                                      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <cuenta>
+                                                                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <banco>BDV</banco>
+                                                                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numeroCuenta>01021021023542547853</numeroCuenta>
+                                                                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <nombreCuenta>Prueba de cuenta 9</nombreCuenta>
+                                                                                                                            
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </cuenta>
                                                                                   
     
     
@@ -251,8 +895,101 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    <cuenta>
+                                                                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <banco>BDV</banco>
+                                                                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numeroCuenta>01021021023542547852</numeroCuenta>
+                                                                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <nombreCuenta>Cuenta BDV PRUEBA</nombreCuenta>
+                                                                                                                      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     </cuenta>
-                                                      
+                                                                              
+    
+    
+    
+    
+    
+    
     
     
     
@@ -266,7 +1003,7 @@
     
     
     <cuenta>
-                                                                              
+                                                                                                                  
       
       
       
@@ -278,8 +1015,14 @@
       
       
       
-      <banco>Mercantil</banco>
-                                                                              
+      
+      
+      
+      
+      
+      
+      <banco>BBVA</banco>
+                                                                                                                  
       
       
       
@@ -291,8 +1034,14 @@
       
       
       
-      <numeroCuenta>01230230123545521586</numeroCuenta>
-                                                                              
+      
+      
+      
+      
+      
+      
+      <numeroCuenta>01111881005511088452</numeroCuenta>
+                                                                                                                  
       
       
       
@@ -304,8 +1053,20 @@
       
       
       
-      <nombreCuenta>Cuenta Prueba 1</nombreCuenta>
-                                                                            
+      
+      
+      
+      
+      
+      
+      <nombreCuenta>Cuenta de prueba BBVA</nombreCuenta>
+                                                                                                                
+    
+    
+    
+    
+    
+    
     
     
     
@@ -318,7 +1079,13 @@
     
     
     </cuenta>
-                                                  
+                                                                          
+    
+    
+    
+    
+    
+    
     
     
     
@@ -331,7 +1098,7 @@
     
     
     <cuenta>
-                                                                        
+                                                                                                            
       
       
       
@@ -342,8 +1109,14 @@
       
       
       
-      <banco>Mercantil</banco>
-                                                                        
+      
+      
+      
+      
+      
+      
+      <banco>BDV</banco>
+                                                                                                            
       
       
       
@@ -354,8 +1127,14 @@
       
       
       
-      <numeroCuenta>01230230123545521589</numeroCuenta>
-                                                                        
+      
+      
+      
+      
+      
+      
+      <numeroCuenta>01021021023542547851</numeroCuenta>
+                                                                                                            
       
       
       
@@ -366,8 +1145,145 @@
       
       
       
-      <nombreCuenta>Cuenta Ejemplo 3</nombreCuenta>
+      
+      
+      
+      
+      
+      
+      <nombreCuenta>Cuenta de BDV ahorro</nombreCuenta>
+                                                                                                          
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </cuenta>
                                                                       
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+    
+    
+    <cuenta>
+                              
+      
+      
+      
+      <banco>Mercantil</banco>
+                              
+      
+      
+      
+      <numeroCuenta>01230230123545521590</numeroCuenta>
+                              
+      
+      
+      
+      <nombreCuenta>Banco Ejemplo 99</nombreCuenta>
+                            
+    
+    
+    
+    </cuenta>
+                  
+  
+  
+  
+  </usuario>
+                        
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <usuario numeroDocumento="31045045">
+                                                                                                                
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <cuenta>
+                                                                                                                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <banco>MERCANTIL</banco>
+                                                                                                                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numeroCuenta>01230230123545521587</numeroCuenta>
+                                                                                                                                                                      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <nombreCuenta>Simonsito</nombreCuenta>
+                                                                                                                                                                      
+    
     
     
     
@@ -401,7 +1317,7 @@
       
       
       
-      <banco>Mercantil</banco>
+      <banco>BDV</banco>
                                                                   
       
       
@@ -412,7 +1328,7 @@
       
       
       
-      <numeroCuenta>01230230123545521588</numeroCuenta>
+      <numeroCuenta>01021230111233698744</numeroCuenta>
                                                                   
       
       
@@ -423,7 +1339,7 @@
       
       
       
-      <nombreCuenta>Prueba de cuenta 4</nombreCuenta>
+      <nombreCuenta>Cuenta de banco 2</nombreCuenta>
                                                                 
     
     
@@ -436,58 +1352,45 @@
     
     </cuenta>
                                           
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <cuenta>
-                                                            
-      
-      
-      
-      
-      
-      
-      
-      
-      <banco>BDV</banco>
-                                                            
-      
-      
-      
-      
-      
-      
-      
-      
-      <numeroCuenta>01021021023542547853</numeroCuenta>
-                                                            
-      
-      
-      
-      
-      
-      
-      
-      
-      <nombreCuenta>Prueba de cuenta 9</nombreCuenta>
-                                                          
-    
-    
-    
-    
-    
-    
-    
-    
-    </cuenta>
-                                      
-    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  </usuario>
+                                                      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <usuario numeroDocumento="30301301">
+                                    
     
     
     
@@ -504,7 +1407,7 @@
       
       
       
-      <banco>BDV</banco>
+      <banco>Mercantil</banco>
                                                       
       
       
@@ -513,7 +1416,7 @@
       
       
       
-      <numeroCuenta>01021021023542547852</numeroCuenta>
+      <numeroCuenta>01231110023215412655</numeroCuenta>
                                                       
       
       
@@ -522,7 +1425,7 @@
       
       
       
-      <nombreCuenta>Cuenta BDV PRUEBA</nombreCuenta>
+      <nombreCuenta>Cuenta Principal</nombreCuenta>
                                                     
     
     
@@ -548,7 +1451,7 @@
       
       
       
-      <banco>BBVA</banco>
+      <banco>BDV</banco>
                                                 
       
       
@@ -556,7 +1459,7 @@
       
       
       
-      <numeroCuenta>01111881005511088452</numeroCuenta>
+      <numeroCuenta>01021021087922545120</numeroCuenta>
                                                 
       
       
@@ -564,7 +1467,7 @@
       
       
       
-      <nombreCuenta>Cuenta de prueba BBVA</nombreCuenta>
+      <nombreCuenta>Banco de BDV 1</nombreCuenta>
                                               
     
     
@@ -574,62 +1477,72 @@
     
     </cuenta>
                               
-    
-    
-    
-    
-    
-    
-    <cuenta>
-                                          
-      
-      
-      
-      
-      
-      <banco>BDV</banco>
-                                          
-      
-      
-      
-      
-      
-      <numeroCuenta>01021021023542547851</numeroCuenta>
-                                          
-      
-      
-      
-      
-      
-      <nombreCuenta>Cuenta de BDV ahorro</nombreCuenta>
-                                        
-    
-    
-    
-    
-    
-    </cuenta>
-                          
+  
   
   
   
   
   
   </usuario>
-                                
+                
 
 
 
 
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  <usuario numeroDocumento="31090090">
+                
+    
+    
+    <cuenta>
+                        
+      
+      
+      <banco>BDV</banco>
+                        
+      
+      
+      <numeroCuenta>01021230111233698600</numeroCuenta>
+                        
+      
+      
+      <nombreCuenta>Cuenta Principal 1</nombreCuenta>
+                      
+    
+    
+    </cuenta>
+              
+    
+    
+    <cuenta>
+                  
+      
+      <banco>Mercantil</banco>
+                  
+      
+      <numeroCuenta>01231110023215412659</numeroCuenta>
+                  
+      
+      <nombreCuenta>Cuenta de Mercantil AHORRO</nombreCuenta>
+                
+    
+    </cuenta>
+          
+    
+    <cuenta>
+            
+      <banco>BBVA</banco>
+            
+      <numeroCuenta>01111881005511088440</numeroCuenta>
+            
+      <nombreCuenta>Cuenta de BBVA de AHORRO</nombreCuenta>
+          
+    </cuenta>
+      
+  </usuario>
+      
 
 
 </usuarios>

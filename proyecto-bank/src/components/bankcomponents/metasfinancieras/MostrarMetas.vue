@@ -26,7 +26,10 @@ export default {
         metas.value = response.data.map(meta => ({
           ...meta,
           numeroDocumento: documento,
-          displayMonto: meta.montoRequerido.toLocaleString('es-VE') + ',00 Bs'
+          displayMonto: parseFloat(meta.montoRequerido).toLocaleString('es-VE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }) + ' Bs'
         }))
       } catch (error) {
         console.error("Error al cargar metas:", error)

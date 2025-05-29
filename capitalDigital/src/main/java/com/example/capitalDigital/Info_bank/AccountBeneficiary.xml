@@ -1,118 +1,682 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><usuarios>
-            
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<usuarios>
+                                                
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     <usuario numeroDocumento="30313726">
-                        
+                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         <beneficiary>
-                                    
+                                                                                                                                                
             
-            <beneficiaryName>Juan Perez</beneficiaryName>
-                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <beneficiaryName>Beneficiario</beneficiaryName>
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <accountNumber>01231110023215412654</accountNumber>
-                                    
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <bank>Mercantil</bank>
-                                    
+                                                                                                                                                
             
-            <ID>10336111</ID>
-                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <ID/>
+                                                                                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         </beneficiary>
-                        
+                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         <beneficiary>
-                                    
+                                                                                                                                                
             
-            <beneficiaryName>Jesus Miranda</beneficiaryName>
-                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <beneficiaryName>Jesús Miranda</beneficiaryName>
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <accountNumber>01021021087922545123</accountNumber>
-                                    
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <bank>BDV</bank>
-                                    
+                                                                                                                                                
             
-            <ID>6981321</ID>
-                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <ID/>
+                                                                                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         </beneficiary>
-                        
+                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         <beneficiary>
-                                    
+                                                                                                                                                
             
-            <beneficiaryName>Miguel Correa</beneficiaryName>
-                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <beneficiaryName>María Gimmy</beneficiaryName>
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <accountNumber>01021230111233698745</accountNumber>
-                                    
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <bank>BDV</bank>
-                                    
+                                                                                                                                                
             
-            <ID>12102032</ID>
-                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <ID/>
+                                                                                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         </beneficiary>
-                        
+                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         <beneficiary>
-                                    
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <beneficiaryName>Sebastián Pérez</beneficiaryName>
-                                    
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <accountNumber>01021230111233698710</accountNumber>
-                                    
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <bank>Mercantil</bank>
-                                    
+                                                                                                                                                
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             <ID>12102033</ID>
-                                
+                                                                                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         </beneficiary>
-                        
+                                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         <beneficiary>
-                                    
+                                                                                                                                    
             
-            <beneficiaryName>Simón Manjoud</beneficiaryName>
-                                    
             
-            <accountNumber>01021230111233698710</accountNumber>
-                                    
             
-            <bank>BBVA Provincial</bank>
-                                    
             
-            <ID>12102033</ID>
-                                
-        
-        </beneficiary>
-                    
-        
-        <beneficiary>
-                        
-            <beneficiaryName>JJesús</beneficiaryName>
-                        
+            
+            
+            
+            
+            
+            <beneficiaryName>Jesús</beneficiaryName>
+                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
             <ID/>
-                        
+                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
             <accountNumber>01231110023215412653</accountNumber>
-                        
+                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
             <bank>Mercantil</bank>
+                                                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </beneficiary>
+                                                                                    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <beneficiary>
+                                                                                                                        
+            
+            
+            
+            
+            
+            
+            
+            
+            <beneficiaryName>María</beneficiaryName>
+                                                                                                                        
+            
+            
+            
+            
+            
+            
+            
+            
+            <ID/>
+                                                                                                                        
+            
+            
+            
+            
+            
+            
+            
+            
+            <accountNumber>01021230111233698745</accountNumber>
+                                                                                                                        
+            
+            
+            
+            
+            
+            
+            
+            
+            <bank>BDV</bank>
+                                                                                                                    
+        
+        
+        
+        
+        
+        
+        
+        
+        </beneficiary>
+                                            
+        
+        
+        
+        
+        <beneficiary>
+                                                            
+            
+            
+            
+            <beneficiaryName>Simón Yousef Manjoud Haffar</beneficiaryName>
+                                                            
+            
+            
+            
+            <ID/>
+                                                            
+            
+            
+            
+            <accountNumber>01021230111233698741</accountNumber>
+                                                            
+            
+            
+            
+            <bank>BDV</bank>
+                                                        
+        
+        
+        
+        </beneficiary>
+                                    
+    
+    
+    
+    </usuario>
+                                            
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    <usuario numeroDocumento="31045045">
+                                                                        
+        
+        
+        
+        
+        
+        
+        
+        <beneficiary>
+                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            <beneficiaryName>Siminhooo</beneficiaryName>
+                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            <ID/>
+                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            <accountNumber>01021230111233698745</accountNumber>
+                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            <bank>BDV</bank>
+                                                                                                        
+        
+        
+        
+        
+        
+        
+        
+        </beneficiary>
+                                                                    
+    
+    
+    
+    
+    
+    
+    
+    </usuario>
+                                
+    
+    
+    
+    
+    
+    
+    
+    <usuario numeroDocumento="30301301">
+                                                                
+        
+        
+        
+        
+        
+        
+        <beneficiary>
+                                                                                                
+            
+            
+            
+            
+            
+            
+            <beneficiaryName>Jimy Fernando</beneficiaryName>
+                                                                                                
+            
+            
+            
+            
+            
+            
+            <ID/>
+                                                                                                
+            
+            
+            
+            
+            
+            
+            <accountNumber>01021021087922545123</accountNumber>
+                                                                                                
+            
+            
+            
+            
+            
+            
+            <bank>BDV</bank>
+                                                                                            
+        
+        
+        
+        
+        
+        
+        </beneficiary>
+                                                            
+    
+    
+    
+    
+    
+    
+    </usuario>
+                            
+
+
+
+    
+    
+    
+    <usuario numeroDocumento="31090090">
+                                
+        
+        
+        <beneficiary>
+                                                
+            
+            
+            <beneficiaryName>Gerhard Castro</beneficiaryName>
+                                                
+            
+            
+            <ID/>
+                                                
+            
+            
+            <accountNumber>01021021087922545120</accountNumber>
+                                                
+            
+            
+            <bank>BDV</bank>
+                                            
+        
+        
+        </beneficiary>
+                            
+        
+        
+        <beneficiary>
+                                    
+            
+            <beneficiaryName>Ana García</beneficiaryName>
+                                    
+            
+            <ID/>
+                                    
+            
+            <accountNumber>01021021087922545121</accountNumber>
+                                    
+            
+            <bank>BDV</bank>
+                                
+        
+        </beneficiary>
+                    
+        
+        <beneficiary>
+                        
+            <beneficiaryName>Simón Manjoud</beneficiaryName>
+                        
+            <ID/>
+                        
+            <accountNumber>01111881005511088432</accountNumber>
+                        
+            <bank>BBVA</bank>
                     
         </beneficiary>
             
         <beneficiary>
-            <beneficiaryName>María</beneficiaryName>
+            <beneficiaryName>Sebastián Pérez</beneficiaryName>
             <ID/>
-            <accountNumber>01021230111233698745</accountNumber>
-            <bank>BDV</bank>
+            <accountNumber>01111881005511088452</accountNumber>
+            <bank>BBVA</bank>
         </beneficiary>
     </usuario>
-        
+            
+
 
 </usuarios>
