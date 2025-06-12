@@ -1,7 +1,7 @@
 <!-- Layout.vue -->
 <template>
   <div class="layout">
-    <Sidebar />
+    <Sidebar :usuario="usuario" :cuentas="cuentas" />
     <div class="main-content" :class="{ 'sidebar-active': isSidebarActive }">
 
       <router-view /> <!-- Aquí se cargan los distintos componentes -->
@@ -13,36 +13,28 @@
 import Sidebar from "@/components/bankcomponents/Sidebar.vue";
 import { useRoute } from 'vue-router';
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useUsuarioStore } from '@/stores/useUsuarioStore';
 
 export default {
   components: { Sidebar },
-
   setup() {
     const route = useRoute();
-    const usuario = ref({});
-    const cuentas = ref([]);
     const isSidebarActive = ref(false);
+    const usuarioStore = useUsuarioStore();
 
-    // Capturar datos de la URL al cargar Layout.vue
     onMounted(() => {
-      usuario.value = JSON.parse(route.query.usuario || '{}');
-      cuentas.value = JSON.parse(route.query.cuentas || '[]');
-
-      console.log("Datos recibidos en Layout.vue:", usuario.value, cuentas.value);
-      
       window.addEventListener("toggle-sidebar", (event) => {
         isSidebarActive.value = event.detail;
       });
     });
 
-    // Eliminar el evento al desmontar el componente
     onUnmounted(() => {
       window.removeEventListener("toggle-sidebar", (event) => {
         isSidebarActive.value = false;
       });
     });
 
-    return { usuario, cuentas, isSidebarActive };
+    return { usuario: usuarioStore.usuario, cuentas: usuarioStore.cuentas, isSidebarActive };
   }
 };
 </script>

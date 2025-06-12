@@ -1,49 +1,126 @@
-<script setup lang="ts">
+<script>
+import axios from 'axios'
+import { ref } from 'vue'
+import { useUsuarioStore } from '@/stores/useUsuarioStore'
+import bbvaLogo from '@/images/BBVAprovinciallogo.png'
+import bdvLogo from '@/images/Banco_de_Venezuela_logo.png'
+import mercantilLogo from '@/images/Mercantil.png'
+export default {
+  name: 'AgregarCuenta',
+  setup() {
 
+    const usuarioStore = useUsuarioStore()
+    const nombreCuenta = ref('')
+    const numeroCuenta = ref('')
+    const bancoSeleccionado = ref({ nombre: null, imagen: null })
+
+    const documentoUsuario = usuarioStore.usuario.numeroDocumento
+
+    const seleccionarBanco = (nombreBanco, imagenBanco) => {
+      bancoSeleccionado.value = {
+        nombre: nombreBanco,
+        imagen: imagenBanco // Ahora es un objeto válido
+      }
+    }
+
+    const agregarCuenta = async () => {
+      if (!nombreCuenta.value || !numeroCuenta.value || !bancoSeleccionado.value.nombre) {
+        alert("Por favor complete todos los campos.")
+        return
+      }
+
+      const nuevaCuenta = {
+        banco: bancoSeleccionado.value.nombre,
+        numeroCuenta: numeroCuenta.value,
+        nombreCuenta: nombreCuenta.value
+      }
+
+      try {
+        const response = await axios.post(
+            `http://localhost:8080/cuenta/numeroDocumento/${documentoUsuario}`,
+            nuevaCuenta
+        )
+
+        if (response.status === 200) {
+          alert("✅ Cuenta agregada correctamente")
+          nombreCuenta.value = ''
+          numeroCuenta.value = ''
+          bancoSeleccionado.value = { nombre: null, imagen: null }
+        } else {
+          alert("❌ No se pudo guardar la cuenta")
+        }
+      } catch (error) {
+        console.error("Error al guardar:", error)
+        alert(`⚠️ ${
+            typeof error.response?.data === 'object'
+                ? JSON.stringify(error.response.data, null, 2)
+                : error.response?.data || error.message
+        }`)
+      }
+    }
+
+    return {
+      nombreCuenta,
+      numeroCuenta,
+      bancoSeleccionado,
+      seleccionarBanco,
+      agregarCuenta,
+      bbvaLogo,
+      bdvLogo,
+      mercantilLogo
+    }
+  }
+}
 </script>
 
 <template>
   <header class="header">
     <h1>Cuentas</h1>
   </header>
+
   <main>
     <div class="container">
       <div class="card">
         <h2 class="title">Agregar cuenta</h2>
         <form class="form-agregarcuenta">
+          <!-- Campo Nombre -->
           <p class="message">Nombre de cuenta</p>
-          <input type="text" class="input" placeholder="Cuenta de banco ejemplo">
+          <input v-model="nombreCuenta" type="text" class="input" placeholder="Cuenta de banco ejemplo">
+
+          <!-- Campo Número de cuenta -->
           <p class="message">Número de cuenta</p>
-          <input type="text" class="input" placeholder="0105-XXXXXXXXXXXXXXXXX">
+          <input v-model="numeroCuenta" type="text" class="input" placeholder="0105-XXXXXXXXXXXXXXXXX">
+
+          <!-- Selección de Banco -->
           <p class="message">Seleccione banco de origen</p>
           <div class="dropdown">
-            <input
-                hidden=""
-                class="sr-only"
-                name="state-dropdown"
-                id="state-dropdown"
-                type="checkbox"
-            />
-            <label
-                aria-label="dropdown scrollbar"
-                for="state-dropdown"
-                class="trigger"
-            ></label>
+            <input hidden id="state-dropdown" name="state-dropdown" type="checkbox">
+
+            <!-- Aquí se muestra el logo + nombre del banco seleccionado -->
+            <label for="state-dropdown" class="trigger">
+              <div v-if="bancoSeleccionado.nombre" style="display: flex; align-items: center; gap: 8px;">
+                <img :src="bancoSeleccionado.imagen" width="60" height="30" v-if="bancoSeleccionado.imagen">
+                <span>{{ bancoSeleccionado.nombre }}</span>
+              </div>
+              <span v-else>Seleccione un banco...</span>
+            </label>
+
+            <!-- Botones del dropdown -->
             <ul class="list webkit-scrollbar" role="list" dir="auto">
               <li class="listitem" role="listitem">
-                <button class="button">
+                <button type="button" class="button" @click="seleccionarBanco('BBVA', bbvaLogo)">
                   <img src="@/images/BBVAprovinciallogo.png" width="60" height="30">
                   <span>BBVA Provincial</span>
                 </button>
               </li>
               <li class="listitem" role="listitem">
-                <button class="button">
+                <button type="button" class="button" @click="seleccionarBanco('BDV', bdvLogo)">
                   <img src="@/images/Banco_de_Venezuela_logo.png" width="100" height="30">
                   <span>Banco de Venezuela</span>
                 </button>
               </li>
               <li class="listitem" role="listitem">
-                <button class="button">
+                <button type="button" class="button" @click="seleccionarBanco('Mercantil', mercantilLogo)">
                   <img src="@/images/Mercantil.png" width="60" height="60">
                   <span>Banco Mercantil</span>
                 </button>
@@ -51,7 +128,9 @@
             </ul>
           </div>
         </form>
-        <button class="continuebtn">
+
+        <!-- Botón Agregar -->
+        <button class="continuebtn" @click="agregarCuenta">
           <span>Agregar</span>
         </button>
       </div>
@@ -59,7 +138,7 @@
   </main>
 </template>
 
-<style>
+<style scoped>
 
 .header {
   display: flex;
@@ -234,7 +313,7 @@
 }
 
 .trigger::after {
-  content: "Seleccione un banco...";
+  content: "";
 }
 
 .list {

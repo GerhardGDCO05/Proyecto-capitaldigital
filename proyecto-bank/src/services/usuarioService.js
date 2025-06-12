@@ -16,8 +16,8 @@ export default {
     return apiClient.get(`/usuario/numeroDocumento/${numeroDocumento}`);
   },
 
-  modificarUsuarioPorNumeroDocumento(numeroDocumento){
-    return apiClient.put(`/usuario/numeroDocumento/${numeroDocumento}`)
+  modificarUsuarioPorNumeroDocumento(numeroDocumento, usuario) {
+    return apiClient.put(`/usuario/numeroDocumento/${numeroDocumento}`, usuario);
   },
 
   eliminarUsuarioPorNumeroDocumento(numeroDocumento) {

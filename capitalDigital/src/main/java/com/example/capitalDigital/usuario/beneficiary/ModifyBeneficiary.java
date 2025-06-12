@@ -1,7 +1,6 @@
 package com.example.capitalDigital.usuario.beneficiary;
 
 import java.io.File;
-import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -35,7 +34,6 @@ public class ModifyBeneficiary {
      * @param holder Nombre del usuario de la cuenta bancaria a guardar el beneficiario
      * @return true si se modifico el beneficiario exitosamente en el xml, false en caso contrario
      */
-    public boolean modifyBeneficiary(String beneficiaryName, String ID,String accountNumber,String Bank, String path,String holder, String oldAccountNumber) {
         ValidateUniqueAccountNumber validateUniqueAccountNumber = new ValidateUniqueAccountNumber();
         if(!validateUniqueAccountNumber.validateUniqueAccountNumber(accountNumber,holder,path)) return false; //validar que no haya otro beneficiario con el mismo numero de cuenta
         ValidateBeneficiaryInfo validateBeneficiaryInfo = new ValidateBeneficiaryInfo();
@@ -89,6 +87,3 @@ public class ModifyBeneficiary {
         } catch (TransformerException e) {
             throw new RuntimeException(e);
         }
-
-    }
-}

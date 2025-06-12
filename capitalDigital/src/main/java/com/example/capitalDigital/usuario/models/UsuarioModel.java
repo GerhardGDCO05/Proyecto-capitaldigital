@@ -2,12 +2,13 @@ package com.example.capitalDigital.usuario.models;
 
 import java.time.LocalDate;
 
+import com.example.capitalDigital.usuario.Controller.UsuarioController;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "usuarios")
-public class UsuarioModel {
+public class UsuarioModel extends UsuarioController {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

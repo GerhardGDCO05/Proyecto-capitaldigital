@@ -1,25 +1,87 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { ref, onMounted, watch } from 'vue'
+import axios from 'axios'
 import { useRoute } from 'vue-router'
-import AgregarBeneficiario from "@/components/bankcomponents/transacciones/crudbeneficiarios/AgregarBeneficiario.vue";
-const route = useRoute()
+import { useUsuarioStore } from '@/stores/useUsuarioStore'
 import Modal from "@/view/Modal.vue";
+import AgregarBeneficiario from "@/components/bankcomponents/transacciones/crudbeneficiarios/AgregarBeneficiario.vue";
+
+interface BeneficiaryModel {
+  beneficiaryName: string;
+  accountNumber: string;
+  bank: string;
+}
+
+const beneficiarioSeleccionado = ref(null)
+
+const router = useRouter()
+const route = useRoute()
+const beneficiarios = ref<BeneficiaryModel[]>([])
 const showModal = ref(false)
-// Ejecutar una vez al montar
+const metaSeleccionada = ref(null)
+
+const usuarioStore = useUsuarioStore()
+const documento = usuarioStore.usuario.numeroDocumento
+
 onMounted(() => {
-  window.dispatchEvent(new Event('resize'))
+  cargarBeneficiarios()
+  window.addEventListener('resize', () => {})
 })
 
-// Ejecutar cada vez que cambie la ruta
 watch(
     () => route.path,
     () => {
-      setTimeout(() => {
-        window.dispatchEvent(new Event('resize'))
-      }, 50) // Pequeño delay para asegurar que el DOM esté listo
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 50)
     }
 )
+
+const cargarBeneficiarios = async () => {
+  try {
+    const response = await axios.get<BeneficiaryModel[]>(`http://localhost:8080/beneficiaries/${documento}`)
+    beneficiarios.value = response.data
+    console.log("✅ Beneficiarios cargados:", beneficiarios.value)
+  } catch (error) {
+    console.error("❌ Error al cargar beneficiarios:", error)
+    alert("⚠️ No se pudieron cargar tus beneficiarios")
+  }
+}
+
+function seleccionarBeneficiario(benef) {
+  beneficiarioSeleccionado.value = benef
+  console.log(' Beneficiario seleccionado:', benef)
+}
+
+// Eliminar beneficiario
+const eliminarBeneficiario = async (accountNumber: string) => {
+  if (!confirm("¿Seguro que deseas eliminar este beneficiario?")) return
+
+  try {
+    await axios.delete(`http://localhost:8080/beneficiaries/${documento}/${accountNumber}`)
+    beneficiarios.value = beneficiarios.value.filter(b => b.accountNumber !== accountNumber)
+    alert("🗑️ Beneficiario eliminado correctamente")
+  } catch (error) {
+    console.error("Error al eliminar beneficiario:", error)
+    alert("❌ Error al eliminar el beneficiario")
+  }
+}
+
+function abrirFormularioModificacion() {
+  if (!beneficiarioSeleccionado.value) {
+    alert("⚠️ Selecciona un beneficiario antes de modificar")
+    return
+  }
+
+  router.push({
+    name: 'ModificarBeneficiario',
+    params: {
+      accountNumber: beneficiarioSeleccionado.value.accountNumber
+    },
+    query: {
+      popup: 'true'
+    }
+  })
+}
 </script>
 
 <template>
@@ -28,13 +90,16 @@ watch(
   </header>
 
   <button class="agregar-benf" @click="showModal = true">Agregar</button>
-  <button class="modificar-benf">Modificar</button>
+  <button class="modificar-benf" @click="abrirFormularioModificacion()">Modificar</button>
+
+
   <button class="eliminar-benf">Eliminar</button>
   <div class="card">
     <div class="card__title">Beneficiarios</div>
     <table>
       <thead>
       <tr>
+        <th></th>
         <th>N°</th>
         <th>Nombre(s)</th>
         <th>Cuenta</th>
@@ -42,35 +107,32 @@ watch(
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>1</td>
-        <td>José Pérez</td>
-        <td>0108-1564152689</td>
-        <td>BBVA Provincial</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>John Doe</td>
-        <td>0105-1523324667</td>
-        <td>Banco de Venezuela</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>Jane Smith</td>
-        <td>0107-214214551135</td>
-        <td>Banco Mercantil</td>
+      <tr v-for="(benef, index) in beneficiarios" :key="benef.accountNumber">
+        <td>
+          <label class="checkbox">
+            <input type="checkbox" @click.stop="seleccionarBeneficiario(benef)">
+            <span class="checkmark"></span>
+          </label>
+        </td>
+        <td>{{ index + 1 }}</td>
+        <td>{{ benef.beneficiaryName }}</td>
+        <td>{{ benef.accountNumber }}</td>
+        <td>{{ benef.bank }}</td>
       </tr>
       </tbody>
     </table>
   </div>
 
+
+
   <!--MODAL PARA LA VENTANA EMERGENTE-->
   <Modal :is-open="showModal" @close="showModal = false">
     <AgregarBeneficiario />
   </Modal>
+
 </template>
 
-<style>
+<style scoped>
 .header {
   display: flex;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -89,7 +151,7 @@ watch(
    /* Establecer un ancho máximo */
   position: absolute;
   left: 55%;
-  top: 40%;
+  top: 60%;
   transform: translate(-50%, -100%);
   background: rgb(0, 31, 64);
   font-family: "Courier New", Courier, monospace;
@@ -205,4 +267,55 @@ tbody td:last-child {
 }
 
 /*---------------------------------------*/
+
+/* From Uiverse.io by JkHuger */
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+}
+
+.checkbox .checkmark {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.checkbox input[type="checkbox"]:checked + .checkmark {
+  background-color: #0078d4;
+  border-color: #0078d4;
+}
+
+.checkbox input[type="checkbox"]:checked + .checkmark:after {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: transform 0.2s ease;
+  transform: scale(1);
+}
+
+.checkbox .checkmark:after {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: transparent;
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+
 </style>

@@ -1,17 +1,28 @@
 package com.example.capitalDigital.usuario.Controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.capitalDigital.usuario.models.CuentaModel;
 import com.example.capitalDigital.usuario.services.CuentaService;
+
 import jakarta.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/cuenta")
@@ -85,7 +96,7 @@ public class CuentaController {
         }
     }
 
-    @PutMapping("/numeroDocumento/{numeroDocumento}/nombreCuenta/{nombreCuenta}")
+    /*@PutMapping("/numeroDocumento/{numeroDocumento}/nombreCuenta/{nombreCuenta}")
     public ResponseEntity<?> modificarCuentaEnXML(@PathVariable String numeroDocumento, @PathVariable String nombreCuenta, @Valid @RequestBody CuentaModel cuenta) {
         try {
             System.out.println("Recibiendo petición PUT para documento: " + numeroDocumento + ", cuenta: " + nombreCuenta);
@@ -105,7 +116,7 @@ public class CuentaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Error interno del servidor: " + e.getMessage());
         }
-    }
+    }*/
 
 
     @DeleteMapping("/numeroDocumento/{numeroDocumento}/numeroCuenta/{numeroCuenta}")
@@ -135,6 +146,44 @@ public class CuentaController {
             errores.put(error.getField(), error.getDefaultMessage()); // ✅ Captura mensajes personalizados
         }
         return ResponseEntity.badRequest().body(errores);
+    }
+
+    /*@PutMapping("/numeroDocumento/{numeroDocumento}/nombreCuenta/{nombreCuenta}")
+    public ResponseEntity<?> modificarNombreCuenta(@PathVariable String numeroDocumento,
+                                                  @PathVariable String nombreCuenta,
+                                                  @RequestBody Map<String, String> payload) {
+        try {
+            System.out.println("Modificando nombre de cuenta...");
+            System.out.println("Documento: " + numeroDocumento);
+            System.out.println("Nombre actual: " + nombreCuenta);
+            System.out.println("Nuevo nombre: " + payload.get("nombreCuenta"));
+
+            boolean modificado = cuentaService.modificarNombreCuenta(numeroDocumento, nombreCuenta, payload.get("nombreCuenta"));
+
+            if (modificado) {
+                return ResponseEntity.ok("Nombre de cuenta actualizado");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró la cuenta o no se pudo modificar");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al modificar nombre de cuenta: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error interno del servidor: " + e.getMessage());
+        }
+    }*/
+
+    @PutMapping("/numeroDocumento/{documento}/nombreCuenta/{oldNombre}")
+    public ResponseEntity<?> modificarNombreCuenta(@PathVariable String documento,
+                                                  @PathVariable String oldNombre,
+                                                  @Valid @RequestBody CuentaModel nuevaCuenta) {
+        boolean modificado = cuentaService.modificarCuentaEnXML(documento, oldNombre, nuevaCuenta);
+                                                
+        if (modificado) {
+            return ResponseEntity.ok("✅ Nombre de cuenta actualizado exitosamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("❌ Cuenta no encontrada o nombre inválido");
+        }
     }
 
 }

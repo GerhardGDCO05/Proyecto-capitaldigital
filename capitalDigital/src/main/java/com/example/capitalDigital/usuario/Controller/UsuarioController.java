@@ -36,6 +36,7 @@ public class UsuarioController {
         }
     }
 
+
     @GetMapping("/numeroDocumento/{numeroDocumento}")
     public ResponseEntity<?> obtenerUsuarioPorNumeroDocumento(@PathVariable String numeroDocumento) {
         System.out.println("Recibí en el controlador: " + numeroDocumento);

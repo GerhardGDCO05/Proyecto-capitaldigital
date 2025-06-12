@@ -1,47 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><holders>
-    <holder>
-        <holderName>Simonsito</holderName>
         <beneficiary>
-            <beneficiaryName>Juan Perez</beneficiaryName>
             <accountNumber>01231110023215412654</accountNumber>
             <bank>Mercantil</bank>
-            <ID>10336111</ID>
         </beneficiary>
         <beneficiary>
-            <beneficiaryName>Jesus Miranda</beneficiaryName>
             <accountNumber>01021021087922545123</accountNumber>
             <bank>BDV</bank>
-            <ID>6981321</ID>
-        </beneficiary>
-    <beneficiary><beneficiaryName>Miguel Correa</beneficiaryName><ID>12102032</ID><accountNumber>01021230111233698745</accountNumber><bank>BDV</bank></beneficiary></holder>
-    <holder>
-        <holderName>ANITA</holderName>
-        <beneficiary>
-            <beneficiaryName>Pedro Sanchez</beneficiaryName>
-            <accountNumber>01111819035511082375</accountNumber>
-            <bank>BBVA</bank>
-            <ID>27213981</ID>
         </beneficiary>
         <beneficiary>
-            <beneficiaryName>Jorge Peraza</beneficiaryName>
-            <accountNumber>01230451271255412971</accountNumber>
-            <bank>MERCANTIL</bank>
-            <ID>22341792</ID>
         </beneficiary>
-    </holder>
-    <holder>
-        <holderName>SEBASTIAN</holderName>
         <beneficiary>
-            <beneficiaryName>Oscar Rodriguez</beneficiaryName>
-            <accountNumber>01021079088234541212</accountNumber>
+        </beneficiary>
+        <beneficiary>
             <bank>BDV</bank>
-            <ID>16231232</ID>
         </beneficiary>
         <beneficiary>
-            <beneficiaryName>Diego Urbina</beneficiaryName>
-            <accountNumber>01111816521511089881</accountNumber>
             <bank>BBVA</bank>
-            <ID>11231651</ID>
         </beneficiary>
-    </holder>    
-<holder><holderName>Gerhard</holderName><beneficiary><beneficiaryName>Marco Castro</beneficiaryName><ID>11232002</ID><accountNumber>01113213325548785466</accountNumber><bank>BBVA</bank></beneficiary></holder></holders>

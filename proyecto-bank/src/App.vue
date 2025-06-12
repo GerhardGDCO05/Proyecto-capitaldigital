@@ -3,13 +3,13 @@ import './assets/main.css';
 import { ref } from "vue";
 import usuarioService from './services/usuarioService';
 import { useRouter } from 'vue-router';
-
+import { useUsuarioStore } from '@/stores/useUsuarioStore.js'
 export default {
   name: 'App',
   setup() {
-    const router = useRouter(); 
+    const router = useRouter();
     const options = ref(['Cedula', 'Pasaporte', 'Option 3', 'Option 4']);
-    const selectedOption = ref(options.value[0]); 
+    const selectedOption = ref(options.value[0]);
     const numeroDocumento = ref("");
     const clave = ref("");
     const usuario = ref({});
@@ -30,14 +30,16 @@ export default {
 
         if (usuario.value && usuario.value.numeroDocumento) {
           if (usuario.value.password === clave.value) {
-            router.push({ 
-              path: '/bank/vistageneral', 
-              query: { 
-                usuario: JSON.stringify(usuario.value), 
-                cuentas: JSON.stringify(cuentas.value), 
-                popup: 'true' 
-              } 
+
+            const usuarioStore = useUsuarioStore();
+            usuarioStore.setUsuario(usuario.value);
+            usuarioStore.setCuentas(cuentas.value);
+
+            router.push({
+              path: '/bank/vistageneral',
+              query: { popup: 'true' }
             });
+
           } else {
             alert("Error: Clave Incorrecta.");
           }
@@ -74,7 +76,7 @@ export default {
   });
 
     const abrirRegistro = () => {
-      router.push({ path: '/registrar', query: { popup: 'true' } }); 
+      router.push({ path: '/registrar', query: { popup: 'true' } });
     };
 
     return { router, options, selectedOption, numeroDocumento, clave, usuario, cuentas, abrirbank, abrirRegistro };

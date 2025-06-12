@@ -6,15 +6,6 @@ import com.example.capitalDigital.Validation_bank.ValidateBeneficiaryInfo;
 import com.example.capitalDigital.Validation_bank.ValidateUniqueAccountNumber;
 import com.example.capitalDigital.usuario.beneficiary.AddBeneficiary;
 import com.example.capitalDigital.usuario.beneficiary.ModifyBeneficiary;
-import com.example.capitalDigital.usuario.models.Beneficiary;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class BeneficiaryService {
@@ -35,7 +26,6 @@ public class BeneficiaryService {
     @Autowired
     private ValidateBeneficiaryInfo validateBeneficiaryInfo;
 
-    private static final String XML_FILE = "C:\\Users\\Usuario\\Desktop\\proyecto IS\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\AccountBeneficiary.xml";
 
     public boolean addBeneficiary(String beneficiaryName, String id, String accountNumber, String bank, String holder) {
         if (addBeneficiary == null) {
@@ -120,33 +110,13 @@ public class BeneficiaryService {
         }
     }
 
-    public List<Beneficiary> getBeneficiariesByHolder(String holder) {
-        List<Beneficiary> beneficiaries = new ArrayList<>();
         try {
-            DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();
-            Document doc = dbuilder.parse(XML_FILE);
-
             doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("holder");
 
-            for (int i = 0; i < nList.getLength(); i++) {
-                Element element = (Element) nList.item(i);
 
-                NodeList nameList = element.getElementsByTagName("holderName");
-                Element holderName = (Element) nameList.item(0);
-                if (holderName.getTextContent().equals(holder)) {
-
-                    NodeList beneficiaryList = element.getElementsByTagName("beneficiary");
                     for (int j = 0; j < beneficiaryList.getLength(); j++) {
-                        Element beneficiary = (Element) beneficiaryList.item(j);
 
-                        String beneficiaryName = beneficiary.getElementsByTagName("beneficiaryName").item(0).getTextContent();
-                        String ID = beneficiary.getElementsByTagName("ID").item(0).getTextContent();
-                        String accNumber = beneficiary.getElementsByTagName("accountNumber").item(0).getTextContent();
-                        String bank = beneficiary.getElementsByTagName("bank").item(0).getTextContent();
 
-                        beneficiaries.add(new Beneficiary(beneficiaryName, ID, accNumber, bank));
                     }
                 }
             }
@@ -156,7 +126,6 @@ public class BeneficiaryService {
         return beneficiaries;
     }
 
-    public Beneficiary getBeneficiary(String holder, String accountNumber) {
         try {
             DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();
@@ -182,7 +151,6 @@ public class BeneficiaryService {
                             String ID = beneficiary.getElementsByTagName("ID").item(0).getTextContent();
                             String bank = beneficiary.getElementsByTagName("bank").item(0).getTextContent();
 
-                            return new Beneficiary(beneficiaryName, ID, accountNumber, bank);
                         }
                     }
                 }

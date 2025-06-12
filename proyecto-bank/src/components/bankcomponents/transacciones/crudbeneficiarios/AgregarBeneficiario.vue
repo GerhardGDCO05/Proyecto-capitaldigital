@@ -1,68 +1,133 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import axios from 'axios'
+import { useUsuarioStore } from '@/stores/useUsuarioStore'
 
+// Datos del beneficiario
+const usuarioStore = useUsuarioStore()
+const documento = usuarioStore.usuario.numeroDocumento
+
+const nombre = ref('')
+const cedula = ref('')
+const numeroCuenta = ref('')
+const bancoSeleccionado = ref<{ nombre: string | null; imagen: string | null }>({
+  nombre: null,
+  imagen: null
+})
+
+// Lista de bancos disponibles
+const bancos = [
+  { nombre: 'BBVA', logo: '/src/images/BBVAprovinciallogo.png' },
+  { nombre: 'BDV', logo: '/src/images/Banco_de_Venezuela_logo.png' },
+  { nombre: 'Mercantil', logo: '/src/images/Mercantil.png' }
+]
+
+// Función para seleccionar banco
+function seleccionarBanco(nombreBanco: string) {
+  const banco = bancos.filter(b => b.nombre === nombreBanco)[0]
+  if (banco) {
+    bancoSeleccionado.value = {
+      nombre: banco.nombre,
+      imagen: banco.logo
+    }
+  }
+}
+
+// Agregar beneficiario al backend
+function agregarBeneficiario() {
+  if (!nombre.value || !cedula.value || !numeroCuenta.value || !bancoSeleccionado.value.nombre) {
+    alert("⚠️ Completa todos los campos")
+    return
+  }
+
+  const nuevo = {
+    beneficiaryName: nombre.value,
+    ID: cedula.value.trim() || 'N/A',
+    accountNumber: numeroCuenta.value,
+    bank: bancoSeleccionado.value.nombre
+  }
+
+  // Enviar datos al backend como promesa normal
+  axios.post(`http://localhost:8080/beneficiaries/${documento}`, nuevo)
+      .then(response => {
+        console.log("Respuesta del servidor:", response.data)
+
+        alert("Beneficiario agregado exitosamente")
+
+        // Limpiar formulario
+        nombre.value = ''
+        cedula.value = ''
+        numeroCuenta.value = ''
+        bancoSeleccionado.value = { nombre: '', imagen: '' }
+
+        // Lanzar evento global para recargar la lista
+        window.dispatchEvent(new CustomEvent("beneficiario-agregado"))
+
+      })
+      .catch(error => {
+        console.error("❌ Error al guardar:", error)
+        alert(`⚠️ ${error.response?.data || error.message}`)
+      })
+}
 </script>
 
 <template>
-  <!-- From Uiverse.io by nathann09 -->
-
-  <form class="form">
+  <form class="form" @submit.prevent="agregarBeneficiario">
     <p class="form-title">Agregar beneficiario</p>
+
+    <!-- Campo Nombre -->
     <div class="input-container">
-      <input type="text" placeholder="Ingresa su nombre completo">
-      <span>
-          </span>
+      <input v-model="nombre" type="text" placeholder="Nombre del beneficiario" required />
     </div>
+
+    <!-- Campo Cédula (ID) -->
     <div class="input-container">
-      <input type="text" placeholder="Ingresa su número de teléfono">
+      <input v-model="cedula" type="text" placeholder="Cédula del beneficiario" required />
     </div>
+
+    <!-- Campo Número de cuenta -->
     <div class="input-container">
-      <input type="text" placeholder="Ingresa su número de cuenta bancaria">
+      <input v-model="numeroCuenta" type="text" placeholder="Número de cuenta bancaria" required />
     </div>
+
+    <!-- Selección de Banco -->
     <div class="dropdown">
-      <input
-          hidden=""
-          class="sr-only"
-          name="state-dropdown"
-          id="state-dropdown"
-          type="checkbox"
-      />
-      <label
-          aria-label="dropdown scrollbar"
-          for="state-dropdown"
-          class="trigger"
-      ></label>
+      <input hidden id="state-dropdown" name="state-dropdown" type="checkbox" />
+
+      <label for="state-dropdown" class="trigger">
+        <span v-if="bancoSeleccionado.nombre">{{ bancoSeleccionado.nombre }}</span>
+        <span v-else>Seleccione un banco...</span>
+      </label>
+
       <ul class="list webkit-scrollbar" role="list" dir="auto">
         <li class="listitem" role="listitem">
-          <button class="button">
-            <img src="@/images/BBVAprovinciallogo.png" width="60" height="30">
+          <button type="button" class="button" @click="seleccionarBanco('BBVA')">
+            <img src="@/images/BBVAprovinciallogo.png" width="60" height="30" />
             <span>BBVA Provincial</span>
           </button>
         </li>
         <li class="listitem" role="listitem">
-          <button class="button">
-            <img src="@/images/Banco_de_Venezuela_logo.png" width="100" height="30">
+          <button type="button" class="button" @click="seleccionarBanco('BDV')">
+            <img src="@/images/Banco_de_Venezuela_logo.png" width="100" height="30" />
             <span>Banco de Venezuela</span>
           </button>
         </li>
         <li class="listitem" role="listitem">
-          <button class="button">
-            <img src="@/images/Mercantil.png" width="60" height="60">
+          <button type="button" class="button" @click="seleccionarBanco('Mercantil')">
+            <img src="@/images/Mercantil.png" width="60" height="60" />
             <span>Banco Mercantil</span>
           </button>
         </li>
       </ul>
     </div>
-    <button type="submit" class="submit">
-      Agregar beneficiario
-    </button>
+
+    <!-- Botón submit -->
+    <button type="submit" class="submit">Agregar beneficiario</button>
   </form>
-
-
 </template>
 
 <style scoped>
 /*---FORM PARA AGREGAR BENEFICIARIO---*/
-/* From Uiverse.io by nathann09 */
 .form {
   background-color: #fff;
   display: block;

@@ -3,12 +3,8 @@ package com.example.capitalDigital.usuario.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import com.example.capitalDigital.usuario.models.Beneficiary;
 import com.example.capitalDigital.usuario.services.BeneficiaryService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/beneficiaries")
@@ -19,7 +15,6 @@ public class BeneficiaryController {
     private BeneficiaryService beneficiaryService;
 
     @PostMapping("/{holder}")
-    public ResponseEntity<String> addBeneficiary(@PathVariable String holder,@RequestBody Beneficiary beneficiary) {
 
         System.out.println("Holder: " + holder);
         System.out.println("Beneficiary Name: " + beneficiary.getBeneficiaryName());
@@ -47,7 +42,6 @@ public class BeneficiaryController {
     public ResponseEntity<String> modifyBeneficiary(
             @PathVariable String holder,
             @PathVariable String oldAccountNumber,
-            @RequestBody Beneficiary beneficiary) {
 
         boolean success = beneficiaryService.modifyBeneficiary(
             beneficiary.getBeneficiaryName(),
@@ -82,23 +76,16 @@ public class BeneficiaryController {
     }
 
     @GetMapping("/{holder}")
-    public ResponseEntity<List<Beneficiary>> getBeneficiariesByHolder(@PathVariable String holder) {
-        List<Beneficiary> beneficiaries = beneficiaryService.getBeneficiariesByHolder(holder);
-
         if (beneficiaries.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(null);
         } else {
             return ResponseEntity.ok(beneficiaries);
         }
     }
 
     @GetMapping("/{holder}/{accountNumber}")
-    public ResponseEntity<Beneficiary> getBeneficiary(
             @PathVariable String holder,
             @PathVariable String accountNumber) {
 
-        Beneficiary beneficiary = beneficiaryService.getBeneficiary(holder, accountNumber);
 
         if (beneficiary == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

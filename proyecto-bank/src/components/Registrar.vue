@@ -10,7 +10,7 @@ export default{
     return {
       aceptaTerminos: false,
       recordarme: false,
-      options: ['Cedula', 'Pasaporte', 'Option 3', 'Option 4'],
+      options: ['Cedula Nacional', 'Cédula Extranjera'],
       banks: ['Provincial', 'BDV', 'BNC', 'Mercantil']
     }
   },
@@ -91,6 +91,21 @@ export default{
       try {
         const response = await usuarioService.guardarUsuario(usuario.value);
         alert("¡Registro exitoso!");
+        const nuevaCuenta = {
+          nombreCuenta: "Cuenta Principal", // Nombre por defecto
+          banco: usuario.value.banco,
+          numeroCuenta: usuario.value.numeroCuenta
+        };
+
+        // Paso 3: Agregar la cuenta bancaria usando el mismo número de documento
+        const responseCuenta = await usuarioService.agregarCuentaPorNumeroDocumento(
+            usuario.value.numeroDocumento,
+            nuevaCuenta
+        );
+
+        console.log("Cuenta agregada:", responseCuenta.data);
+
+        // Redirigir
         router.push('/bank?popup=true');
       } catch (error) {
         console.error("Error al registrar usuario:", error);
