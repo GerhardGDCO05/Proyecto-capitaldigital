@@ -60,5 +60,19 @@ export default {
 
   eliminarBeneficiario(holder, numeroCuenta) {
     return apiClient.delete(`/beneficiaries/${holder}/${numeroCuenta}`);
-  } 
+  },
+
+  //Metas
+  agregarMeta(numeroDocumento){
+    return apiClient.post(`/meta/numeroDocumento/${numeroDocumento}`)
+  },
+  obtenerMeta(numeroDocumento){
+    return apiClient.get(`/meta/numeroDocumento/${numeroDocumento}`)
+  },
+  modificarMeta(numeroDocumento, nombreMeta){
+    return apiClient.put(`/meta/numeroDocumento/${numeroDocumento}/${nombreMeta}`)
+  },
+  eliminarMeta(numeroDocumento,nombreMeta){
+    return apiClient.delete(`/meta/${numeroDocumento}/${nombreMeta}`)
+  }
 };
