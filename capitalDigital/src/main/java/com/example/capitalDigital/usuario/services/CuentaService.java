@@ -29,7 +29,7 @@ public class CuentaService {
     private BancoService bancoService;
 
     // Ruta específica para el archivo XML de cuentas
-    private static final String XML_FILE = "C:\\Users\\simon\\OneDrive\\Escritorio\\CapitalDigitalISProyect\\Proyecto-capitaldigital\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\UserCuentas.xml";
+    private static final String XML_FILE = "C:\\Users\\Usuario\\Desktop\\proyecto IS\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\UserCuentas.xml";
 
     // Guardar cuenta en XML (POST)
     public boolean guardarCuentaEnXML(String numeroDocumento, CuentaModel cuenta) {
