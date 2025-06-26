@@ -64,13 +64,13 @@ export default {
 
   //Metas
   agregarMeta(numeroDocumento){
-    return apiClient.post(`/meta/numeroDocumento/${numeroDocumento}`)
+    return apiClient.post(`/meta/numeroDocumento/${numeroDocumento}`,nuevameta)
   },
   obtenerMeta(numeroDocumento){
     return apiClient.get(`/meta/numeroDocumento/${numeroDocumento}`)
   },
   modificarMeta(numeroDocumento, nombreMeta){
-    return apiClient.put(`/meta/numeroDocumento/${numeroDocumento}/${nombreMeta}`)
+    return apiClient.put(`/meta/numeroDocumento/${numeroDocumento}/${nombreMeta}`,nuevameta)
   },
   eliminarMeta(numeroDocumento,nombreMeta){
     return apiClient.delete(`/meta/${numeroDocumento}/${nombreMeta}`)
