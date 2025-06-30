@@ -14,6 +14,8 @@ export default {
     const clave = ref("");
     const usuario = ref({});
     const cuentas = ref([]);
+    let contador_intentos=0;
+    let activo=true;
 
     const abrirbank = async () => {
       if (!numeroDocumento.value || !clave.value) {
@@ -27,9 +29,15 @@ export default {
 
         usuario.value = responseUsuario.data;
         cuentas.value = responseCuentas.data;
+        if(usuario.value.activo===false){
+          alert("Usuario Bloqueado Temporalmente");
+          activo=false;
+          return;
+        }
 
-        if (usuario.value && usuario.value.numeroDocumento) {
+        if (usuario.value && usuario.value.numeroDocumento && activo===true) {
           if (usuario.value.password === clave.value) {
+            contador_intentos=0;
 
             const usuarioStore = useUsuarioStore();
             usuarioStore.setUsuario(usuario.value);
@@ -42,6 +50,14 @@ export default {
 
           } else {
             alert("Error: Clave Incorrecta.");
+            contador_intentos++;
+            if (contador_intentos===3){
+              alert("Usuario Bloqueado por 24 Horas")
+              usuario.value.activo=false;
+              usuarioService.modificarUsuarioPorNumeroDocumento(usuario.value.numeroDocumento,usuario.value)
+
+            }
+            console.log("contador de intentos: "+contador_intentos);
           }
         } else {
           alert("Error: No se encontró información del usuario.");

@@ -1,6 +1,7 @@
 package com.example.capitalDigital.usuario.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.example.capitalDigital.usuario.Controller.UsuarioController;
 import jakarta.persistence.*;
@@ -62,6 +63,12 @@ public class UsuarioModel extends UsuarioController {
     @Size(min = 20, max = 20, message = "El número de cuenta debe tener 20 dígitos")
     private String numeroCuenta;
 
+    private boolean activo = true;
+    
+    private LocalDateTime fechaBloqueo;
+
+
+
     // Constructor vacío
     public UsuarioModel() {
     }
@@ -72,7 +79,7 @@ public class UsuarioModel extends UsuarioController {
                         LocalDate fechaNacimiento,
                         String direccion, String codigoPostal,
                         String email, String password,
-                        String banco, String numeroCuenta) {
+                        String banco, String numeroCuenta, boolean activo) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -85,6 +92,7 @@ public class UsuarioModel extends UsuarioController {
         this.password = password;
         this.banco = banco;
         this.numeroCuenta = numeroCuenta;
+        this.activo=activo;
     }
 
     public Long getId() {return id;}
@@ -134,6 +142,14 @@ public class UsuarioModel extends UsuarioController {
     public String getNumeroCuenta() {return numeroCuenta;}
 
     public void setNumeroCuenta(String numeroCuenta) {this.numeroCuenta = numeroCuenta;}
+    
+    public boolean getActivo(){return activo;}
+
+    public void setActivo(boolean activo){this.activo=activo;}
+
+    public LocalDateTime getFechaBloqueo() {return fechaBloqueo;}
+
+    public void setFechaBloqueo(LocalDateTime fechaBloqueo) {this.fechaBloqueo = fechaBloqueo;}
 
     //Método toString
     @Override
@@ -151,6 +167,8 @@ public class UsuarioModel extends UsuarioController {
                 ", password='" + password + '\'' +
                 ", banco=" + banco +'\'' +
                 ",numeroCuenta="+numeroCuenta+'\''+
+                ",activo="+activo+'\''+
+                ",fecha de bloqueo="+fechaBloqueo+'\''+
                 '}';
     }
 }
