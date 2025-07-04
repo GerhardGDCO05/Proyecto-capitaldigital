@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.capitalDigital.usuario.models.CuentaModel;
 import com.example.capitalDigital.usuario.services.CuentaService;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/cuenta")
 @Validated 
@@ -36,12 +34,12 @@ public class CuentaController {
     }
 
     @PostMapping("/numeroDocumento/{numeroDocumento}")
-    public ResponseEntity<?> agregarCuentaEnXML(@PathVariable String numeroDocumento, @Valid @RequestBody CuentaModel cuenta) {
+    public ResponseEntity<?> agregarCuentaEnXML(@PathVariable String numeroDocumento, @RequestBody Map<String, Object> datosCuenta) {
         try {
             System.out.println("Recibiendo petición POST para documento: " + numeroDocumento);
-            System.out.println("Datos de cuenta: Banco=" + cuenta.getBanco() + ", Número=" + cuenta.getNumeroCuenta());
+            System.out.println("Datos de cuenta recibidos: " + datosCuenta);
 
-            boolean guardado = cuentaService.guardarCuentaEnXML(numeroDocumento, cuenta);
+            boolean guardado = cuentaService.guardarCuentaEnXML(numeroDocumento, datosCuenta);
 
             if (guardado) {
                 return ResponseEntity.ok("Cuenta guardada correctamente en XML");
@@ -49,6 +47,10 @@ public class CuentaController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("La cuenta podría ya existir o el número de cuenta no es válido para el banco especificado");
             }
+        } catch (RuntimeException e) {
+            System.err.println("Error de validación en el controlador POST: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Error de validación: " + e.getMessage());
         } catch (Exception e) {
             System.err.println("Error en el controlador POST: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -96,27 +98,6 @@ public class CuentaController {
         }
     }
 
-    /*@PutMapping("/numeroDocumento/{numeroDocumento}/nombreCuenta/{nombreCuenta}")
-    public ResponseEntity<?> modificarCuentaEnXML(@PathVariable String numeroDocumento, @PathVariable String nombreCuenta, @Valid @RequestBody CuentaModel cuenta) {
-        try {
-            System.out.println("Recibiendo petición PUT para documento: " + numeroDocumento + ", cuenta: " + nombreCuenta);
-            System.out.println("Datos de cuenta: Banco=" + cuenta.getBanco() + ", Número=" + cuenta.getNumeroCuenta() + ", Nombre=" + cuenta.getNombreCuenta());
-
-            boolean modificado = cuentaService.modificarCuentaEnXML(numeroDocumento, nombreCuenta, cuenta);
-
-            if (modificado) {
-                return ResponseEntity.ok("Cuenta modificada correctamente. Nombre de cuenta actualizado: " + cuenta.getNombreCuenta());
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Cuenta no encontrada para el documento: " + numeroDocumento +
-                        " o el nuevo número de cuenta no es válido para el banco especificado.");
-            }
-        } catch (Exception e) {
-            System.err.println("Error en el controlador PUT: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error interno del servidor: " + e.getMessage());
-        }
-    }*/
 
 
     @DeleteMapping("/numeroDocumento/{numeroDocumento}/numeroCuenta/{numeroCuenta}")
@@ -148,41 +129,31 @@ public class CuentaController {
         return ResponseEntity.badRequest().body(errores);
     }
 
-    /*@PutMapping("/numeroDocumento/{numeroDocumento}/nombreCuenta/{nombreCuenta}")
-    public ResponseEntity<?> modificarNombreCuenta(@PathVariable String numeroDocumento,
-                                                  @PathVariable String nombreCuenta,
-                                                  @RequestBody Map<String, String> payload) {
-        try {
-            System.out.println("Modificando nombre de cuenta...");
-            System.out.println("Documento: " + numeroDocumento);
-            System.out.println("Nombre actual: " + nombreCuenta);
-            System.out.println("Nuevo nombre: " + payload.get("nombreCuenta"));
-
-            boolean modificado = cuentaService.modificarNombreCuenta(numeroDocumento, nombreCuenta, payload.get("nombreCuenta"));
-
-            if (modificado) {
-                return ResponseEntity.ok("Nombre de cuenta actualizado");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se encontró la cuenta o no se pudo modificar");
-            }
-        } catch (Exception e) {
-            System.err.println("Error al modificar nombre de cuenta: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error interno del servidor: " + e.getMessage());
-        }
-    }*/
 
     @PutMapping("/numeroDocumento/{documento}/nombreCuenta/{oldNombre}")
     public ResponseEntity<?> modificarNombreCuenta(@PathVariable String documento,
-                                                  @PathVariable String oldNombre,
-                                                  @Valid @RequestBody CuentaModel nuevaCuenta) {
-        boolean modificado = cuentaService.modificarCuentaEnXML(documento, oldNombre, nuevaCuenta);
+                                                    @PathVariable String oldNombre,
+                                                    @RequestBody Map<String, Object> datosCuenta) {
+        try {
+            System.out.println("Recibiendo petición PUT para documento: " + documento);
+            System.out.println("Nombre actual: " + oldNombre);
+            System.out.println("Datos de cuenta recibidos: " + datosCuenta);
+
+            boolean modificado = cuentaService.modificarCuentaEnXML(documento, oldNombre, datosCuenta);
                                                 
-        if (modificado) {
-            return ResponseEntity.ok("✅ Nombre de cuenta actualizado exitosamente");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("❌ Cuenta no encontrada o nombre inválido");
+            if (modificado) {
+                return ResponseEntity.ok("✅ Nombre de cuenta actualizado exitosamente");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("❌ Cuenta no encontrada o nombre inválido");
+            }
+        } catch (RuntimeException e) {
+            System.err.println("Error de validación en el controlador PUT: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Error de validación: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error en el controlador PUT: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error interno del servidor: " + e.getMessage());
         }
     }
 

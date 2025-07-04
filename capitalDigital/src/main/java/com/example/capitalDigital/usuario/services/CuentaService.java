@@ -3,6 +3,8 @@ package com.example.capitalDigital.usuario.services;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,20 +24,44 @@ import org.w3c.dom.NodeList;
 import com.example.capitalDigital.Validation_bank.BancoService;
 import com.example.capitalDigital.usuario.models.CuentaModel;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+
 @Service
 public class CuentaService {
 
     @Autowired
     private BancoService bancoService;
+    @Autowired
+    private Validator validator;
 
     // Ruta específica para el archivo XML de cuentas
     private static final String XML_FILE = "C:\\Users\\Usuario\\Desktop\\proyecto IS\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\UserCuentas.xml";
 
     // Guardar cuenta en XML (POST)
-    public boolean guardarCuentaEnXML(String numeroDocumento, CuentaModel cuenta) {
+    public boolean guardarCuentaEnXML(String numeroDocumento, Map<String, Object> datosCuenta) {
         try {
             System.out.println("Iniciando guardado de cuenta para documento: " + numeroDocumento);
-            System.out.println("Datos de cuenta: Banco=" + cuenta.getBanco() + ", Número=" + cuenta.getNumeroCuenta() + ", Nombre=" + cuenta.getNombreCuenta());
+            System.out.println("Datos de cuenta recibidos: " + datosCuenta);
+
+            // Crear y mapear la instancia de CuentaModel
+            CuentaModel cuenta = new CuentaModel();
+            
+            // Mapear los datos del Map al objeto CuentaModel
+            if (datosCuenta.get("banco") != null) {
+                cuenta.setBanco((String) datosCuenta.get("banco"));
+            }
+            if (datosCuenta.get("numeroCuenta") != null) {
+                cuenta.setNumeroCuenta((String) datosCuenta.get("numeroCuenta"));
+            }
+            if (datosCuenta.get("nombreCuenta") != null) {
+                cuenta.setNombreCuenta((String) datosCuenta.get("nombreCuenta"));
+            }
+
+            // Validar la cuenta usando las anotaciones del modelo
+            validarCuenta(cuenta);
+
+            System.out.println("Cuenta creada en el servicio: " + cuenta);
 
             // Validar el número de cuenta según el banco
             if (!bancoService.validarNumeroCuenta(cuenta.getBanco(), cuenta.getNumeroCuenta())) {
@@ -74,10 +100,24 @@ public class CuentaService {
             System.out.println("Cuenta guardada exitosamente");
             return true;
 
+        } catch (RuntimeException e) {
+            System.err.println("Error de validación al guardar cuenta: " + e.getMessage());
+            throw e; // Re-lanzar para que el controller pueda capturar y manejar específicamente
         } catch (Exception e) {
             System.err.println("Error al guardar cuenta: " + e.getMessage());
             e.printStackTrace();
             return false;
+        }
+    }
+    // Método para validar CuentaModel usando las anotaciones
+    private void validarCuenta(CuentaModel cuenta) {
+        Set<ConstraintViolation<CuentaModel>> violations = validator.validate(cuenta);
+        if (!violations.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (ConstraintViolation<CuentaModel> violation : violations) {
+                sb.append(violation.getMessage()).append("; ");
+            }
+            throw new RuntimeException("Errores de validación: " + sb.toString());
         }
     }
 
@@ -158,9 +198,28 @@ public class CuentaService {
     }
 
     // Modificar nombre de cuenta en XML (PUT)
-    public boolean modificarCuentaEnXML(String numeroDocumento, String nombreCuenta, CuentaModel nuevaCuenta) {
+    public boolean modificarCuentaEnXML(String numeroDocumento, String nombreCuenta, Map<String, Object> datosCuenta) {
         try {
             System.out.println("Modificando nombre de cuenta para documento: " + numeroDocumento + ", cuenta: " + nombreCuenta);
+            System.out.println("Datos de cuenta recibidos: " + datosCuenta);
+
+            // Crear y mapear la instancia de CuentaModel en el servicio
+            CuentaModel nuevaCuenta = new CuentaModel();
+            
+            // Mapear los datos del Map al objeto CuentaModel
+            if (datosCuenta.get("banco") != null) {
+                nuevaCuenta.setBanco((String) datosCuenta.get("banco"));
+            }
+            if (datosCuenta.get("numeroCuenta") != null) {
+                nuevaCuenta.setNumeroCuenta((String) datosCuenta.get("numeroCuenta"));
+            }
+            if (datosCuenta.get("nombreCuenta") != null) {
+                nuevaCuenta.setNombreCuenta((String) datosCuenta.get("nombreCuenta"));
+            }
+
+            // Validar la cuenta usando las anotaciones del modelo
+            validarCuenta(nuevaCuenta);
+
             System.out.println("Nuevo nombre de cuenta: " + nuevaCuenta.getNombreCuenta());
 
             Document doc = obtenerDocumentoXML();
@@ -184,6 +243,9 @@ public class CuentaService {
             } else {
                 System.out.println("Usuario no encontrado para modificar cuenta.");
             }
+        } catch (RuntimeException e) {
+            System.err.println("Error de validación al modificar cuenta: " + e.getMessage());
+            throw e; // Re-lanzar para que el controller pueda capturar y manejar específicamente
         } catch (Exception e) {
             System.err.println("Error al modificar nombre de cuenta: " + e.getMessage());
             e.printStackTrace();

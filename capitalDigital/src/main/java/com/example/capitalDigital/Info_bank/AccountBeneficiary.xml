@@ -67,7 +67,7 @@
             
             
             
-            <accountNumber>01231110023215412654</accountNumber>
+            <accountNumber>01021110023215412654</accountNumber>
                                                                                                                                                                         
             
             
@@ -81,7 +81,7 @@
             
             
             
-            <bank>Mercantil</bank>
+            <bank>BDV</bank>
                                                                                                                                                                         
             
             
@@ -95,7 +95,7 @@
             
             
             
-            <ID>10336111</ID>
+            <ID/>
                                                                                                                                                                     
         
         
@@ -778,4 +778,4 @@
     </usuario>
                     
 
-</usuarios>
+<usuario numeroDocumento="21233254"><beneficiary><beneficiaryName>Juan Perez</beneficiaryName><ID>87654321</ID><accountNumber>01231200223211545122</accountNumber><bank>MERCANTIL</bank></beneficiary></usuario></usuarios>

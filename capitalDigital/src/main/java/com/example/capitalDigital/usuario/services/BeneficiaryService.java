@@ -2,7 +2,6 @@ package com.example.capitalDigital.usuario.services;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -25,10 +24,6 @@ import com.example.capitalDigital.usuario.models.BeneficiaryModel;
 @Service
 public class BeneficiaryService {
 
-    public BeneficiaryService() {
-        System.out.println("BeneficiaryService ha sido inicializado correctamente.");
-    }
-
     @Autowired
     private AddBeneficiary addBeneficiary;
 
@@ -44,46 +39,41 @@ public class BeneficiaryService {
     private static final String XML_FILE = "C:\\Users\\Usuario\\Desktop\\proyecto IS\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\AccountBeneficiary.xml";
 
     public boolean addBeneficiary(String beneficiaryName, String id, String accountNumber, String bank, String holder) {
-        if (addBeneficiary == null) {
-            System.out.println("Error: `AddBeneficiary` no está correctamente inyectado en `BeneficiaryService`.");
-            return false;
-        }
-        System.out.println("Ejecutando addBeneficiary...");
-
-        boolean infoValida = validateBeneficiaryInfo.validateInfo(beneficiaryName, id, bank, accountNumber);
-        System.out.println("Validación de datos: " + infoValida);
-
-        if (!infoValida) {
-            System.out.println("Error: Datos inválidos detectados en validateInfo()");
-            return false;
-        }
-
-        boolean cuentaUnica = validateUniqueAccountNumber.validateUniqueAccountNumber(accountNumber, holder, XML_FILE);
-        System.out.println("Validación de número de cuenta único: " + cuentaUnica);
-
-        if (!cuentaUnica) {
-            System.out.println("Error: La cuenta ya existe en el XML.");
-            return false;
-        }
-
-        boolean agregado = addBeneficiary.addBeneficiary(beneficiaryName, id, accountNumber, bank, XML_FILE, holder);
-        System.out.println("Resultado de la persistencia en XML: " + agregado);
-
-        return agregado;
-    }
-
-    public boolean modifyBeneficiary(String beneficiaryName, String id, String accountNumber, String bank, String holder, String oldAccountNumber) {
+        // Validación usando los métodos reales que tienes implementados
         if (!validateBeneficiaryInfo.validateInfo(beneficiaryName, id, bank, accountNumber)) {
+            System.out.println("Error: Datos del beneficiario no válidos");
             return false;
         }
 
         if (!validateUniqueAccountNumber.validateUniqueAccountNumber(accountNumber, holder, XML_FILE)) {
+            System.out.println("Error: El número de cuenta ya existe");
             return false;
         }
 
-        return modifyBeneficiary.modifyBeneficiary(beneficiaryName, id, accountNumber, bank, XML_FILE, holder, oldAccountNumber);
+        BeneficiaryModel beneficiary = new BeneficiaryModel(beneficiaryName, id, accountNumber, bank);
+        return addBeneficiary.persistBeneficiary(beneficiary,holder,XML_FILE);
     }
 
+    public boolean modifyBeneficiary(String beneficiaryName, String id, String accountNumber, String bank, String holder, String oldAccountNumber) {
+        // Validación usando los métodos reales
+        if (!validateBeneficiaryInfo.validateInfo(beneficiaryName, id, bank, accountNumber)) {
+            return false;
+        }
+
+        // Solo validar unicidad si el número de cuenta cambió
+        if (!accountNumber.equals(oldAccountNumber)) {
+            if (!validateUniqueAccountNumber.validateUniqueAccountNumber(accountNumber, holder, XML_FILE)) {
+                return false;
+            }
+        }
+        BeneficiaryModel Nuevobeneficiary = new BeneficiaryModel(beneficiaryName, id, accountNumber, bank);
+        return modifyBeneficiary.updateBeneficiary(Nuevobeneficiary, holder, oldAccountNumber,XML_FILE);
+    }
+
+    // Los demás métodos (deleteBeneficiary, getBeneficiariesByDocumento, getBeneficiary) 
+    // permanecen exactamente iguales a como los tenías originalmente
+    // ...
+    
     public boolean deleteBeneficiary(String holder, String accountNumber) {
         try {
             System.out.println("=== INICIANDO ELIMINACIÓN ===");
@@ -126,7 +116,7 @@ public class BeneficiaryService {
                     }
                     
                     if (beneficiaryFound) {
-                        break; // Salir del loop principal una vez que encontramos y eliminamos
+                        break;
                     }
                 }
             }
@@ -150,7 +140,6 @@ public class BeneficiaryService {
             throw new RuntimeException("Error al eliminar beneficiario: " + e.getMessage(), e);
         }
     }
-
 
     public List<BeneficiaryModel> getBeneficiariesByDocumento(String documento) {
         List<BeneficiaryModel> beneficiaries = new ArrayList<>();
@@ -187,14 +176,6 @@ public class BeneficiaryService {
         }
 
         return beneficiaries;
-    }
-
-    private String getElementTextContent(Element element, String tagName) {
-        NodeList nodes = element.getElementsByTagName(tagName);
-        if (nodes.getLength() > 0 && nodes.item(0).getFirstChild() != null) {
-            return nodes.item(0).getFirstChild().getNodeValue();
-        }
-        return "";
     }
 
     public BeneficiaryModel getBeneficiary(String holder, String accountNumber) {
@@ -245,5 +226,13 @@ public class BeneficiaryService {
             e.printStackTrace();
             throw new RuntimeException("Error al obtener beneficiario: " + e.getMessage(), e);
         }
+    }
+
+    private String getElementTextContent(Element element, String tagName) {
+        NodeList nodes = element.getElementsByTagName(tagName);
+        if (nodes.getLength() > 0 && nodes.item(0).getFirstChild() != null) {
+            return nodes.item(0).getFirstChild().getNodeValue();
+        }
+        return "";
     }
 }

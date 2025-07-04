@@ -3,13 +3,12 @@ package com.example.capitalDigital.usuario.models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.example.capitalDigital.usuario.Controller.UsuarioController;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "usuarios")
-public class UsuarioModel extends UsuarioController {
+public class UsuarioModel { 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +29,7 @@ public class UsuarioModel extends UsuarioController {
     @Column(name = "numero_documento", unique = true, nullable = false)
     @NotBlank(message = "El número de documento no puede estar vacío")
     @Pattern(regexp = "^[0-9]+$", message = "El número de documento debe contener solo números")
-    @Size(min = 5, max = 20, message = "El número de documento debe tener entre 5 y 20 caracteres")
+    @Size(min = 7, max = 8, message = "El número de documento debe tener entre 7 y 8 caracteres")
     private String numeroDocumento;
     
     @NotNull(message = "La Fecha de Nacimiento no puede estar vacía")
@@ -67,8 +66,6 @@ public class UsuarioModel extends UsuarioController {
     
     private LocalDateTime fechaBloqueo;
 
-
-
     // Constructor vacío
     public UsuarioModel() {
     }
@@ -92,66 +89,52 @@ public class UsuarioModel extends UsuarioController {
         this.password = password;
         this.banco = banco;
         this.numeroCuenta = numeroCuenta;
-        this.activo=activo;
+        this.activo = activo;
     }
 
-    public Long getId() {return id;}
+    // Getters y Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {this.id = id;}
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getNombre() {return nombre;}
+    public String getApellido() { return apellido; }
+    public void setApellido(String apellido) { this.apellido = apellido; }
 
-    public void setNombre(String nombre) {this.nombre = nombre;}
+    public String getDocumento() { return documento; }
+    public void setDocumento(String documento) { this.documento = documento; }
 
-    public String getApellido() {return apellido;}
+    public String getNumeroDocumento() { return numeroDocumento; }
+    public void setNumeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; }
 
-    public void setApellido(String apellido) {this.apellido = apellido;}
+    public LocalDate getFechaNacimiento() { return fechaNacimiento; }
+    public void setFechaNacimiento(LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
 
-    public String getDocumento() {return documento;}
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
-    public void setDocumento(String documento) {this.documento = documento;}
+    public String getCodigoPostal() { return codigoPostal; }
+    public void setCodigoPostal(String codigoPostal) { this.codigoPostal = codigoPostal; }
 
-    public String getNumeroDocumento() {return numeroDocumento;}
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setNumeroDocumento(String numeroDocumento) {this.numeroDocumento = numeroDocumento;}
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public LocalDate getFechaNacimiento() {return fechaNacimiento;}
+    public String getBanco() { return banco; }
+    public void setBanco(String banco) { this.banco = banco; }
 
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {this.fechaNacimiento = fechaNacimiento;}
-
-    public String getDireccion() {return direccion;}
-
-    public void setDireccion(String direccion) {this.direccion = direccion;}
-
-    public String getCodigoPostal() {return codigoPostal;}
-
-    public void setCodigoPostal(String codigoPostal) {this.codigoPostal = codigoPostal;}
-
-    public String getEmail() {return email;}
-
-    public void setEmail(String email) {this.email = email;}
-
-    public String getPassword() {return password;}
-
-    public void setPassword(String password) {this.password = password;}
-
-    public String getBanco() {return banco;}
-
-    public void setBanco(String banco) {this.banco = banco;}
-
-    public String getNumeroCuenta() {return numeroCuenta;}
-
-    public void setNumeroCuenta(String numeroCuenta) {this.numeroCuenta = numeroCuenta;}
+    public String getNumeroCuenta() { return numeroCuenta; }
+    public void setNumeroCuenta(String numeroCuenta) { this.numeroCuenta = numeroCuenta; }
     
-    public boolean getActivo(){return activo;}
+    public boolean getActivo() { return activo; }
+    public void setActivo(boolean activo) { this.activo = activo; }
 
-    public void setActivo(boolean activo){this.activo=activo;}
+    public LocalDateTime getFechaBloqueo() { return fechaBloqueo; }
+    public void setFechaBloqueo(LocalDateTime fechaBloqueo) { this.fechaBloqueo = fechaBloqueo; }
 
-    public LocalDateTime getFechaBloqueo() {return fechaBloqueo;}
-
-    public void setFechaBloqueo(LocalDateTime fechaBloqueo) {this.fechaBloqueo = fechaBloqueo;}
-
-    //Método toString
     @Override
     public String toString() {
         return "UsuarioModel{" +
@@ -165,10 +148,10 @@ public class UsuarioModel extends UsuarioController {
                 ", codigoPostal='" + codigoPostal + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", banco=" + banco +'\'' +
-                ",numeroCuenta="+numeroCuenta+'\''+
-                ",activo="+activo+'\''+
-                ",fecha de bloqueo="+fechaBloqueo+'\''+
+                ", banco=" + banco + '\'' +
+                ", numeroCuenta=" + numeroCuenta + '\'' +
+                ", activo=" + activo + '\'' +
+                ", fechaBloqueo=" + fechaBloqueo + '\'' +
                 '}';
     }
 }

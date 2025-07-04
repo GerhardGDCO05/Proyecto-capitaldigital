@@ -1,6 +1,8 @@
 package com.example.capitalDigital.usuario.Controller;
 
 import java.util.List;
+import java.util.Map;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.capitalDigital.usuario.models.MetaFinanciera;
 import com.example.capitalDigital.usuario.services.MetaService;
+import com.example.capitalDigital.usuario.models.MetaFinanciera;
 
 @RestController
 @RequestMapping("/meta")
@@ -27,16 +29,16 @@ public class MetaController {
     private MetaService metaService;
 
     @PostMapping("/numeroDocumento/{numeroDocumento}")
-    public ResponseEntity<String> agregarMeta(@PathVariable String numeroDocumento, @RequestBody MetaFinanciera meta) {
+    public ResponseEntity<String> agregarMeta(
+            @PathVariable String numeroDocumento,
+            @RequestBody Map<String, Object> metaData) {
+        
         System.out.println("=== RECIBIENDO PETICIÓN POST ===");
         System.out.println("Número de documento: " + numeroDocumento);
-        System.out.println("Meta recibida: " + meta.getNombre());
-        System.out.println("Fecha inicio: " + meta.getFechaInicio());
-        System.out.println("Fecha fin: " + meta.getFechaFin());
-        System.out.println("Monto requerido: " + meta.getMontoRequerido());
+        System.out.println("Datos recibidos: " + metaData);
         
         try {
-            boolean guardado = metaService.guardarMetaEnXML(numeroDocumento, meta);
+            boolean guardado = metaService.guardarMeta(numeroDocumento, metaData);
             if (guardado) {
                 return ResponseEntity.ok("Meta guardada correctamente");
             } else {
@@ -52,7 +54,9 @@ public class MetaController {
     }
 
     @GetMapping("/numeroDocumento/{numeroDocumento}")
-    public ResponseEntity<List<MetaFinanciera>> obtenerMetasPorNumeroDocumento(@PathVariable String numeroDocumento) {
+    public ResponseEntity<List<MetaFinanciera>> obtenerMetasPorNumeroDocumento(
+            @PathVariable String numeroDocumento) {
+        
         System.out.println("=== OBTENIENDO METAS ===");
         System.out.println("Número de documento: " + numeroDocumento);
         
@@ -62,18 +66,18 @@ public class MetaController {
         }
         return ResponseEntity.ok(metas);
     }
-
-    @PutMapping("/numeroDocumento/{numeroDocumento}/{nombreMeta}")
+    @PutMapping("/numeroDocumento/{numeroDocumento}/meta/{nombreMeta}")
     public ResponseEntity<String> modificarMeta(
             @PathVariable String numeroDocumento,
             @PathVariable String nombreMeta,
-            @RequestBody MetaFinanciera nuevaMeta) {
+            @RequestBody Map<String, Object> metaData) {
 
         System.out.println("=== MODIFICANDO META ===");
         System.out.println("Número de documento: " + numeroDocumento);
         System.out.println("Nombre meta a modificar: " + nombreMeta);
+        System.out.println("Nuevos datos: " + metaData);
 
-        boolean modificada = metaService.modificarMetaEnXML(numeroDocumento, nombreMeta, nuevaMeta);
+        boolean modificada = metaService.modificarMeta(numeroDocumento, nombreMeta, metaData);
         if (modificada) {
             return ResponseEntity.ok("Meta modificada correctamente");
         } else {
@@ -99,6 +103,4 @@ public class MetaController {
             return ResponseEntity.status(500).body("Error al eliminar la meta: " + e.getMessage());
         }
     }
-
-    
 }

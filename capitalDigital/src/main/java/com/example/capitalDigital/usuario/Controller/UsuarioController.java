@@ -3,11 +3,7 @@ package com.example.capitalDigital.usuario.Controller;
 import java.util.Map;
 import java.util.Optional;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
@@ -23,17 +19,12 @@ public class UsuarioController {
     UsuarioServices usuarioServices;
 
     @PostMapping()
-    public ResponseEntity<?> guardarUsuario(@Valid @RequestBody UsuarioModel usuario, BindingResult result) {
-        if (result.hasErrors()) {
-            Map<String, String> errores = new HashMap<>();
-            result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errores);
-        }
+    public ResponseEntity<?> guardarUsuario(@RequestBody Map<String, Object> datosUsuario) {
         try {
-            UsuarioModel nuevoUsuario = usuarioServices.guardarUsuario(usuario);
+            UsuarioModel nuevoUsuario = usuarioServices.crearUsuario(datosUsuario);
             return ResponseEntity.ok(nuevoUsuario);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage())); // Devuelve error si el email ya está en uso
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -56,48 +47,17 @@ public class UsuarioController {
 
     }
     @PutMapping("/numeroDocumento/{numeroDocumento}")
-    public ResponseEntity<?> modificarUsuarioPorNumeroDocumento(
-            @PathVariable("numeroDocumento") String numeroDocumento,
-            @Valid @RequestBody UsuarioModel usuarioActualizado,
-            BindingResult result) {
-
-        if (result.hasErrors()) {
-            Map<String, String> errores = new HashMap<>();
-            result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errores);
+        public ResponseEntity<?> modificarUsuarioPorNumeroDocumento(
+                @PathVariable("numeroDocumento") String numeroDocumento,
+                @RequestBody Map<String, Object> datosUsuario) {
+            
+            try {
+                UsuarioModel usuarioGuardado = usuarioServices.actualizarUsuario(numeroDocumento, datosUsuario);
+                return ResponseEntity.ok(usuarioGuardado);
+            } catch (RuntimeException e) {
+                return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            }
         }
-
-        Optional<UsuarioModel> usuarioExistente = usuarioServices.obtenerPorNumeroDocumento(numeroDocumento);
-        if (usuarioExistente.isEmpty()) {
-            return ResponseEntity.status(404).body("Usuario no encontrado.");
-        }
-
-        UsuarioModel usuario = usuarioExistente.get();
-
-        // 🛠️ Actualizar todos los campos excepto el estado de bloqueo aún
-        usuario.setNombre(usuarioActualizado.getNombre());
-        usuario.setApellido(usuarioActualizado.getApellido());
-        usuario.setDocumento(usuarioActualizado.getDocumento());
-        usuario.setNumeroDocumento(usuarioActualizado.getNumeroDocumento());
-        usuario.setFechaNacimiento(usuarioActualizado.getFechaNacimiento());
-        usuario.setDireccion(usuarioActualizado.getDireccion());
-        usuario.setEmail(usuarioActualizado.getEmail());
-        usuario.setCodigoPostal(usuarioActualizado.getCodigoPostal());
-        usuario.setBanco(usuarioActualizado.getBanco());
-        usuario.setNumeroCuenta(usuarioActualizado.getNumeroCuenta());
-        usuario.setPassword(usuarioActualizado.getPassword());
-
-        // 🔒 Si el usuario se bloquea ahora
-        if (!usuarioActualizado.getActivo() && usuario.getActivo()) {
-            usuario.setActivo(false);
-            usuario.setFechaBloqueo(LocalDateTime.now());
-        } else {
-            usuario.setActivo(usuarioActualizado.getActivo());
-        }
-
-        UsuarioModel usuarioGuardado = usuarioServices.guardarUsuario(usuario);
-        return ResponseEntity.ok(usuarioGuardado);
-    }
 
     @DeleteMapping("/numeroDocumento/{numeroDocumento}")
     public ResponseEntity<String> eliminarUsuarioPorNumeroDocumento(@PathVariable("numeroDocumento") String numeroDocumento) {

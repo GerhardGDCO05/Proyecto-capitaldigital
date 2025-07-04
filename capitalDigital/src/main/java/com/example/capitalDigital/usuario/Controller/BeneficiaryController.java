@@ -1,19 +1,12 @@
 package com.example.capitalDigital.usuario.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.capitalDigital.usuario.models.BeneficiaryModel;
 import com.example.capitalDigital.usuario.services.BeneficiaryService;
@@ -27,20 +20,17 @@ public class BeneficiaryController {
     private BeneficiaryService beneficiaryService;
 
     @PostMapping("/{holder}")
-    public ResponseEntity<String> addBeneficiary(@PathVariable String holder,@RequestBody BeneficiaryModel beneficiary) {
-
-        System.out.println("Holder: " + holder);
-        System.out.println("Beneficiary Name: " + beneficiary.getBeneficiaryName());
-        System.out.println("ID: " + beneficiary.getID());
-        System.out.println("Account Number: " + beneficiary.getAccountNumber());
-        System.out.println("Bank: " + beneficiary.getBank());
+    public ResponseEntity<String> addBeneficiary(
+            @PathVariable String holder,
+            @RequestBody Map<String, String> requestData) {
 
         boolean success = beneficiaryService.addBeneficiary(
-            beneficiary.getBeneficiaryName(),
-            beneficiary.getID(),
-            beneficiary.getAccountNumber(),
-            beneficiary.getBank(),
+            requestData.get("beneficiaryName"),
+            requestData.get("id"),
+            requestData.get("accountNumber"),
+            requestData.get("bank"),
             holder
+            
         );
 
         if (success) {
@@ -55,13 +45,13 @@ public class BeneficiaryController {
     public ResponseEntity<String> modifyBeneficiary(
             @PathVariable String holder,
             @PathVariable String oldAccountNumber,
-            @RequestBody BeneficiaryModel beneficiary) {
+            @RequestBody Map<String, String> requestData) {
 
         boolean success = beneficiaryService.modifyBeneficiary(
-            beneficiary.getBeneficiaryName(),
-            beneficiary.getID(),
-            beneficiary.getAccountNumber(),
-            beneficiary.getBank(),
+            requestData.get("beneficiaryName"),
+            requestData.get("id"),
+            requestData.get("accountNumber"),
+            requestData.get("bank"),
             holder,
             oldAccountNumber
         );
@@ -74,16 +64,12 @@ public class BeneficiaryController {
         }
     }
 
+    // Los demás métodos (delete, get) permanecen exactamente iguales
     @DeleteMapping("/{holder}/{accountNumber}")
     public ResponseEntity<String> deleteBeneficiary(
             @PathVariable String holder,
             @PathVariable String accountNumber) {
-
-        System.out.println("Eliminando beneficiario para holder: " + holder);
-        System.out.println("Número de cuenta a eliminar: " + accountNumber);
-
         boolean success = beneficiaryService.deleteBeneficiary(holder, accountNumber);
-
         if (success) {
             return ResponseEntity.ok("Beneficiario eliminado exitosamente");
         } else {
@@ -95,25 +81,14 @@ public class BeneficiaryController {
     @GetMapping("/{holder}")
     public ResponseEntity<List<BeneficiaryModel>> getBeneficiariesByHolder(@PathVariable String holder) {
         List<BeneficiaryModel> beneficiaries = beneficiaryService.getBeneficiariesByDocumento(holder);
-        if (beneficiaries.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } else {
-            return ResponseEntity.ok(beneficiaries);
-        }
+        return ResponseEntity.ok(beneficiaries);
     }
 
     @GetMapping("/{holder}/{accountNumber}")
     public ResponseEntity<BeneficiaryModel> getBeneficiary(
             @PathVariable String holder,
             @PathVariable String accountNumber) {
-
         BeneficiaryModel beneficiary = beneficiaryService.getBeneficiary(holder, accountNumber);
-
-        if (beneficiary == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(null);
-        } else {
-            return ResponseEntity.ok(beneficiary);
-        }
+        return ResponseEntity.ok(beneficiary);
     }
 }
