@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class TransactionHistoryModel {
     private String beneficiario;
-    private LocalDateTime fechaHora; // Removido = LocalDateTime.now()
+    private LocalDateTime fechaHora; 
     private String monto;
     private String bancoOrigen;
     private String numCuentaOrigen;
@@ -95,4 +95,4 @@ public class TransactionHistoryModel {
         }
         return "";
     }
-}
+} 

@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -26,13 +28,19 @@ public class TransactionHistoryService {
 
     private static final String XML_FILE = "C:\\Users\\Usuario\\Desktop\\proyecto IS\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\TransactionHistory.xml";
 
-    public boolean guardarTransactionEnXML(String numeroDocumento, TransactionHistoryModel transaction) {
+    public boolean guardarTransactionEnXML(String numeroDocumento, Map<String, Object> historyTransaction) {
         try {
             System.out.println("Guardando transacción en XML");
             File file = new File(XML_FILE);
             Document doc;
             Element root;
-
+            TransactionHistoryModel transaction = new TransactionHistoryModel(
+                (String) historyTransaction.get("beneficiario"),
+                (String) historyTransaction.get("monto"),
+                (String) historyTransaction.get("bancoOrigen"),
+                (String) historyTransaction.get("numCuentaOrigen"),
+                (String) historyTransaction.get("bancoDestino"),
+                (String) historyTransaction.get("numCuentaDestino"));
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
@@ -143,7 +151,7 @@ public class TransactionHistoryService {
             }
         }
         return null;
-    }
+    } 
 
     private String getElementTextContent(Element element, String tagName) {
         NodeList nodes = element.getElementsByTagName(tagName);

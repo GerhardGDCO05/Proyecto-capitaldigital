@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <usuarios>
-                
+                  
+  
   
   
   
@@ -8,7 +9,89 @@
   
   
   <usuario numeroDocumento="30313726">
-                                
+                                    
+    
+    
+    
+    
+    
+    
+    
+    <transaccion>
+                                                      
+      
+      
+      
+      
+      
+      
+      
+      <Beneficiario>Simon</Beneficiario>
+                                                      
+      
+      
+      
+      
+      
+      
+      
+      <Fecha>2025-06-25 21:08:57</Fecha>
+                                                      
+      
+      
+      
+      
+      
+      
+      
+      <BancoOrigen>MERCANTIL</BancoOrigen>
+                                                      
+      
+      
+      
+      
+      
+      
+      
+      <CuentaOrigen>01231263412365481236</CuentaOrigen>
+                                                      
+      
+      
+      
+      
+      
+      
+      
+      <BancoDestino>BDV</BancoDestino>
+                                                      
+      
+      
+      
+      
+      
+      
+      
+      <CuentaDestino>01021112235584574588</CuentaDestino>
+                                                      
+      
+      
+      
+      
+      
+      
+      
+      <Monto>1000</Monto>
+                                                    
+    
+    
+    
+    
+    
+    
+    
+    </transaccion>
+                                  
+    
     
     
     
@@ -23,7 +106,7 @@
       
       
       
-      <Beneficiario>Simon</Beneficiario>
+      <Beneficiario>Sebastian</Beneficiario>
                                                 
       
       
@@ -31,7 +114,7 @@
       
       
       
-      <Fecha>2025-06-25 21:08:57</Fecha>
+      <Fecha>2025-06-25 21:18:28</Fecha>
                                                 
       
       
@@ -63,7 +146,7 @@
       
       
       
-      <CuentaDestino>01021112235584574588</CuentaDestino>
+      <CuentaDestino>01021232215447458565</CuentaDestino>
                                                 
       
       
@@ -71,7 +154,7 @@
       
       
       
-      <Monto>1000</Monto>
+      <Monto>100000</Monto>
                                               
     
     
@@ -80,116 +163,95 @@
     
     
     </transaccion>
-                              
-    
-    
-    
-    
-    
-    
-    <transaccion>
-                                          
-      
-      
-      
-      
-      
-      <Beneficiario>Sebastian</Beneficiario>
-                                          
-      
-      
-      
-      
-      
-      <Fecha>2025-06-25 21:18:28</Fecha>
-                                          
-      
-      
-      
-      
-      
-      <BancoOrigen>MERCANTIL</BancoOrigen>
-                                          
-      
-      
-      
-      
-      
-      <CuentaOrigen>01231263412365481236</CuentaOrigen>
-                                          
-      
-      
-      
-      
-      
-      <BancoDestino>BDV</BancoDestino>
-                                          
-      
-      
-      
-      
-      
-      <CuentaDestino>01021232215447458565</CuentaDestino>
-                                          
-      
-      
-      
-      
-      
-      <Monto>100000</Monto>
-                                        
-    
-    
-    
-    
-    
-    </transaccion>
-                        
+                            
   
     
     
     
+    
     <transaccion>
-                        
+                              
+      
       
       
       <Beneficiario>Ana</Beneficiario>
-                        
+                              
+      
       
       
       <Fecha>2025-06-25 21:27:46</Fecha>
-                        
+                              
+      
       
       
       <BancoOrigen>MERCANTIL</BancoOrigen>
-                        
+                              
+      
       
       
       <CuentaOrigen>01231263412365481236</CuentaOrigen>
-                        
+                              
+      
       
       
       <BancoDestino>BBVA</BancoDestino>
-                        
+                              
+      
       
       
       <CuentaDestino>01111232215447458565</CuentaDestino>
-                        
+                              
+      
       
       
       <Monto>20000</Monto>
-                      
+                            
+    
     
     
     </transaccion>
-              
+                  
     
     
+    
+    <transaccion>
+                  
+      
+      <Beneficiario>Gerhard</Beneficiario>
+                  
+      
+      <Fecha>2025-06-25 21:47:59</Fecha>
+                  
+      
+      <BancoOrigen>MERCANTIL</BancoOrigen>
+                  
+      
+      <CuentaOrigen>01231263412365481236</CuentaOrigen>
+                  
+      
+      <BancoDestino>BBVA</BancoDestino>
+                  
+      
+      <CuentaDestino>01112003321547895654</CuentaDestino>
+                  
+      
+      <Monto>50000</Monto>
+                
+    
+    </transaccion>
+          
+  
+  </usuario>
+      
+
+  
+  <usuario numeroDocumento="31332541">
+        
     <transaccion>
             
       <Beneficiario>Gerhard</Beneficiario>
             
-      <Fecha>2025-06-25 21:47:59</Fecha>
+      <Fecha>2025-06-25 21:48:34</Fecha>
             
       <BancoOrigen>MERCANTIL</BancoOrigen>
             
@@ -203,18 +265,15 @@
           
     </transaccion>
       
-  </usuario>
-    
-
-  <usuario numeroDocumento="31332541">
     <transaccion>
       <Beneficiario>Gerhard</Beneficiario>
-      <Fecha>2025-06-25 21:48:34</Fecha>
+      <Fecha>2025-07-04 19:36:45</Fecha>
       <BancoOrigen>MERCANTIL</BancoOrigen>
       <CuentaOrigen>01231263412365481236</CuentaOrigen>
       <BancoDestino>BBVA</BancoDestino>
       <CuentaDestino>01112003321547895654</CuentaDestino>
-      <Monto>50000</Monto>
+      <Monto>500000</Monto>
     </transaccion>
   </usuario>
+  
 </usuarios>

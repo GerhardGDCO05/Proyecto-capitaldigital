@@ -1,12 +1,14 @@
 package com.example.capitalDigital.usuario.Controller;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PathVariable; 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,19 +26,13 @@ public class TransactionHistoryController {
     private TransactionHistoryService transactionHistoryService; 
 
     @PostMapping("/numeroDocumento/{numeroDocumento}")
-    public ResponseEntity<String> agregarMeta(@PathVariable String numeroDocumento, @RequestBody TransactionHistoryModel transaction) {
+    public ResponseEntity<String> agregarMeta(@PathVariable String numeroDocumento, @RequestBody  Map<String, Object>historyData) {
         System.out.println("=== RECIBIENDO PETICIÓN POST TRANSACCION ===");
         System.out.println("Número de documento: " + numeroDocumento);
-        System.out.println("Beneficiario: " + transaction.getBeneficiario());
-        System.out.println("Fecha: " + transaction.getFecha());
-        System.out.println("Banco Origen: " + transaction.getBancoOrigen());
-        System.out.println("Numero de Cuenta De Origen: " + transaction.getNumCuentaOrigen());
-        System.out.println("Banco Destino: " + transaction.getBancoDestino());
-        System.out.println("Numero de Cuenta De Destino: " + transaction.getNumCuentaDestino());
-        System.out.println("Monto: " + transaction.getMonto());
+        System.out.println("Datos recibidos: "+historyData);
 
         try {
-            boolean guardado = transactionHistoryService.guardarTransactionEnXML(numeroDocumento, transaction);
+            boolean guardado = transactionHistoryService.guardarTransactionEnXML(numeroDocumento, historyData);
             if (guardado) {
                 return ResponseEntity.ok("Transacción guardada correctamente");
             } else {
