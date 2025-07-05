@@ -26,7 +26,7 @@ public class TransactionHistoryController {
     private TransactionHistoryService transactionHistoryService; 
 
     @PostMapping("/numeroDocumento/{numeroDocumento}")
-    public ResponseEntity<String> agregarMeta(@PathVariable String numeroDocumento, @RequestBody  Map<String, Object>historyData) {
+    public ResponseEntity<String> agregarTransaction(@PathVariable String numeroDocumento, @RequestBody  Map<String, Object>historyData) {
         System.out.println("=== RECIBIENDO PETICIÓN POST TRANSACCION ===");
         System.out.println("Número de documento: " + numeroDocumento);
         System.out.println("Datos recibidos: "+historyData);

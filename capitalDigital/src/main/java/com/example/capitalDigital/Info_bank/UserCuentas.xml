@@ -1,13 +1,94 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <usuarios>
-              
+                    
+  
+  
+  
   
   
   
   
   
   <usuario numeroDocumento="30313726">
-                
+                            
+    
+    
+    
+    
+    
+    <cuenta>
+                                                
+      
+      
+      
+      
+      
+      
+      <banco>MERCANTIL</banco>
+                                                
+      
+      
+      
+      
+      
+      
+      <numeroCuenta>01230230123545521586</numeroCuenta>
+                                                
+      
+      
+      
+      
+      
+      
+      <nombreCuenta>Marci</nombreCuenta>
+                                              
+    
+    
+    
+    
+    
+    
+    </cuenta>
+                              
+    
+    
+    
+    
+    
+    
+    <cuenta>
+                                          
+      
+      
+      
+      
+      
+      <banco>MERCANTIL</banco>
+                                          
+      
+      
+      
+      
+      
+      <numeroCuenta>01230230123545521590</numeroCuenta>
+                                          
+      
+      
+      
+      
+      
+      <nombreCuenta>JUAN</nombreCuenta>
+                                        
+    
+    
+    
+    
+    
+    </cuenta>
+                          
+  
+    
+    
     
     
     <cuenta>
@@ -15,61 +96,70 @@
       
       
       
-      <banco>MERCANTIL</banco>
+      <banco>BBVA</banco>
                               
       
       
       
-      <numeroCuenta>01230230123545521586</numeroCuenta>
+      <numeroCuenta>01111881005511088452</numeroCuenta>
                               
       
       
       
-      <nombreCuenta>Marci</nombreCuenta>
+      <nombreCuenta>Carro</nombreCuenta>
                             
     
     
     
     </cuenta>
                   
-    
-    
+  
+  
+  
+  </usuario>
+                  
+
+
+
+
+
+
+  
+  
+  <usuario numeroDocumento="31090090">
+            
     
     <cuenta>
-                        
+                  
       
+      <banco>BBVA</banco>
+                  
       
-      <banco>BDV</banco>
-                        
+      <numeroCuenta>01111881005511088440</numeroCuenta>
+                  
       
-      
-      <numeroCuenta>01022102325545658545</numeroCuenta>
-                        
-      
-      
-      <nombreCuenta>JUAN</nombreCuenta>
-                      
-    
+      <nombreCuenta>Cuenta Principal</nombreCuenta>
+                
     
     </cuenta>
-              
-  
+          
     
     <cuenta>
             
-      <banco>BBVA</banco>
+      <banco>BDV</banco>
             
-      <numeroCuenta>01111235478996545212</numeroCuenta>
+      <numeroCuenta>01021230111233698600</numeroCuenta>
             
-      <nombreCuenta>Carro</nombreCuenta>
+      <nombreCuenta>Conjunta</nombreCuenta>
           
     </cuenta>
       
+    <cuenta>
+      <banco>Mercantil</banco>
+      <numeroCuenta>01231110023215412659</numeroCuenta>
+      <nombreCuenta>casa</nombreCuenta>
+    </cuenta>
   </usuario>
-            
-
-
-
-
+    
 
 </usuarios>

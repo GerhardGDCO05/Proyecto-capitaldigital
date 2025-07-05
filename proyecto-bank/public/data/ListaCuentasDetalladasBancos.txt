@@ -20,7 +20,7 @@ TipoCuenta:Corriente
 Saldo:100.000,00
 -*-*-*-*-*
 ----------
-Cedula:30313726
+Cedula:30313726 
 NCuenta:01021021023542547853
 Banco:Banco de Venezuela
 TipoCuenta:Corriente

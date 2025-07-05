@@ -11,7 +11,7 @@ export default{
       aceptaTerminos: false,
       recordarme: false,
       options: ['Cedula Nacional', 'Cédula Extranjera'],
-      banks: ['Provincial', 'BDV', 'BNC', 'Mercantil']
+      banks: ['BBVA', 'BDV', 'BNC', 'Mercantil']
     }
   },
   setup() {
