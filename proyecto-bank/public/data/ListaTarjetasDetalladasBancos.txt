@@ -1,0 +1,20 @@
+-----------
+Cedula:31999999
+NCuenta:01021021087922545120
+Banco:BDV
+TipoCuenta:Ahorro
+Saldo:20.000,00
+NTarjeta:9759 2484 5269 6576
+ValidoHasta:12/25
+NombreTarjeta:Pepito
+***********
+-----------
+Cedula:31999999
+NCuenta:01231110023215412641
+Banco:Mercantil
+TipoCuenta:Ahorro
+Saldo:100.000,00
+NTarjeta:9759 2484 5269 6555
+ValidoHasta:12/29
+NombreTarjeta:Pepito
+***********

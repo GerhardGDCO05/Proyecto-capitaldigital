@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { ref, onMounted, watch } from 'vue'
-import axios from 'axios'
-import { useRoute } from 'vue-router'
-import { useUsuarioStore } from '@/stores/useUsuarioStore'
+import { useRouter, useRoute } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import axios from 'axios';
+import { useUsuarioStore } from '@/stores/useUsuarioStore';
 import Modal from "@/view/Modal.vue";
 import AgregarBeneficiario from "@/components/bankcomponents/transacciones/crudbeneficiarios/AgregarBeneficiario.vue";
+import Swal from 'sweetalert2';
 
 interface BeneficiaryModel {
   beneficiaryName: string;
@@ -13,63 +13,119 @@ interface BeneficiaryModel {
   bank: string;
 }
 
-const beneficiarioSeleccionado = ref(null)
+const beneficiarioSeleccionado = ref<BeneficiaryModel | null>(null);
+const router = useRouter();
+const route = useRoute();
+const beneficiarios = ref<BeneficiaryModel[]>([]);
+const showModal = ref(false);
+const metaSeleccionada = ref(null);
 
-const router = useRouter()
-const route = useRoute()
-const beneficiarios = ref<BeneficiaryModel[]>([])
-const showModal = ref(false)
-const metaSeleccionada = ref(null)
-
-const usuarioStore = useUsuarioStore()
-const documento = usuarioStore.usuario.numeroDocumento
+const usuarioStore = useUsuarioStore();
+const documento = usuarioStore.usuario.numeroDocumento;
 
 onMounted(() => {
-  cargarBeneficiarios()
-  window.addEventListener('resize', () => {})
-})
+  if (!documento) {
+    Swal.fire({
+      title: 'Error',
+      text: 'No hay usuario logueado.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    }).then(() => {
+      router.push('/login');
+    });
+    return;
+  }
+  cargarBeneficiarios();
+  window.addEventListener('resize', () => {});
+});
 
 watch(
     () => route.path,
     () => {
-      setTimeout(() => window.dispatchEvent(new Event('resize')), 50)
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
     }
-)
+);
 
 const cargarBeneficiarios = async () => {
   try {
-    const response = await axios.get<BeneficiaryModel[]>(`http://localhost:8080/beneficiaries/${documento}`)
-    beneficiarios.value = response.data
-    console.log("✅ Beneficiarios cargados:", beneficiarios.value)
+    const response = await axios.get<BeneficiaryModel[]>(`http://localhost:8080/beneficiaries/${documento}`);
+    beneficiarios.value = response.data;
+    console.log("✅ Beneficiarios cargados:", beneficiarios.value);
   } catch (error) {
-    console.error("❌ Error al cargar beneficiarios:", error)
-    alert("⚠️ No se pudieron cargar tus beneficiarios")
+    console.error("❌ Error al cargar beneficiarios:", error);
+    await Swal.fire({
+      title: 'Error',
+      text: 'No se pudieron cargar tus beneficiarios.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
   }
-}
+};
 
-function seleccionarBeneficiario(benef) {
-  beneficiarioSeleccionado.value = benef
-  console.log(' Beneficiario seleccionado:', benef)
+function seleccionarBeneficiario(benef: BeneficiaryModel) {
+  beneficiarioSeleccionado.value = benef;
+  console.log('Beneficiario seleccionado:', benef);
 }
 
 // Eliminar beneficiario
-const eliminarBeneficiario = async (accountNumber: string) => {
-  if (!confirm("¿Seguro que deseas eliminar este beneficiario?")) return
+const eliminarBeneficiario = async () => {
+  if (!beneficiarioSeleccionado.value) {
+    await Swal.fire({
+      title: 'Error',
+      text: 'Por favor, selecciona un beneficiario antes de eliminar.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
+    return;
+  }
+
+  const { accountNumber, beneficiaryName } = beneficiarioSeleccionado.value;
+
+  // Mostrar confirmación con SweetAlert2
+  const result = await Swal.fire({
+    title: '¿Estás seguro?',
+    text: `¿Deseas eliminar al beneficiario ${beneficiaryName} (${accountNumber})? Esta acción no se puede deshacer.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6'
+  });
+
+  if (!result.isConfirmed) return;
 
   try {
-    await axios.delete(`http://localhost:8080/beneficiaries/${documento}/${accountNumber}`)
-    beneficiarios.value = beneficiarios.value.filter(b => b.accountNumber !== accountNumber)
-    alert("🗑️ Beneficiario eliminado correctamente")
+    await axios.delete(`http://localhost:8080/beneficiaries/${documento}/${accountNumber}`);
+    // Actualizar la lista de beneficiarios en el frontend
+    beneficiarios.value = beneficiarios.value.filter(b => b.accountNumber !== accountNumber);
+    beneficiarioSeleccionado.value = null; // Limpiar selección
+    await Swal.fire({
+      title: '¡Eliminado!',
+      text: 'Beneficiario eliminado correctamente.',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
   } catch (error) {
-    console.error("Error al eliminar beneficiario:", error)
-    alert("❌ Error al eliminar el beneficiario")
+    console.error("Error al eliminar beneficiario:", error);
+    await Swal.fire({
+      title: 'Error',
+      text: error.response?.data || 'Hubo un error al eliminar el beneficiario.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
   }
-}
+};
 
 function abrirFormularioModificacion() {
   if (!beneficiarioSeleccionado.value) {
-    alert("⚠️ Selecciona un beneficiario antes de modificar")
-    return
+    Swal.fire({
+      title: 'Error',
+      text: 'Selecciona un beneficiario antes de modificar.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
+    return;
   }
 
   router.push({
@@ -80,20 +136,26 @@ function abrirFormularioModificacion() {
     query: {
       popup: 'true'
     }
-  })
+  });
 }
 </script>
 
 <template>
-  <header class="header" :key="$route.fullPath"> <!--BUG FIX: :key="$route.fullPath fuerza a Vue a que el componente se cargue correctamente-->
+  <header class="header" :key="$route.fullPath">
     <h1>Transferencias</h1>
   </header>
 
   <button class="agregar-benf" @click="showModal = true">Agregar</button>
   <button class="modificar-benf" @click="abrirFormularioModificacion()">Modificar</button>
+  <button
+      class="eliminar-benf"
+      @click="eliminarBeneficiario"
+      :disabled="!beneficiarioSeleccionado"
+      :class="{ 'disabled': !beneficiarioSeleccionado }"
+  >
+    Eliminar
+  </button>
 
-
-  <button class="eliminar-benf">Eliminar</button>
   <div class="card">
     <div class="card__title">Beneficiarios</div>
     <table>
@@ -110,7 +172,7 @@ function abrirFormularioModificacion() {
       <tr v-for="(benef, index) in beneficiarios" :key="benef.accountNumber">
         <td>
           <label class="checkbox">
-            <input type="checkbox" @click.stop="seleccionarBeneficiario(benef)">
+            <input type="checkbox" @click.stop="seleccionarBeneficiario(benef)" :checked="beneficiarioSeleccionado?.accountNumber === benef.accountNumber">
             <span class="checkmark"></span>
           </label>
         </td>
@@ -123,13 +185,10 @@ function abrirFormularioModificacion() {
     </table>
   </div>
 
-
-
-  <!--MODAL PARA LA VENTANA EMERGENTE-->
+  <!-- MODAL PARA LA VENTANA EMERGENTE -->
   <Modal :is-open="showModal" @close="showModal = false">
     <AgregarBeneficiario />
   </Modal>
-
 </template>
 
 <style scoped>
@@ -151,7 +210,7 @@ function abrirFormularioModificacion() {
    /* Establecer un ancho máximo */
   position: absolute;
   left: 55%;
-  top: 60%;
+  top: 40%;
   transform: translate(-50%, -100%);
   background: rgb(0, 31, 64);
   font-family: "Courier New", Courier, monospace;

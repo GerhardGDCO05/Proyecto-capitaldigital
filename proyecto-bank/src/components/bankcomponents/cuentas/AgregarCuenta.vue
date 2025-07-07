@@ -5,10 +5,11 @@ import { useUsuarioStore } from '@/stores/useUsuarioStore'
 import bbvaLogo from '@/images/BBVAprovinciallogo.png'
 import bdvLogo from '@/images/Banco_de_Venezuela_logo.png'
 import mercantilLogo from '@/images/Mercantil.png'
+import Swal from 'sweetalert2'
+
 export default {
   name: 'AgregarCuenta',
   setup() {
-
     const usuarioStore = useUsuarioStore()
     const nombreCuenta = ref('')
     const numeroCuenta = ref('')
@@ -19,13 +20,18 @@ export default {
     const seleccionarBanco = (nombreBanco, imagenBanco) => {
       bancoSeleccionado.value = {
         nombre: nombreBanco,
-        imagen: imagenBanco // Ahora es un objeto válido
+        imagen: imagenBanco
       }
     }
 
     const agregarCuenta = async () => {
       if (!nombreCuenta.value || !numeroCuenta.value || !bancoSeleccionado.value.nombre) {
-        alert("Por favor complete todos los campos.")
+        await Swal.fire({
+          title: 'Campos incompletos',
+          text: 'Por favor complete todos los campos.',
+          icon: 'warning',
+          confirmButtonText: 'OK'
+        })
         return
       }
 
@@ -42,20 +48,35 @@ export default {
         )
 
         if (response.status === 200) {
-          alert("✅ Cuenta agregada correctamente")
+          await Swal.fire({
+            title: '¡Éxito!',
+            text: '✅ Cuenta agregada correctamente',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          })
           nombreCuenta.value = ''
           numeroCuenta.value = ''
           bancoSeleccionado.value = { nombre: null, imagen: null }
         } else {
-          alert("❌ No se pudo guardar la cuenta")
+          await Swal.fire({
+            title: 'Error',
+            text: '❌ No se pudo guardar la cuenta',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          })
         }
       } catch (error) {
         console.error("Error al guardar:", error)
-        alert(`⚠️ ${
-            typeof error.response?.data === 'object'
-                ? JSON.stringify(error.response.data, null, 2)
-                : error.response?.data || error.message
-        }`)
+        await Swal.fire({
+          title: 'Error',
+          text: `⚠️ ${
+              typeof error.response?.data === 'object'
+                  ? JSON.stringify(error.response.data, null, 2)
+                  : error.response?.data || error.message
+          }`,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        })
       }
     }
 

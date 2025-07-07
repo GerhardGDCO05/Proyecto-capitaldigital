@@ -27,12 +27,6 @@ const routes = [
         query: {popup: 'true'},
       },
       {
-        path: 'cuentas',
-        name: 'Cuentas',
-        component: () => import('@/components/bankcomponents/Cuentas.vue'),
-        meta: { popup: true }
-      },
-      {
         path: 'perfil',
         name: 'Perfil',
         component: () => import('@/components/bankcomponents/perfil/Perfil.vue'),
@@ -80,7 +74,50 @@ const routes = [
         name: 'EditarCuenta',
         component: () => import('@/components/bankcomponents/cuentas/EditarCuenta.vue'),
         query: {popup: 'true'}
-      }
+      },
+      {
+        path: 'transferencias',
+        name: 'Transferencias',
+        component: () => import('@/components/bankcomponents/transacciones/Transferencias.vue'),
+        query: {popup: 'true'}
+      },
+      {
+        path: 'historialtransferencias',
+        name: 'HistorialTransferencias',
+        component: () => import('@/components/bankcomponents/transacciones/transferencias/HistorialTransferencias.vue'),
+        query: {popup: 'true'}
+      },
+      {
+        path: '/consultar-cuenta/:numeroCuenta',
+        name: 'ConsultarCuentas',
+        component: () => import('@/components/bankcomponents/cuentas/ConsultarCuenta.vue'),
+        props: true, // Permite pasar params como props al componente
+        query: {popup: 'true'}
+      },
+      {
+        path: 'tarjetas',
+        name: 'Tarjetas',
+        component: () => import('@/components/bankcomponents/cuentas/Tarjetas.vue'),
+        query: {popup: 'true'}
+      },
+      {
+        path: 'patrimonioneto',
+        name: 'PatrimonioNeto',
+        component: () => import('@/components/bankcomponents/transacciones/PatrimonioNeto.vue'),
+        query: {popup: 'true'}
+      },
+      {
+        path: 'ayuda',
+        name: 'Ayuda',
+        component: () => import('@/components/bankcomponents/Ayuda.vue'),
+        query: {popup: 'true'}
+      },
+      {
+        path: 'configuracion',
+        name: 'Configuracion',
+        component: () => import('@/components/bankcomponents/Configuracion.vue'),
+        query: {popup: 'true'}
+      },
     ]
   },
 ];
