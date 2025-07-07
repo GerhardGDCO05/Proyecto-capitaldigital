@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +25,6 @@ import com.example.capitalDigital.usuario.models.BeneficiaryModel;
 @Service
 public class BeneficiaryService {
 
-    public BeneficiaryService() {
-        System.out.println("BeneficiaryService ha sido inicializado correctamente.");
-    }
-
     @Autowired
     private AddBeneficiary addBeneficiary;
 
@@ -40,123 +40,189 @@ public class BeneficiaryService {
     private static final String XML_FILE = "C:\\Users\\simon\\OneDrive\\Escritorio\\CapitalDigitalISProyect\\Proyecto-capitaldigital\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\AccountBeneficiary.xml";
 
     public boolean addBeneficiary(String beneficiaryName, String id, String accountNumber, String bank, String holder) {
-        if (addBeneficiary == null) {
-            System.out.println("Error: `AddBeneficiary` no está correctamente inyectado en `BeneficiaryService`.");
-            return false;
-        }
-        System.out.println("Ejecutando addBeneficiary...");
-        
-        boolean infoValida = validateBeneficiaryInfo.validateInfo(beneficiaryName, id, bank, accountNumber);
-        System.out.println("Validación de datos: " + infoValida);
-
-        if (!infoValida) {
-            System.out.println("Error: Datos inválidos detectados en validateInfo()");
-            return false;
-        }
-
-        boolean cuentaUnica = validateUniqueAccountNumber.validateUniqueAccountNumber(accountNumber, holder, XML_FILE);
-        System.out.println("Validación de número de cuenta único: " + cuentaUnica);
-
-        if (!cuentaUnica) {
-            System.out.println("Error: La cuenta ya existe en el XML.");
-            return false;
-        }
-
-        boolean agregado = addBeneficiary.addBeneficiary(beneficiaryName, id, accountNumber, bank, XML_FILE, holder);
-        System.out.println("Resultado de la persistencia en XML: " + agregado);
-
-        return agregado;
-    }
-
-    public boolean modifyBeneficiary(String beneficiaryName, String id, String accountNumber, String bank, String holder, String oldAccountNumber) {
+        // Validación usando los métodos reales que tienes implementados
         if (!validateBeneficiaryInfo.validateInfo(beneficiaryName, id, bank, accountNumber)) {
+            System.out.println("Error: Datos del beneficiario no válidos");
             return false;
         }
 
         if (!validateUniqueAccountNumber.validateUniqueAccountNumber(accountNumber, holder, XML_FILE)) {
+            System.out.println("Error: El número de cuenta ya existe");
             return false;
         }
 
-        return modifyBeneficiary.modifyBeneficiary(beneficiaryName, id, accountNumber, bank, XML_FILE, holder, oldAccountNumber);
+        BeneficiaryModel beneficiary = new BeneficiaryModel(beneficiaryName, id, accountNumber, bank);
+        return addBeneficiary.persistBeneficiary(beneficiary,holder,XML_FILE);
     }
 
+    public boolean modifyBeneficiary(String beneficiaryName, String id, String accountNumber, String bank, String holder, String oldAccountNumber) {
+        // Validación usando los métodos reales
+        if (!validateBeneficiaryInfo.validateInfo(beneficiaryName, id, bank, accountNumber)) {
+            return false;
+        }
+
+        // Solo validar unicidad si el número de cuenta cambió
+        if (!accountNumber.equals(oldAccountNumber)) {
+            if (!validateUniqueAccountNumber.validateUniqueAccountNumber(accountNumber, holder, XML_FILE)) {
+                return false;
+            }
+        }
+        BeneficiaryModel Nuevobeneficiary = new BeneficiaryModel(beneficiaryName, id, accountNumber, bank);
+        return modifyBeneficiary.updateBeneficiary(Nuevobeneficiary, holder, oldAccountNumber,XML_FILE);
+    }
+    
     public boolean deleteBeneficiary(String holder, String accountNumber) {
         try {
+            System.out.println("=== INICIANDO ELIMINACIÓN ===");
+            System.out.println("Holder recibido: " + holder);
+            System.out.println("Account Number recibido: " + accountNumber);
+            
             DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();
             Document doc = dbuilder.parse(XML_FILE);
 
             doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("holder");
+            NodeList nList = doc.getElementsByTagName("usuario");
+            System.out.println("Total de usuarios encontrados: " + nList.getLength());
+
+            boolean beneficiaryFound = false;
 
             for (int i = 0; i < nList.getLength(); i++) {
-                Element element = (Element) nList.item(i);
+                Element usuarioElement = (Element) nList.item(i);
+                String usuarioNumeroDocumento = usuarioElement.getAttribute("numeroDocumento");
 
-                NodeList nameList = element.getElementsByTagName("holderName");
-                Element holderName = (Element) nameList.item(0);
-                if (holderName.getTextContent().equals(holder)) {
+                System.out.println("Comparando numeroDocumento XML: '" + usuarioNumeroDocumento + "' con holder: '" + holder + "'");
 
-                    NodeList beneficiaries = element.getElementsByTagName("beneficiary");
+                if (usuarioNumeroDocumento.equals(holder)) {
+                    System.out.println("¡Usuario encontrado!");
+                    NodeList beneficiaries = usuarioElement.getElementsByTagName("beneficiary");
+                    System.out.println("Beneficiarios encontrados para este usuario: " + beneficiaries.getLength());
+
                     for (int j = 0; j < beneficiaries.getLength(); j++) {
                         Element beneficiary = (Element) beneficiaries.item(j);
                         String existingAccountNumber = beneficiary.getElementsByTagName("accountNumber").item(0).getTextContent();
 
+                        System.out.println("Comparando accountNumber XML: '" + existingAccountNumber + "' con: '" + accountNumber + "'");
+
                         if (existingAccountNumber.equals(accountNumber)) {
-                            element.removeChild(beneficiary);
+                            System.out.println("¡Beneficiario encontrado! Eliminando...");
+                            usuarioElement.removeChild(beneficiary);
+                            beneficiaryFound = true;
                             break;
                         }
+                    }
+                    
+                    if (beneficiaryFound) {
+                        break;
                     }
                 }
             }
 
-            // Guardar cambios en el archivo XML
-            javax.xml.transform.TransformerFactory transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
-            javax.xml.transform.Transformer transformer = transformerFactory.newTransformer();
-            javax.xml.transform.dom.DOMSource source = new javax.xml.transform.dom.DOMSource(doc);
-            javax.xml.transform.stream.StreamResult result = new javax.xml.transform.stream.StreamResult(XML_FILE);
-            transformer.transform(source, result);
+            if (beneficiaryFound) {
+                System.out.println("Guardando cambios en el XML...");
+                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                Transformer transformer = transformerFactory.newTransformer();
+                DOMSource source = new DOMSource(doc);
+                StreamResult result = new StreamResult(XML_FILE);
+                transformer.transform(source, result);
+                System.out.println("¡Cambios guardados exitosamente!");
+            } else {
+                System.out.println("ERROR: Beneficiario no encontrado");
+            }
 
-            return true;
+            return beneficiaryFound;
         } catch (Exception e) {
+            System.out.println("ERROR en deleteBeneficiary: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Error al eliminar beneficiario: " + e.getMessage(), e);
         }
     }
 
     public List<BeneficiaryModel> getBeneficiariesByDocumento(String documento) {
         List<BeneficiaryModel> beneficiaries = new ArrayList<>();
-        
+
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(XML_FILE);
             doc.getDocumentElement().normalize();
-        
+
             NodeList usuarios = doc.getElementsByTagName("usuario");
             for (int i = 0; i < usuarios.getLength(); i++) {
                 Element usuarioElement = (Element) usuarios.item(i);
                 String xmlDocumento = usuarioElement.getAttribute("numeroDocumento");
-            
+
                 if (xmlDocumento.equals(documento)) {
                     NodeList beneficiaryList = usuarioElement.getElementsByTagName("beneficiary");
                     for (int j = 0; j < beneficiaryList.getLength(); j++) {
                         Element benef = (Element) beneficiaryList.item(j);
-                    
+
                         String name = getElementTextContent(benef, "beneficiaryName");
                         String id = getElementTextContent(benef, "ID");
                         String account = getElementTextContent(benef, "accountNumber");
                         String bank = getElementTextContent(benef, "bank");
-                    
+
                         beneficiaries.add(new BeneficiaryModel(name, id, account, bank));
                     }
                     break;
                 }
             }
-        
+
         } catch (Exception e) {
             throw new RuntimeException("Error al obtener beneficiarios: " + e.getMessage(), e);
         }
-    
+
         return beneficiaries;
+    }
+
+    public BeneficiaryModel getBeneficiary(String holder, String accountNumber) {
+        try {
+            System.out.println("=== BUSCANDO BENEFICIARIO ===");
+            System.out.println("Holder: " + holder);
+            System.out.println("Account Number: " + accountNumber);
+            
+            DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();
+            Document doc = dbuilder.parse(XML_FILE);
+
+            doc.getDocumentElement().normalize();
+            NodeList nList = doc.getElementsByTagName("usuario");
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Element usuarioElement = (Element) nList.item(i);
+                String usuarioNumeroDocumento = usuarioElement.getAttribute("numeroDocumento");
+
+                System.out.println("Comparando numeroDocumento: " + usuarioNumeroDocumento + " con holder: " + holder);
+
+                if (usuarioNumeroDocumento.equals(holder)) {
+                    System.out.println("Usuario encontrado, buscando beneficiario...");
+                    NodeList beneficiaryList = usuarioElement.getElementsByTagName("beneficiary");
+                    
+                    for (int j = 0; j < beneficiaryList.getLength(); j++) {
+                        Element beneficiary = (Element) beneficiaryList.item(j);
+                        String existingAccountNumber = beneficiary.getElementsByTagName("accountNumber").item(0).getTextContent();
+
+                        System.out.println("Comparando account: " + existingAccountNumber + " con: " + accountNumber);
+
+                        if (existingAccountNumber.equals(accountNumber)) {
+                            String beneficiaryName = beneficiary.getElementsByTagName("beneficiaryName").item(0).getTextContent();
+                            String ID = getElementTextContent(beneficiary, "ID");
+                            String bank = beneficiary.getElementsByTagName("bank").item(0).getTextContent();
+
+                            System.out.println("¡Beneficiario encontrado!");
+                            return new BeneficiaryModel(beneficiaryName, ID, accountNumber, bank);
+                        }
+                    }
+                }
+            }
+            
+            System.out.println("Beneficiario no encontrado");
+            return null;
+        } catch (Exception e) {
+            System.out.println("ERROR en getBeneficiary: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al obtener beneficiario: " + e.getMessage(), e);
+        }
     }
 
     private String getElementTextContent(Element element, String tagName) {
@@ -165,42 +231,5 @@ public class BeneficiaryService {
             return nodes.item(0).getFirstChild().getNodeValue();
         }
         return "";
-    }
-
-    public BeneficiaryModel getBeneficiary(String holder, String accountNumber) {
-        try {
-            DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();
-            Document doc = dbuilder.parse(XML_FILE);
-
-            doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("holder");
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Element element = (Element) nList.item(i);
-
-                NodeList nameList = element.getElementsByTagName("holderName");
-                Element holderName = (Element) nameList.item(0);
-                if (holderName.getTextContent().equals(holder)) {
-
-                    NodeList beneficiaryList = element.getElementsByTagName("beneficiary");
-                    for (int j = 0; j < beneficiaryList.getLength(); j++) {
-                        Element beneficiary = (Element) beneficiaryList.item(j);
-                        String existingAccountNumber = beneficiary.getElementsByTagName("accountNumber").item(0).getTextContent();
-
-                        if (existingAccountNumber.equals(accountNumber)) {
-                            String beneficiaryName = beneficiary.getElementsByTagName("beneficiaryName").item(0).getTextContent();
-                            String ID = beneficiary.getElementsByTagName("ID").item(0).getTextContent();
-                            String bank = beneficiary.getElementsByTagName("bank").item(0).getTextContent();
-
-                            return new BeneficiaryModel(beneficiaryName, ID, accountNumber, bank);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Error al obtener beneficiario: " + e.getMessage(), e);
-        }
-        return null;
     }
 }

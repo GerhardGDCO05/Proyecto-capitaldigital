@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cuentas>
+  <usuario numeroDocumento="30200400">
+    <cuenta>
+      <banco>Mercantil</banco>
+      <numeroCuenta>01230230123545521587</numeroCuenta>
+      <nombreCuenta>principal</nombreCuenta>
+      <saldo>0.0</saldo>
+    </cuenta>
+  </usuario>
+</cuentas>

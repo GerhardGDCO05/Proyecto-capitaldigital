@@ -1,92 +1,79 @@
 package com.example.capitalDigital.usuario.beneficiary;
 
-import java.io.File;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.example.capitalDigital.Validation_bank.ValidateBeneficiaryInfo;
+import com.example.capitalDigital.usuario.models.BeneficiaryModel;
 
 @Component
 public class AddBeneficiary {
 
-    @Autowired
-    private ValidateBeneficiaryInfo validateBeneficiaryInfo;
-
-    public boolean addBeneficiary(String beneficiaryName, String id, String accountNumber, String bank, String xmlPath, String holder) {
+    public boolean persistBeneficiary(BeneficiaryModel beneficiary, String holder, String xmlPath) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(xmlPath);
 
-            doc.getDocumentElement().normalize();
+            Node usuario = obtenerONuevoNodoUsuario(doc, holder);
+            Element beneficiario = crearElementoBeneficiario(doc, beneficiary);
+            usuario.appendChild(beneficiario);
 
-            // Buscar el nodo <usuario> por numeroDocumento
-            Node usuarioNode = encontrarNodoUsuario(doc, holder);
-            if (usuarioNode == null) {
-                Element root = doc.getDocumentElement();
-
-                Element usuarioElement = doc.createElement("usuario");
-                usuarioElement.setAttribute("numeroDocumento", holder);
-                root.appendChild(usuarioElement);
-                usuarioNode = usuarioElement;
-            }
-
-            // Crear el nuevo beneficiario
-            Element beneficiaryElement = doc.createElement("beneficiary");
-
-            beneficiaryElement.appendChild(crearElemento(doc, "beneficiaryName", beneficiaryName));
-            beneficiaryElement.appendChild(crearElemento(doc, "ID", id));
-            beneficiaryElement.appendChild(crearElemento(doc, "accountNumber", accountNumber));
-            beneficiaryElement.appendChild(crearElemento(doc, "bank", bank));
-
-            // Agregar al usuario encontrado o creado
-            usuarioNode.appendChild(beneficiaryElement);
-
-            // Guardar cambios en el archivo XML
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(xmlPath));
-            transformer.transform(source, result);
-
-            System.out.println("✅ Beneficiario agregado exitosamente al XML");
+            guardarDocumento(doc, xmlPath);
             return true;
-
         } catch (Exception e) {
-            System.out.println("❌ Error al agregar beneficiario: " + e.getMessage());
+            System.err.println("Error agregando beneficiario: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    private Node encontrarNodoUsuario(Document doc, String documento) {
+    private Node obtenerONuevoNodoUsuario(Document doc, String documento) {
         NodeList usuarios = doc.getElementsByTagName("usuario");
         for (int i = 0; i < usuarios.getLength(); i++) {
-            Element usuarioElement = (Element) usuarios.item(i);
-            if (usuarioElement.getAttribute("numeroDocumento").equals(documento)) {
-                return usuarioElement;
+            Node usuario = usuarios.item(i);
+            if (usuario.getAttributes().getNamedItem("numeroDocumento").getNodeValue().equals(documento)) {
+                return usuario;
             }
         }
-        return null;
+
+        Element nuevoUsuario = doc.createElement("usuario");
+        nuevoUsuario.setAttribute("numeroDocumento", documento);
+        doc.getDocumentElement().appendChild(nuevoUsuario);
+        return nuevoUsuario;
     }
 
-    private Element crearElemento(Document doc, String nombreTag, String valor) {
-        Element elemento = doc.createElement(nombreTag);
+    private Element crearElementoBeneficiario(Document doc, BeneficiaryModel model) {
+        Element beneficiario = doc.createElement("beneficiary");
+        
+        beneficiario.appendChild(crearElementoConTexto(doc, "beneficiaryName", model.getBeneficiaryName()));
+        beneficiario.appendChild(crearElementoConTexto(doc, "ID", model.getID()));
+        beneficiario.appendChild(crearElementoConTexto(doc, "accountNumber", model.getAccountNumber()));
+        beneficiario.appendChild(crearElementoConTexto(doc, "bank", model.getBank()));
+        
+        return beneficiario;
+    }
+
+    private Element crearElementoConTexto(Document doc, String tag, String valor) {
+        Element elemento = doc.createElement(tag);
         elemento.setTextContent(valor != null ? valor : "");
         return elemento;
+    }
+
+    private void guardarDocumento(Document doc, String path) throws Exception {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(doc);
+        StreamResult result = new StreamResult(path);
+        transformer.transform(source, result);
     }
 }
