@@ -39,6 +39,11 @@ export default {
 
         usuario.value = responseUsuario.data;
         cuentas.value = responseCuentas.data;
+        if(usuario.value.activo===false){
+          alert("Usuario Bloqueado Temporalmente");
+          activo=false;
+          return;
+        }
 
         if (usuario.value.activo === false) {
           await Swal.fire({

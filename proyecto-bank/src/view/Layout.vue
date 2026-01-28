@@ -21,6 +21,117 @@ export default {
     const router = useRouter();
     const isSidebarActive = ref(false);
     const usuarioStore = useUsuarioStore();
+    
+    // Configuración del detector de actividad
+    const TIEMPO_INACTIVIDAD = 180000; // 5 segundos para alert
+    const TIEMPO_CIERRE_SESION = 300000; // 8 segundos para cierre
+    
+    // Estados reactivos
+    const alertaMostrada = ref(false);
+    const sesionCerrada = ref(false);
+    
+    // Variables para temporizadores
+    let temporizadorAlert = null;
+    let temporizadorCierre = null;
+
+    // Función para limpiar todos los temporizadores
+    const limpiarTemporizadores = () => {
+      if (temporizadorAlert) {
+        clearTimeout(temporizadorAlert);
+        temporizadorAlert = null;
+      }
+      if (temporizadorCierre) {
+        clearTimeout(temporizadorCierre);
+        temporizadorCierre = null;
+      }
+    };
+
+    // Función para cerrar sesión
+    const cerrarSesion = () => {
+      // Evitar múltiples ejecuciones
+      if (sesionCerrada.value) {
+        return;
+      }
+      
+      sesionCerrada.value = true;
+      limpiarTemporizadores();
+      
+      // Limpiar store del usuario
+      try {
+        if (usuarioStore.limpiarSesion) {
+          usuarioStore.limpiarSesion();
+        }
+      } catch (error) {
+        console.error('Error al limpiar sesión:', error);
+      }
+      
+      // Redirección segura a App.vue
+      try {
+        router.push('/');
+      } catch (error) {
+        console.error('Error con router.push:', error);
+        window.location.href = '/';
+      }
+      
+      console.log('Sesión cerrada');
+    };
+
+    // Función para mostrar alerta de inactividad
+    const mostrarAlertaInactividad = () => {
+      if (!alertaMostrada.value && !sesionCerrada.value) {
+        alertaMostrada.value = true;
+        alert('Tu sesión se cerrará por inactividad en 3 segundos');
+      }
+    };
+
+    // Función para resetear el temporizador de sesión
+    const resetearTemporizador = () => {
+      // No resetear si la sesión ya está cerrada
+      if (sesionCerrada.value) {
+        return;
+      }
+      
+      // Resetear estados
+      alertaMostrada.value = false;
+      
+      // Limpiar temporizadores existentes
+      limpiarTemporizadores();
+      
+      // Configurar nuevo temporizador para alerta
+      temporizadorAlert = setTimeout(() => {
+        mostrarAlertaInactividad();
+      }, TIEMPO_INACTIVIDAD);
+      
+      // Configurar nuevo temporizador para cierre de sesión
+      temporizadorCierre = setTimeout(() => {
+        cerrarSesion();
+      }, TIEMPO_CIERRE_SESION);
+    };
+
+    // Función para manejar la actividad del usuario
+    const manejarActividad = (event) => {
+      // Evitar bucles infinitos si la sesión ya está cerrada
+      if (sesionCerrada.value) {
+        return;
+      }
+      
+      // Throttle para evitar demasiadas llamadas
+      if (event.type === 'mousemove') {
+        // Limitar eventos de mousemove cada 100ms
+        const now = Date.now();
+        if (manejarActividad.lastMouseMove && now - manejarActividad.lastMouseMove < 100) {
+          return;
+        }
+        manejarActividad.lastMouseMove = now;
+      }
+      
+      resetearTemporizador();
+    };
+
+    // Función para manejar el toggle del sidebar
+    const handleSidebarToggle = (event) => {
+      isSidebarActive.value = event.detail;
+    };
 
     // Configuración del detector de inactividad
     const TIEMPO_INACTIVIDAD = 180000; // 3 minutos para alerta

@@ -144,22 +144,31 @@ public class CuentaController {
         }
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errores = new HashMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errores.put(error.getField(), error.getDefaultMessage()); // ✅ Captura mensajes personalizados
+        }
+        return ResponseEntity.badRequest().body(errores);
+    }
+
+
     @PutMapping("/numeroDocumento/{documento}/nombreCuenta/{oldNombre}")
     public ResponseEntity<?> modificarNombreCuenta(@PathVariable String documento,
-                                                  @PathVariable String oldNombre,
-                                                  @RequestBody Map<String, Object> datosCuenta) {
+                                                    @PathVariable String oldNombre,
+                                                    @RequestBody Map<String, Object> datosCuenta) {
         try {
             System.out.println("Recibiendo petición PUT para documento: " + documento);
             System.out.println("Nombre actual: " + oldNombre);
             System.out.println("Datos de cuenta recibidos: " + datosCuenta);
 
             boolean modificado = cuentaService.modificarCuentaEnXML(documento, oldNombre, datosCuenta);
-
+                                                
             if (modificado) {
                 return ResponseEntity.ok("✅ Nombre de cuenta actualizado exitosamente");
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("❌ Cuenta no encontrada o nombre inválido");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("❌ Cuenta no encontrada o nombre inválido");
             }
         } catch (RuntimeException e) {
             System.err.println("Error de validación en el controlador PUT: " + e.getMessage());
@@ -170,14 +179,5 @@ public class CuentaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Error interno del servidor: " + e.getMessage());
         }
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errores = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errores.put(error.getField(), error.getDefaultMessage());
-        }
-        return ResponseEntity.badRequest().body(errores);
     }
 }

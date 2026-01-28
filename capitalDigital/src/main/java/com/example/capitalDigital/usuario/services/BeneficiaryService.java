@@ -2,7 +2,6 @@ package com.example.capitalDigital.usuario.services;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -37,7 +36,7 @@ public class BeneficiaryService {
     @Autowired
     private ValidateBeneficiaryInfo validateBeneficiaryInfo;
 
-    private static final String XML_FILE = "C:\\Users\\simon\\OneDrive\\Escritorio\\CapitalDigitalISProyect\\Proyecto-capitaldigital\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\AccountBeneficiary.xml";
+    private static final String XML_FILE = "C:\\Users\\Usuario\\Desktop\\proyecto IS\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\AccountBeneficiary.xml";
 
     public boolean addBeneficiary(String beneficiaryName, String id, String accountNumber, String bank, String holder) {
         // Validación usando los métodos reales que tienes implementados

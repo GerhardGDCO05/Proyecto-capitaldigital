@@ -49,6 +49,8 @@ public class CuentaService {
 
             // Crear y mapear la instancia de CuentaModel
             CuentaModel cuenta = new CuentaModel();
+            
+            // Mapear los datos del Map al objeto CuentaModel
             if (datosCuenta.get("banco") != null) {
                 cuenta.setBanco((String) datosCuenta.get("banco"));
             }
@@ -275,6 +277,17 @@ public class CuentaService {
             throw new RuntimeException("Errores de validación: " + sb.toString());
         }
     }
+    // Método para validar CuentaModel usando las anotaciones
+    private void validarCuenta(CuentaModel cuenta) {
+        Set<ConstraintViolation<CuentaModel>> violations = validator.validate(cuenta);
+        if (!violations.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (ConstraintViolation<CuentaModel> violation : violations) {
+                sb.append(violation.getMessage()).append("; ");
+            }
+            throw new RuntimeException("Errores de validación: " + sb.toString());
+        }
+    }
 
     // Verificar si una cuenta ya existe para un usuario
     private boolean cuentaExiste(Node usuarioNode, String numeroCuenta) {
@@ -373,7 +386,10 @@ public class CuentaService {
             System.out.println("Modificando nombre de cuenta para documento: " + numeroDocumento + ", cuenta: " + nombreCuenta);
             System.out.println("Datos de cuenta recibidos: " + datosCuenta);
 
+            // Crear y mapear la instancia de CuentaModel en el servicio
             CuentaModel nuevaCuenta = new CuentaModel();
+            
+            // Mapear los datos del Map al objeto CuentaModel
             if (datosCuenta.get("banco") != null) {
                 nuevaCuenta.setBanco((String) datosCuenta.get("banco"));
             }
@@ -384,6 +400,7 @@ public class CuentaService {
                 nuevaCuenta.setNombreCuenta((String) datosCuenta.get("nombreCuenta"));
             }
 
+            // Validar la cuenta usando las anotaciones del modelo
             validarCuenta(nuevaCuenta);
 
             System.out.println("Nuevo nombre de cuenta: " + nuevaCuenta.getNombreCuenta());

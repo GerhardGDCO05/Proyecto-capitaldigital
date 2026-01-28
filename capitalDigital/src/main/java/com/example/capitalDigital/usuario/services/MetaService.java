@@ -28,7 +28,23 @@ import com.example.capitalDigital.usuario.models.MetaFinanciera;
 @Service
 public class MetaService {
 
-    private static final String XML_FILE = "C:\\Users\\simon\\OneDrive\\Escritorio\\CapitalDigitalISProyect\\Proyecto-capitaldigital\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\Metas.xml";
+    private static final String XML_FILE = "C:\\Users\\Usuario\\Desktop\\proyecto IS\\capitalDigital\\src\\main\\java\\com\\example\\capitalDigital\\Info_bank\\Metas.xml";
+
+    // Método que faltaba en el controller
+    public boolean guardarMeta(String numeroDocumento, Map<String, Object> metaData) {
+        try {
+            MetaFinanciera meta = new MetaFinanciera(
+                (String) metaData.get("nombre"),
+                (String) metaData.get("fechaInicio"),
+                (String) metaData.get("fechaFin"),
+                Double.parseDouble(metaData.get("montoRequerido").toString())
+            );
+            return guardarMetaEnXML(numeroDocumento, meta);
+        } catch (Exception e) {
+            System.err.println("Error al crear meta desde map: " + e.getMessage());
+            return false;
+        }
+    }
 
     // Método que faltaba en el controller
     public boolean guardarMeta(String numeroDocumento, Map<String, Object> metaData) {

@@ -95,27 +95,40 @@ public class BancoService {
      */
     public boolean validarNumeroCuentaConGuiones(String banco, String numeroCuenta) {
         if (banco == null || numeroCuenta == null) {
+            System.out.println("Banco o número de cuenta es nulo.");
             return false;
         }
 
+        // Normalizar el número de cuenta (eliminar guiones y espacios)
+        String numeroNormalizado = numeroCuenta.replaceAll("[^0-9]", "");
+        System.out.println("Banco: " + banco + " | Número normalizado: " + numeroNormalizado);
+
+        // Validar según el banco
         switch (banco.toUpperCase()) {
             case "MERCANTIL":
             case "MERCANTIL BANCO UNIVERSAL":
-                return numeroCuenta.matches("^0123-[0-9]{2}-[0-9]{14}$");
+                boolean mercantilValido = validarMercantil(numeroNormalizado);
+                System.out.println("¿Cuenta Mercantil válida?: " + mercantilValido);
+                return mercantilValido;
 
             case "BBVA":
             case "BBVA VENEZUELA":
-                return numeroCuenta.matches("^0111-[0-9]{3}-[0-9]{13}$");
+                boolean bbvaValido = validarBBVA(numeroNormalizado);
+                System.out.println("¿Cuenta BBVA válida?: " + bbvaValido);
+                return bbvaValido;
 
             case "BDV":
             case "BANCO DE VENEZUELA":
-                return numeroCuenta.matches("^0102-[0-9]{4}-[0-9]{2}-[0-9]{10}$");
+                boolean bdvValido = validarBDV(numeroNormalizado);
+                System.out.println("¿Cuenta BDV válida?: " + bdvValido);
+                return bdvValido;
 
             default:
                 System.out.println("Banco no soportado: " + banco);
                 return false;
         }
     }
+
 
     /**
      * Normaliza un número de cuenta (elimina guiones y espacios)
