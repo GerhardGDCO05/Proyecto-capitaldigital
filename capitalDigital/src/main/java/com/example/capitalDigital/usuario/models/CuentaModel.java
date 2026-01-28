@@ -1,49 +1,36 @@
-/*package com.example.capitalDigital.usuario.models;
+package com.example.capitalDigital.usuario.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name = "cuentas")
 public class CuentaModel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  // Cambiado de long a Long
-
-    @NotBlank(message = "El nombre del banco no puede estar vacío")
+    @NotBlank(message = "El banco no puede estar vacío")
     private String banco;
 
     @NotBlank(message = "El número de cuenta no puede estar vacío")
-    @Pattern(regexp = "^[0-9]+$", message = "El número de cuenta debe contener solo números")
-    @Size(min = 18, message = "El número de cuenta debe tener al menos 18 dígitos")
-    @Size(max = 20, message = "El número de cuenta debe tener máximo 20 dígitos")
+    @Size(min = 20, max = 20, message = "El número de cuenta debe tener 20 dígitos")
     private String numeroCuenta;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
-    @JsonBackReference
-    private UsuarioModel usuario;
+    @NotBlank(message = "El nombre de la cuenta no puede estar vacío")
+    private String nombreCuenta;
 
-    // Constructores
+    private double saldo;
+
+    private String numeroTarjeta;
+    private String validoHasta;
+    private String nombreTarjeta;
+
+    // Constructor vacío
     public CuentaModel() {}
 
-    public CuentaModel(String banco, String numeroCuenta, UsuarioModel usuario) {
+    // Constructor completo
+    public CuentaModel(String banco, String numeroCuenta, String nombreCuenta) {
         this.banco = banco;
         this.numeroCuenta = numeroCuenta;
-        this.usuario = usuario;
+        this.nombreCuenta = nombreCuenta;
     }
 
     // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getBanco() {
         return banco;
     }
@@ -60,11 +47,56 @@ public class CuentaModel {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public UsuarioModel getUsuario() {
-        return usuario;
+    public String getNombreCuenta() {
+        return nombreCuenta;
     }
 
-    public void setUsuario(UsuarioModel usuario) {
-        this.usuario = usuario;
+    public void setNombreCuenta(String nombreCuenta) {
+        this.nombreCuenta = nombreCuenta;
     }
-}*/
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public String getNumeroTarjeta() {
+        return numeroTarjeta;
+    }
+
+    public void setNumeroTarjeta(String numeroTarjeta) {
+        this.numeroTarjeta = numeroTarjeta;
+    }
+
+    public String getValidoHasta() {
+        return validoHasta;
+    }
+
+    public void setValidoHasta(String validoHasta) {
+        this.validoHasta = validoHasta;
+    }
+
+    public String getNombreTarjeta() {
+        return nombreTarjeta;
+    }
+
+    public void setNombreTarjeta(String nombreTarjeta) {
+        this.nombreTarjeta = nombreTarjeta;
+    }
+
+    @Override
+    public String toString() {
+        return "CuentaModel{" +
+               "banco='" + banco + '\'' +
+               ", numeroCuenta='" + numeroCuenta + '\'' +
+               ", nombreCuenta='" + nombreCuenta + '\'' +
+               ", saldo=" + saldo +
+               ", numeroTarjeta='" + numeroTarjeta + '\'' +
+               ", validoHasta='" + validoHasta + '\'' +
+               ", nombreTarjeta='" + nombreTarjeta + '\'' +
+               '}';
+    }
+}

@@ -1,15 +1,21 @@
 package com.example.capitalDigital.usuario.Controller;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
-import java.util.HashMap;
-
-import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.capitalDigital.usuario.models.UsuarioModel;
 import com.example.capitalDigital.usuario.services.UsuarioServices;
@@ -22,66 +28,51 @@ public class UsuarioController {
     @Autowired
     UsuarioServices usuarioServices;
 
-    @GetMapping()
-    public ResponseEntity<ArrayList<UsuarioModel>> obtenerUsuarios() {
-        return ResponseEntity.ok(usuarioServices.obtenerUsuarios());
-    }
-
     @PostMapping()
-    public ResponseEntity<?> guardarUsuario(@Valid @RequestBody UsuarioModel usuario, BindingResult result) {
-        if (result.hasErrors()) {
-            Map<String, String> errores = new HashMap<>();
-            result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errores);
-        }
-
+    public ResponseEntity<?> guardarUsuario(@RequestBody Map<String, Object> datosUsuario) {
         try {
-            UsuarioModel nuevoUsuario = usuarioServices.guardarUsuario(usuario);
+            UsuarioModel nuevoUsuario = usuarioServices.crearUsuario(datosUsuario);
             return ResponseEntity.ok(nuevoUsuario);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage())); // Devuelve error si el email ya está en uso
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<?> obtenerUsuarioPorEmail(@PathVariable String email) {
-        System.out.println("Recibí en el controlador: " + email);
-        Optional<UsuarioModel> usuario = usuarioServices.obtenerPorEmail(email);
-        return usuario.isPresent() ? ResponseEntity.ok(usuario.get()) : ResponseEntity.status(404).body("Usuario no encontrado.");
-    }
 
-    @PutMapping("/email/{email}")
-    public ResponseEntity<?> modificarUsuarioPorEmail(@PathVariable("email") String email, @Valid @RequestBody UsuarioModel usuarioActualizado, BindingResult result) {
-        if (result.hasErrors()) {
-            Map<String, String> errores = new HashMap<>();
-            result.getFieldErrors().forEach(error -> errores.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errores);
+    @GetMapping("/numeroDocumento/{numeroDocumento}")
+    public ResponseEntity<?> obtenerUsuarioPorNumeroDocumento(@PathVariable String numeroDocumento) {
+        System.out.println("Recibí en el controlador: " + numeroDocumento);
+        Optional<UsuarioModel> usuario = usuarioServices.obtenerPorNumeroDocumento(numeroDocumento);
+        UsuarioModel usuarioEncontrado = usuario.get();
+        if (!usuarioEncontrado.getActivo() && usuarioEncontrado.getFechaBloqueo() != null) {
+            LocalDateTime ahora = LocalDateTime.now();
+            /* asignar 24 horas ---->>> ahora.isAfter(usuarioEncontrado.getFechaBloqueo().plusHours(24)*/
+            if (ahora.isAfter(usuarioEncontrado.getFechaBloqueo().plusSeconds(60))) {
+                usuarioEncontrado.setActivo(true);
+                usuarioEncontrado.setFechaBloqueo(null);
+                usuarioServices.guardarUsuario(usuarioEncontrado);
+            }
+        }
+        return ResponseEntity.ok(usuarioEncontrado);
+
+    }
+    @PutMapping("/numeroDocumento/{numeroDocumento}")
+        public ResponseEntity<?> modificarUsuarioPorNumeroDocumento(
+                @PathVariable("numeroDocumento") String numeroDocumento,
+                @RequestBody Map<String, Object> datosUsuario) {
+            
+            try {
+                UsuarioModel usuarioGuardado = usuarioServices.actualizarUsuario(numeroDocumento, datosUsuario);
+                return ResponseEntity.ok(usuarioGuardado);
+            } catch (RuntimeException e) {
+                return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            }
         }
 
-        Optional<UsuarioModel> usuarioExistente = usuarioServices.obtenerPorEmail(email);
-        if (usuarioExistente.isEmpty()) {
-            return ResponseEntity.status(404).body("Usuario no encontrado.");
-        }
-
-        UsuarioModel usuario = usuarioExistente.get();
-        usuario.setNombre(usuarioActualizado.getNombre());
-        usuario.setApellido(usuarioActualizado.getApellido());
-        usuario.setDocumento(usuarioActualizado.getDocumento());
-        usuario.setNumeroDocumento(usuarioActualizado.getNumeroDocumento());
-        usuario.setFechaNacimiento(usuarioActualizado.getFechaNacimiento());
-        usuario.setDireccion(usuarioActualizado.getDireccion());
-        usuario.setEmail(usuarioActualizado.getEmail());
-        usuario.setCodigoPostal(usuarioActualizado.getCodigoPostal());
-        usuario.setBanco(usuarioActualizado.getBanco());
-        usuario.setNumeroCuenta(usuarioActualizado.getNumeroCuenta());
-
-        UsuarioModel usuarioGuardado = usuarioServices.guardarUsuario(usuario);
-        return ResponseEntity.ok(usuarioGuardado);
-    }
-
-    @DeleteMapping("/email/{email}")
-    public ResponseEntity<String> eliminarUsuarioPorEmail(@PathVariable("email") String email) {
-        boolean ok = usuarioServices.eliminarUsuarioPorEmail(email);
-        return ok ? ResponseEntity.ok("Se eliminó el usuario con email: " + email) : ResponseEntity.status(404).body("No se pudo eliminar el usuario con email: " + email);
+    @DeleteMapping("/numeroDocumento/{numeroDocumento}")
+    public ResponseEntity<String> eliminarUsuarioPorNumeroDocumento(@PathVariable("numeroDocumento") String numeroDocumento) {
+        boolean ok = usuarioServices.eliminarUsuarioPorNumeroDocumento(numeroDocumento);
+        return ok ? ResponseEntity.ok("Se eliminó el usuario con número de documento: " + numeroDocumento) : 
+                   ResponseEntity.status(404).body("No se pudo eliminar el usuario con número de documento: " + numeroDocumento);
     }
 }

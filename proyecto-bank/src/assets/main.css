@@ -43,72 +43,128 @@
     overflow: hidden;
     position: relative;
   }
-  .login {
-    position: absolute; /* Posiciona el div de manera absoluta */
-    top: 10px; /* Ajusta la posición vertical */
-    left: 30px; /* Ajusta la posición horizontal */
-    background: #fffa; /* Fondo semitransparente */
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 10; /* Asegura que el div esté sobre el carrusel */
-    width: 30%;
-    height: 90%;
+
+  /*----------------FORMULARIO DE INICIO DE SESIÓN----------------*/
+
+  .login-container {
     display: flex;
-    flex-direction: column;
-    gap: 2vh;
-    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    z-index: 99;
     justify-content: center;
-    box-shadow: 0 0 10px 10px #fffa;
+    align-items: center;
+
   }
-  .recordarme a{
-    margin: 1vh 4vh;
-    margin-left: 0;
-    text-decoration: none;
+
+  .form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    transition: all 1s ease;
   }
-  .checkbox-remenber{
-    width: 2vh;
-    height: 1.7vh;
-  }
-  .login-data-container{
-    width: 100%;
+
+  .form .form_front {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
+    position: absolute;
+    backface-visibility: hidden;
+    background-color: black;
+    opacity: .9;
+    padding: 65px 45px;
+    border-radius: 15px;
+    box-shadow: inset 2px 2px 10px rgba(0,0,0,1),
+    inset -1px -1px 5px rgba(255, 255, 255, 0.6);
   }
-  .login-data-container label{
-    font-size: 3vh;
-    font-weight: bold;
+
+  .form_details {
+    font-size: 25px;
+    font-weight: 600;
+    padding-bottom: 10px;
+    color: white;
   }
-  .login-data{
-    width: 80%;
-    background-color: transparent;
-    border: none;
-    border-bottom: 2px solid #000;
-  }
-  .login-data::placeholder{
-    color: #000;
-  }
-  .cb-login{
-    margin: 1vh;
-    width: 22vh;
-    padding: 0;
-    border-radius: 20vh;
-    border: 1px solid #ccc;
-    font-size: 20px;
-  }
-  .datos-login{
-    width: 90%;
-  }
-  .login-button{
-    width: 50%;
-    border-radius: 30px;
-  }
-  .login-button:hover{
-    background-color:#aaa3;
+
+  .input {
+    width: 245px;
+    min-height: 45px;
     color: #fff;
+    outline: none;
+    transition: 0.35s;
+    padding: 0px 7px;
+    background-color: #212121;
+    border-radius: 6px;
+    border: 2px solid #212121;
+    box-shadow: 6px 6px 10px rgba(0,0,0,1),
+    1px 1px 10px rgba(255, 255, 255, 0.6);
   }
-  
+
+  .input::placeholder {
+    color: #999;
+  }
+
+  .input:focus.input::placeholder {
+    transition: 0.3s;
+    opacity: 0;
+  }
+
+  .input:focus {
+    transform: scale(1.05);
+    box-shadow: 6px 6px 10px rgba(0,0,0,1),
+    1px 1px 10px rgba(255, 255, 255, 0.6),
+    inset 2px 2px 10px rgba(0,0,0,1),
+    inset -1px -1px 5px rgba(255, 255, 255, 0.6);
+  }
+
+  .btn {
+    padding: 10px 35px;
+    cursor: pointer;
+    background-color: #212121;
+    border-radius: 6px;
+    border: 2px solid #212121;
+    box-shadow: 6px 6px 10px rgba(0,0,0,1),
+    1px 1px 10px rgba(255, 255, 255, 0.6);
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.35s;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 6px 6px 10px rgba(0,0,0,1),
+    1px 1px 10px rgba(255, 255, 255, 0.6),
+    inset 2px 2px 10px rgba(0,0,0,1),
+    inset -1px -1px 5px rgba(255, 255, 255, 0.6);
+  }
+
+  .btn:focus {
+    transform: scale(1.05);
+    box-shadow: 6px 6px 10px rgba(0,0,0,1),
+    1px 1px 10px rgba(255, 255, 255, 0.6),
+    inset 2px 2px 10px rgba(0,0,0,1),
+    inset -1px -1px 5px rgba(255, 255, 255, 0.6);
+  }
+
+  .form .switch {
+    font-size: 13px;
+    color: white;
+  }
+
+  .form .switch .signup_tog {
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .login-container #signup_toggle {
+    display: none;
+  }
+
+  /*----------------------------------------------*/
   .carrusel {
     display: flex;
     transition: transform 0.5s ease-in-out;
@@ -453,7 +509,7 @@
   }
   .nav-bar {
     display: flex; /* Cambia de grid a flexbox */
-    flex-wrap: row; /* Permite que los elementos se ajusten si no caben */
+    flex-wrap: wrap; /* Permite que los elementos se ajusten si no caben */
     justify-content: space-evenly; /* Distribuye los elementos con espacio entre ellos */
     padding: 0; /* Agrega un poco de espacio interno a los lados */
   }

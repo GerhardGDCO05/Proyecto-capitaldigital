@@ -1,13 +1,23 @@
 package com.example.capitalDigital.usuario.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "usuarios")
-public class UsuarioModel {
+public class UsuarioModel { 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +35,12 @@ public class UsuarioModel {
     @NotBlank(message = "El documento no puede estar vacío")
     private String documento;
 
+    @Column(name = "numero_documento", unique = true, nullable = false)
     @NotBlank(message = "El número de documento no puede estar vacío")
     @Pattern(regexp = "^[0-9]+$", message = "El número de documento debe contener solo números")
-    @Size(min = 5, max = 20, message = "El número de documento debe tener entre 5 y 20 caracteres")
+    @Size(min = 7, max = 8, message = "El número de documento debe tener entre 7 y 8 caracteres")
     private String numeroDocumento;
-
+    
     @NotNull(message = "La Fecha de Nacimiento no puede estar vacía")
     private LocalDate fechaNacimiento;
 
@@ -57,9 +68,12 @@ public class UsuarioModel {
 
     @NotBlank(message = "El número de cuenta no puede estar vacío")
     @Pattern(regexp = "^[0-9]+$", message = "El número de cuenta debe contener solo números")
-    @Size(min = 18, message = "El número de cuenta debe tener al menos 18 dígitos")
-    @Size(max = 20, message = "El número de cuenta debe tener máximo 20 dígitos")
+    @Size(min = 20, max = 20, message = "El número de cuenta debe tener 20 dígitos")
     private String numeroCuenta;
+
+    private boolean activo = true;
+    
+    private LocalDateTime fechaBloqueo;
 
     // Constructor vacío
     public UsuarioModel() {
@@ -71,7 +85,7 @@ public class UsuarioModel {
                         LocalDate fechaNacimiento,
                         String direccion, String codigoPostal,
                         String email, String password,
-                        String banco, String numeroCuenta) {
+                        String banco, String numeroCuenta, boolean activo) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -84,57 +98,52 @@ public class UsuarioModel {
         this.password = password;
         this.banco = banco;
         this.numeroCuenta = numeroCuenta;
+        this.activo = activo;
     }
 
-    public Long getId() {return id;}
+    // Getters y Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {this.id = id;}
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getNombre() {return nombre;}
+    public String getApellido() { return apellido; }
+    public void setApellido(String apellido) { this.apellido = apellido; }
 
-    public void setNombre(String nombre) {this.nombre = nombre;}
+    public String getDocumento() { return documento; }
+    public void setDocumento(String documento) { this.documento = documento; }
 
-    public String getApellido() {return apellido;}
+    public String getNumeroDocumento() { return numeroDocumento; }
+    public void setNumeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; }
 
-    public void setApellido(String apellido) {this.apellido = apellido;}
+    public LocalDate getFechaNacimiento() { return fechaNacimiento; }
+    public void setFechaNacimiento(LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
 
-    public String getDocumento() {return documento;}
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
-    public void setDocumento(String documento) {this.documento = documento;}
+    public String getCodigoPostal() { return codigoPostal; }
+    public void setCodigoPostal(String codigoPostal) { this.codigoPostal = codigoPostal; }
 
-    public String getNumeroDocumento() {return numeroDocumento;}
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setNumeroDocumento(String numeroDocumento) {this.numeroDocumento = numeroDocumento;}
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public LocalDate getFechaNacimiento() {return fechaNacimiento;}
+    public String getBanco() { return banco; }
+    public void setBanco(String banco) { this.banco = banco; }
 
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {this.fechaNacimiento = fechaNacimiento;}
+    public String getNumeroCuenta() { return numeroCuenta; }
+    public void setNumeroCuenta(String numeroCuenta) { this.numeroCuenta = numeroCuenta; }
+    
+    public boolean getActivo() { return activo; }
+    public void setActivo(boolean activo) { this.activo = activo; }
 
-    public String getDireccion() {return direccion;}
+    public LocalDateTime getFechaBloqueo() { return fechaBloqueo; }
+    public void setFechaBloqueo(LocalDateTime fechaBloqueo) { this.fechaBloqueo = fechaBloqueo; }
 
-    public void setDireccion(String direccion) {this.direccion = direccion;}
-
-    public String getCodigoPostal() {return codigoPostal;}
-
-    public void setCodigoPostal(String codigoPostal) {this.codigoPostal = codigoPostal;}
-
-    public String getEmail() {return email;}
-
-    public void setEmail(String email) {this.email = email;}
-
-    public String getPassword() {return password;}
-
-    public void setPassword(String password) {this.password = password;}
-
-    public String getBanco() {return banco;}
-
-    public void setBanco(String banco) {this.banco = banco;}
-
-    public String getNumeroCuenta() {return numeroCuenta;}
-
-    public void setNumeroCuenta(String numeroCuenta) {this.numeroCuenta = numeroCuenta;}
-
-    // Método toString
     @Override
     public String toString() {
         return "UsuarioModel{" +
@@ -148,8 +157,10 @@ public class UsuarioModel {
                 ", codigoPostal='" + codigoPostal + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", banco=" + banco +'\'' +
-                ",numeroCuenta="+numeroCuenta+'\''+
+                ", banco=" + banco + '\'' +
+                ", numeroCuenta=" + numeroCuenta + '\'' +
+                ", activo=" + activo + '\'' +
+                ", fechaBloqueo=" + fechaBloqueo + '\'' +
                 '}';
     }
 }

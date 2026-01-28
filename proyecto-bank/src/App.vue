@@ -1,99 +1,213 @@
 <script>
-  import './assets/main.css';
+import './assets/main.css';
+import { ref } from 'vue';
+import usuarioService from './services/usuarioService';
+import { useRouter } from 'vue-router';
+import { useUsuarioStore } from '@/stores/useUsuarioStore.js';
+import Swal from 'sweetalert2';
 
-  export default {
-    name: 'App',
-    data() {
-      return {
-        recordarme: false,
-        options: ['Cedula', 'Pasaporte', 'Option 3', 'Option 4'],
+export default {
+  name: 'App',
+  setup() {
+    const router = useRouter();
+    const options = ref(['Cedula', 'Pasaporte', 'Option 3', 'Option 4']);
+    const selectedOption = ref(options.value[0]);
+    const numeroDocumento = ref('');
+    const clave = ref('');
+    const usuario = ref({});
+    const cuentas = ref([]);
+    let contador_intentos = 0;
+    let activo = true;
+
+    const abrirbank = async () => {
+      if (!numeroDocumento.value || !clave.value) {
+        await Swal.fire({
+          title: 'Campos incompletos',
+          text: 'Debe ingresar un número de documento y clave válida.',
+          icon: 'warning',
+          confirmButtonText: 'OK',
+          customClass: {
+            popup: 'swal2-custom-zindex',
+          },
+        });
+        return;
       }
-    },
-    methods: {
-      abrirbank() {
-        this.$router.push({ path: '/bank', query: { popup: 'true' } });
-      },
-      
-      abrirRegistro() {
-        this.$router.push({ path: '/registrar', query: { popup: 'true' } });
+
+      try {
+        const responseUsuario = await usuarioService.obtenerUsuarioPorNumeroDocumento(numeroDocumento.value);
+        const responseCuentas = await usuarioService.obtenerCuentaPorNumeroDocumento(numeroDocumento.value);
+
+        usuario.value = responseUsuario.data;
+        cuentas.value = responseCuentas.data;
+        if(usuario.value.activo===false){
+          alert("Usuario Bloqueado Temporalmente");
+          activo=false;
+          return;
+        }
+
+        if (usuario.value.activo === false) {
+          await Swal.fire({
+            title: 'Usuario Bloqueado',
+            text: 'Usuario Bloqueado Temporalmente',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+              popup: 'swal2-custom-zindex',
+            },
+          });
+          activo = false;
+          return;
+        }
+
+        if (usuario.value && usuario.value.numeroDocumento && activo === true) {
+          if (usuario.value.password === clave.value) {
+            contador_intentos = 0;
+
+            const usuarioStore = useUsuarioStore();
+            usuarioStore.setUsuario(usuario.value);
+            usuarioStore.setCuentas(cuentas.value);
+
+            router.push({
+              path: '/bank/vistageneral',
+              query: { popup: 'true' },
+            });
+          } else {
+            contador_intentos++;
+            await Swal.fire({
+              title: 'Error',
+              text: 'Clave Incorrecta.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+              customClass: {
+                popup: 'swal2-custom-zindex',
+              },
+            });
+
+            if (contador_intentos === 3) {
+              await Swal.fire({
+                title: 'Usuario Bloqueado',
+                text: 'Usuario Bloqueado por 24 Horas',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'swal2-custom-zindex',
+                },
+              });
+              usuario.value.activo = false;
+              await usuarioService.modificarUsuarioPorNumeroDocumento(usuario.value.numeroDocumento, usuario.value);
+            }
+            console.log('contador de intentos: ' + contador_intentos);
+          }
+        } else {
+          await Swal.fire({
+            title: 'Error',
+            text: 'No se encontró información del usuario.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+              popup: 'swal2-custom-zindex',
+            },
+          });
+        }
+      } catch (error) {
+        console.error('Error al obtener usuario:', error);
+        let errorMessage = 'Error en el servidor. Por favor, intenta de nuevo.';
+        if (error.response) {
+          if (typeof error.response.data === 'string') {
+            errorMessage = error.response.data;
+          } else if (error.response.data?.message) {
+            errorMessage = error.response.data.message;
+          } else {
+            errorMessage = 'Usuario no encontrado o error en la solicitud.';
+          }
+        }
+        await Swal.fire({
+          title: 'Error del servidor',
+          text: errorMessage,
+          icon: 'error',
+          confirmButtonText: 'OK',
+          customClass: {
+            popup: 'swal2-custom-zindex',
+          },
+        });
       }
-    },
-  };
+    };
 
-  document.addEventListener('DOMContentLoaded', function() {
-    let currentIndex = 0;
-    const items = document.querySelectorAll('.carrusel-item');
-    const totalItems = items.length;
+    document.addEventListener('DOMContentLoaded', function () {
+      let currentIndex = 0;
+      const items = document.querySelectorAll('.carrusel-item');
+      const totalItems = items.length;
 
-    function showNext() {
-      currentIndex = (currentIndex + 1) % totalItems;
-      updateCarrusel();
-    }
-
-    function updateCarrusel() {
-      const carruselElement = document.querySelector('.carrusel');
-      if (carruselElement) {
-        const offset = -currentIndex * 100;
-        carruselElement.style.transform = `translateX(${offset}%)`;
+      function showNext() {
+        currentIndex = (currentIndex + 1) % totalItems;
+        updateCarrusel();
       }
-    }
 
-    // Automatically change image every 10 seconds
-    setInterval(showNext, 10000);
-  });
+      function updateCarrusel() {
+        const carruselElement = document.querySelector('.carrusel');
+        if (carruselElement) {
+          const offset = -currentIndex * 100;
+          carruselElement.style.transform = `translateX(${offset}%)`;
+        }
+      }
 
+      // Automatically change image every 30 seconds
+      setInterval(showNext, 30000);
+    });
 
+    const abrirRegistro = () => {
+      router.push({ path: '/registrar', query: { popup: 'true' } });
+    };
 
+    return { router, options, selectedOption, numeroDocumento, clave, usuario, cuentas, abrirbank, abrirRegistro };
+  },
+};
 </script>
 
 <template>
   <div id="app">
     <template v-if="$route.query.popup==='true'">
-          <router-view />
+      <router-view :key="$route.fullPath" />
+        <!--<router-view />-->
     </template>
 
 
     <!-- Si no es popup, muestra la aplicación normal -->
     <template v-else>
-
+      <Layout />
       <main>
-        <div class="titulo">
-          <img class="bank-icon" src="../public/bankicon.ico" alt="logo banco">
-          <h1>MANJOUD BANK</h1>
-        </div>
+
         <header class="header">
           <nav class="nav-bar">
             <div class="cap-social">
-              <img class="bank-icon" src="../bankicon.ico" alt="logo banco">
-              <p class="nav-text cap-social-text">CAPITAL</p> 
+              <img class="bank-icon" src="./images/bankicon.ico" alt="logo banco">
+              <p class="nav-text cap-social-text">CAPITAL</p>
               <p class="nav-text cap-social-text">SOCIAL</p>
             </div>
             <a @click="abrirRegistro" class="links">Registrar</a>
             <a @click="" class="links">Conócenos</a>
             <a href="#" class="links preguntas-frecuentes">Preguntas Frecuentes</a>
           </nav>
-          <div class="carrusel-container">
-            <div class="login" id="login">
-              <h2>Inicio de Sesion</h2>
-              <div class="login-data-container">
-                <label for="identificacion">Documento</label>
-                <select class=" cb cb-login" id="combo-box" v-model="selectedOption">
-                  <option class="datos-login" v-for="option in options" :key="option" :value="option">
-                    {{ option }}
-                  </option>
-                </select>
-              </div>
-              <input type='text' class="login-data" placeholder="N- de documento">
-              <input type='password' class="login-data" placeholder="Password">
-              <Button @click="abrirbank" class="login-button">INGRESAR</Button>
-              <div class="recordarme">
-                <a href="#">¿Olvidaste tu contraseña?</a>
-                <input class="checkbox-remenber" type="checkbox" id="remenber" v-model="recordarme" />
-                <label class="label-remenber" for="remenber">Recordarme</label>
-              </div>
+          <div class="carrusel-container"> <!-- Contenedor del formulario de inicio de sesion -->
+            <div class="login-container">
+                <input type="checkbox" id="signup_toggle">
+                <form class="form">
+                  <div class="form_front">
+                    <div class="form_details">Iniciar Sesión</div>
+                    <input placeholder="Número de documento" class="input" type="text" v-model="numeroDocumento">
+                    <input placeholder="Contraseña" class="input" type="text" v-model="clave">
+                    <button @click="abrirbank" type="button" class="btn">Ingresar</button>
+                    <span class="switch">¿No tienes cuenta?
+                    <label class="signup_tog" for="signup_toggle">
+                        Regístrate
+                    </label>
+                    </span>
+                  </div>
+
+                </form>
             </div>
             <div class="carrusel">
-              <div class="carrusel-item"><img src="https://media.istockphoto.com/id/542727462/es/foto/horizonte-de-houston-texas.jpg?s=612x612&w=0&k=20&c=ZtuiuLR6C48V8jUy_Ws4qyoWrhT6F1wlS_hfxQ5DTjE=" alt="paisaje"></div>
+              <div class="carrusel-item"><img src="@/images/ValleArribaWpp.jpg" alt="paisaje"></div>
 
                 <div class="carrusel-item"><img src="https://media.istockphoto.com/id/517188688/es/foto/paisaje-de-monta%C3%B1a.jpg?s=612x612&w=0&k=20&c=EnSd5sJdxih_svZHscQ5Hfzr3RSOdXO9MpdmKK4CMTs=" alt="Image 2"></div>
 
@@ -102,7 +216,7 @@
           </div>
         </header>
 
-        
+
         <div class="container">
             <h2 class="subtitle">TU PATRIMONIO EN UN SITIO</h2>
             <nav class="nav-container">
@@ -171,11 +285,11 @@
         </div>
         <footer class="barra-final">
           <div class="cap-digital">
-            
+
             <div class="cap-digital-title">
-              <img class="bank-icon icon-cap-digital" src="../public/bankicon.ico" alt="logo banco">
+              <img class="bank-icon icon-cap-digital" src="./images/bankicon.ico" alt="logo banco">
               <h2>CAPITAL DIGITAL</h2>
-            </div>        
+            </div>
             <div class="info-terminos-condiciones">
               <div>
                 <p>Legal Terminos y Condiciones</p>
@@ -202,7 +316,7 @@
             </div>
           </div>
           <div class="derechos-reservados">
-            <p>© 2025-Actua Capital Digital, S.A. Todos los derechos reservados</p>
+            <p>© 2025-Actual Capital Digital, S.A. Todos los derechos reservados</p>
           </div>
 
         </footer>
