@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<usuarios>
-                    
+<transacciones>
+                            
   
   
   
@@ -9,8 +9,516 @@
   
   
   
-  <usuario numeroDocumento="30313726">
-                                        
+  
+  
+  
+  
+  <usuario numeroDocumento="31999999">
+                                                        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <transaccion>
+                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <beneficiario>María Rodríguez</beneficiario>
+                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <monto>100</monto>
+                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <bancoOrigen>BDV</bancoOrigen>
+                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numCuentaOrigen>01021021023542547853</numCuentaOrigen>
+                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <bancoDestino>BBVA</bancoDestino>
+                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numCuentaDestino>01111881005511088440</numCuentaDestino>
+                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <concepto>Pago de Ejemplo</concepto>
+                                                                                    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <fecha>2025-07-05 14:05:08</fecha>
+                                                                                  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </transaccion>
+                                                      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <transaccion>
+                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <beneficiario>María Rodríguez</beneficiario>
+                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <monto>10000</monto>
+                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <bancoOrigen>BBVA</bancoOrigen>
+                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numCuentaOrigen>01111881005511088440</numCuentaOrigen>
+                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <bancoDestino>BBVA</bancoDestino>
+                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numCuentaDestino>01111881005511088440</numCuentaDestino>
+                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <concepto>EJJ</concepto>
+                                                                              
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <fecha>2025-07-05 14:06:06</fecha>
+                                                                            
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </transaccion>
+                                                  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <transaccion>
+                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <beneficiario>María Rodríguez</beneficiario>
+                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <monto>10000</monto>
+                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <bancoOrigen>BDV</bancoOrigen>
+                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numCuentaOrigen>01021021023542547853</numCuentaOrigen>
+                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <bancoDestino>BBVA</bancoDestino>
+                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numCuentaDestino>01111881005511088440</numCuentaDestino>
+                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <concepto>Prueba de H.U. Realizar Transacciones</concepto>
+                                                                        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <fecha>2025-07-05 14:13:15</fecha>
+                                                                      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </transaccion>
+                                              
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <transaccion>
+                                                                  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <beneficiario>María Rodríguez</beneficiario>
+                                                                  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <monto>5000</monto>
+                                                                  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <bancoOrigen>BDV</bancoOrigen>
+                                                                  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numCuentaOrigen>01021021023542547853</numCuentaOrigen>
+                                                                  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <bancoDestino>BBVA</bancoDestino>
+                                                                  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <numCuentaDestino>01111881005511088440</numCuentaDestino>
+                                                                  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <concepto>Jeje</concepto>
+                                                                  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <fecha>2025-07-05 14:14:11</fecha>
+                                                                
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </transaccion>
+                                          
+    
     
     
     
@@ -29,7 +537,7 @@
       
       
       
-      <Beneficiario>Simon</Beneficiario>
+      <beneficiario>María Rodríguez</beneficiario>
                                                             
       
       
@@ -39,7 +547,7 @@
       
       
       
-      <Fecha>2025-06-25 21:08:57</Fecha>
+      <monto>10000</monto>
                                                             
       
       
@@ -49,7 +557,7 @@
       
       
       
-      <BancoOrigen>MERCANTIL</BancoOrigen>
+      <bancoOrigen>BDV</bancoOrigen>
                                                             
       
       
@@ -59,7 +567,7 @@
       
       
       
-      <CuentaOrigen>01231263412365481236</CuentaOrigen>
+      <numCuentaOrigen>01021021023542547853</numCuentaOrigen>
                                                             
       
       
@@ -69,7 +577,7 @@
       
       
       
-      <BancoDestino>BDV</BancoDestino>
+      <bancoDestino>BBVA</bancoDestino>
                                                             
       
       
@@ -79,7 +587,7 @@
       
       
       
-      <CuentaDestino>01021112235584574588</CuentaDestino>
+      <numCuentaDestino>01111881005511088440</numCuentaDestino>
                                                             
       
       
@@ -89,7 +597,17 @@
       
       
       
-      <Monto>1000</Monto>
+      <concepto>Pagosss</concepto>
+                                                            
+      
+      
+      
+      
+      
+      
+      
+      
+      <fecha>2025-07-05 16:16:27</fecha>
                                                           
     
     
@@ -101,7 +619,240 @@
     
     </transaccion>
                                       
+  
     
+    
+    
+    
+    
+    
+    
+    <transaccion>
+                                                
+      
+      
+      
+      
+      
+      
+      <beneficiario>María Rodríguez</beneficiario>
+                                                
+      
+      
+      
+      
+      
+      
+      <monto>10000</monto>
+                                                
+      
+      
+      
+      
+      
+      
+      <bancoOrigen>BDV</bancoOrigen>
+                                                
+      
+      
+      
+      
+      
+      
+      <numCuentaOrigen>01021021087922545120</numCuentaOrigen>
+                                                
+      
+      
+      
+      
+      
+      
+      <bancoDestino>BBVA</bancoDestino>
+                                                
+      
+      
+      
+      
+      
+      
+      <numCuentaDestino>01111881005511088440</numCuentaDestino>
+                                                
+      
+      
+      
+      
+      
+      
+      <concepto>Otro pago más...</concepto>
+                                                
+      
+      
+      
+      
+      
+      
+      <fecha>2025-07-06 07:21:17</fecha>
+                                              
+    
+    
+    
+    
+    
+    
+    </transaccion>
+                              
+    
+    
+    
+    
+    
+    
+    <transaccion>
+                                          
+      
+      
+      
+      
+      
+      <beneficiario>María Rodríguez</beneficiario>
+                                          
+      
+      
+      
+      
+      
+      <monto>20000</monto>
+                                          
+      
+      
+      
+      
+      
+      <bancoOrigen>Mercantil</bancoOrigen>
+                                          
+      
+      
+      
+      
+      
+      <numCuentaOrigen>01231110023215412641</numCuentaOrigen>
+                                          
+      
+      
+      
+      
+      
+      <bancoDestino>BBVA</bancoDestino>
+                                          
+      
+      
+      
+      
+      
+      <numCuentaDestino>01111881005511088440</numCuentaDestino>
+                                          
+      
+      
+      
+      
+      
+      <concepto>Pago</concepto>
+                                          
+      
+      
+      
+      
+      
+      <fecha>2025-07-06 10:42:07</fecha>
+                                        
+    
+    
+    
+    
+    
+    </transaccion>
+                          
+    
+    
+    
+    
+    
+    <transaccion>
+                                    
+      
+      
+      
+      
+      <beneficiario>Ramsés Ramírez</beneficiario>
+                                    
+      
+      
+      
+      
+      <monto>10000</monto>
+                                    
+      
+      
+      
+      
+      <bancoOrigen>BDV</bancoOrigen>
+                                    
+      
+      
+      
+      
+      <numCuentaOrigen>01021021023542547853</numCuentaOrigen>
+                                    
+      
+      
+      
+      
+      <bancoDestino>Mercantil</bancoDestino>
+                                    
+      
+      
+      
+      
+      <numCuentaDestino>01230230123545521587</numCuentaDestino>
+                                    
+      
+      
+      
+      
+      <concepto>Pagos</concepto>
+                                    
+      
+      
+      
+      
+      <fecha>2025-07-06 12:06:20</fecha>
+                                  
+    
+    
+    
+    
+    </transaccion>
+                      
+  
+  
+  
+  
+  </usuario>
+                          
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <usuario numeroDocumento="30999997">
+                                    
     
     
     
@@ -118,7 +869,7 @@
       
       
       
-      <Beneficiario>Sebastian</Beneficiario>
+      <beneficiario>Pedro Rodríguez</beneficiario>
                                                       
       
       
@@ -127,7 +878,7 @@
       
       
       
-      <Fecha>2025-06-25 21:18:28</Fecha>
+      <monto>30000</monto>
                                                       
       
       
@@ -136,7 +887,7 @@
       
       
       
-      <BancoOrigen>MERCANTIL</BancoOrigen>
+      <bancoOrigen>Mercantil</bancoOrigen>
                                                       
       
       
@@ -145,7 +896,7 @@
       
       
       
-      <CuentaOrigen>01231263412365481236</CuentaOrigen>
+      <numCuentaOrigen>01230230123545521587</numCuentaOrigen>
                                                       
       
       
@@ -154,7 +905,7 @@
       
       
       
-      <BancoDestino>BDV</BancoDestino>
+      <bancoDestino>BDV</bancoDestino>
                                                       
       
       
@@ -163,7 +914,7 @@
       
       
       
-      <CuentaDestino>01021232215447458565</CuentaDestino>
+      <numCuentaDestino>01021021023542547853</numCuentaDestino>
                                                       
       
       
@@ -172,7 +923,16 @@
       
       
       
-      <Monto>100000</Monto>
+      <concepto>Pago. Gracias.</concepto>
+                                                      
+      
+      
+      
+      
+      
+      
+      
+      <fecha>2025-07-05 16:48:22</fecha>
                                                     
     
     
@@ -182,64 +942,75 @@
     
     
     </transaccion>
-                                
+                                  
   
-    
-    
+  
+  
+  
+  
+  
+  
+  </usuario>
+                
+
+
+
+  
+  
+  
+  
+  <usuario numeroDocumento="31997997">
+                    
     
     
     
     <transaccion>
-                                    
+                              
       
       
       
-      
-      <Beneficiario>Ana</Beneficiario>
-                                    
-      
+      <beneficiario>María Rodríguez</beneficiario>
+                              
       
       
       
-      <Fecha>2025-06-25 21:27:46</Fecha>
-                                    
+      <monto>20000</monto>
+                              
       
       
       
-      
-      <BancoOrigen>MERCANTIL</BancoOrigen>
-                                    
-      
+      <bancoOrigen>BDV</bancoOrigen>
+                              
       
       
       
-      <CuentaOrigen>01231263412365481236</CuentaOrigen>
-                                    
+      <numCuentaOrigen>01021021023542547853</numCuentaOrigen>
+                              
       
       
       
-      
-      <BancoDestino>BBVA</BancoDestino>
-                                    
-      
+      <bancoDestino>Mercantil</bancoDestino>
+                              
       
       
       
-      <CuentaDestino>01111232215447458565</CuentaDestino>
-                                    
+      <numCuentaDestino>01231110023215412617</numCuentaDestino>
+                              
       
       
       
+      <concepto>Pago Bodegón. Gracias...</concepto>
+                              
       
-      <Monto>20000</Monto>
-                                  
-    
+      
+      
+      <fecha>2025-07-06 16:47:39</fecha>
+                            
     
     
     
     </transaccion>
-                      
-    
+                  
     
     
     
@@ -247,84 +1018,107 @@
                         
       
       
-      <Beneficiario>Gerhard</Beneficiario>
+      <beneficiario>María Rodríguez</beneficiario>
                         
       
       
-      <Fecha>2025-06-25 21:47:59</Fecha>
+      <monto>30000</monto>
                         
       
       
-      <BancoOrigen>MERCANTIL</BancoOrigen>
+      <bancoOrigen>BBVA</bancoOrigen>
                         
       
       
-      <CuentaOrigen>01231263412365481236</CuentaOrigen>
+      <numCuentaOrigen>01111881005511088447</numCuentaOrigen>
                         
       
       
-      <BancoDestino>BBVA</BancoDestino>
+      <bancoDestino>Mercantil</bancoDestino>
                         
       
       
-      <CuentaDestino>01112003321547895654</CuentaDestino>
+      <numCuentaDestino>01231110023215412617</numCuentaDestino>
                         
       
       
-      <Monto>50000</Monto>
+      <concepto>Gracias... María. MT...</concepto>
+                        
+      
+      
+      <fecha>2025-07-06 16:53:16</fecha>
                       
     
     
     </transaccion>
               
-  
-  
-  </usuario>
-        
-
-  
-  
-  <usuario numeroDocumento="31332541">
-            
+    
     
     <transaccion>
                   
       
-      <Beneficiario>Gerhard</Beneficiario>
+      <beneficiario>Desconocido</beneficiario>
                   
       
-      <Fecha>2025-06-25 21:48:34</Fecha>
+      <monto>10000</monto>
                   
       
-      <BancoOrigen>MERCANTIL</BancoOrigen>
+      <bancoOrigen>BDV</bancoOrigen>
                   
       
-      <CuentaOrigen>01231263412365481236</CuentaOrigen>
+      <numCuentaOrigen>01021021023542547853</numCuentaOrigen>
                   
       
-      <BancoDestino>BBVA</BancoDestino>
+      <bancoDestino>BBVA</bancoDestino>
                   
       
-      <CuentaDestino>01112003321547895654</CuentaDestino>
+      <numCuentaDestino>01111881005511088447</numCuentaDestino>
                   
       
-      <Monto>50000</Monto>
+      <concepto>Transferencia de fondo</concepto>
+                  
+      
+      <fecha>2025-07-06 17:01:57</fecha>
                 
     
     </transaccion>
           
-  
-  
+    
     <transaccion>
-      <Beneficiario>Gerhard</Beneficiario>
-      <Fecha>2025-07-05 15:27:58</Fecha>
-      <BancoOrigen>MERCANTIL</BancoOrigen>
-      <CuentaOrigen>01231263412365481236</CuentaOrigen>
-      <BancoDestino>BBVA</BancoDestino>
-      <CuentaDestino>01112003321547895654</CuentaDestino>
-      <Monto>500000</Monto>
+            
+      <beneficiario>Desconocido</beneficiario>
+            
+      <monto>50000</monto>
+            
+      <bancoOrigen>BDV</bancoOrigen>
+            
+      <numCuentaOrigen>01021021023542547853</numCuentaOrigen>
+            
+      <bancoDestino>BDV</bancoDestino>
+            
+      <numCuentaDestino>01021021087922545120</numCuentaDestino>
+            
+      <concepto>Pago. Gracias.</concepto>
+            
+      <fecha>2025-07-06 17:03:56</fecha>
+          
+    </transaccion>
+      
+  </usuario>
+        
+
+
+
+  <usuario numeroDocumento="31045045">
+    <transaccion>
+      <beneficiario>Siminhooo</beneficiario>
+      <monto>10000</monto>
+      <bancoOrigen>BDV</bancoOrigen>
+      <numCuentaOrigen>01021021023542547853</numCuentaOrigen>
+      <bancoDestino>BDV</bancoDestino>
+      <numCuentaDestino>01021230111233698745</numCuentaDestino>
+      <concepto>Pago ejemplo</concepto>
+      <fecha>2025-07-07 16:06:22</fecha>
     </transaccion>
   </usuario>
-    
-
-</usuarios>
+</transacciones>

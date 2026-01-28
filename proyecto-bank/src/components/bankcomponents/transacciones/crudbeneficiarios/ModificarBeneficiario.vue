@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { useUsuarioStore } from '@/stores/useUsuarioStore'
+import Swal from 'sweetalert2'
 
 interface BeneficiaryModel {
   beneficiaryName: string;
@@ -29,7 +30,13 @@ onMounted(async () => {
   const accountNumber = route.params.accountNumber as string
 
   if (!accountNumber) {
-    alert("⚠️ Número de cuenta inválido")
+    await Swal.fire({
+      title: 'Error',
+      text: '⚠️ Número de cuenta inválido',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#3d405b'
+    })
     router.push('/beneficiarios')
     return
   }
@@ -44,7 +51,13 @@ onMounted(async () => {
     )
 
     if (!beneficiario) {
-      alert("❌ No se encontró el beneficiario")
+      await Swal.fire({
+        title: 'Error',
+        text: '❌ No se encontró el beneficiario',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3d405b'
+      })
       router.push('/beneficiarios')
       return
     }
@@ -55,14 +68,26 @@ onMounted(async () => {
 
   } catch (error) {
     console.error("❌ Error al cargar beneficiario:", error)
-    alert("⚠️ No se pudieron cargar los datos del beneficiario")
+    await Swal.fire({
+      title: 'Error',
+      text: '⚠️ No se pudieron cargar los datos del beneficiario',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#3d405b'
+    })
     router.push('/beneficiarios')
   }
 })
 
 async function guardarCambios() {
   if (!nombre.value || !bancoSeleccionado.value || !numeroCuenta.value) {
-    alert("⚠️ Completa todos los campos")
+    await Swal.fire({
+      title: 'Campos incompletos',
+      text: '⚠️ Completa todos los campos',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#3d405b'
+    })
     return
   }
 
@@ -80,16 +105,28 @@ async function guardarCambios() {
     )
 
     if (response.status === 200) {
-      alert("✅ Beneficiario modificado exitosamente")
+      await Swal.fire({
+        title: '¡Éxito!',
+        text: '✅ Beneficiario modificado exitosamente',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3d405b'
+      })
       router.back()
     }
   } catch (error) {
     console.error("❌ Error al guardar cambios:", error)
-    alert(`⚠️ ${
-        typeof error.response?.data === 'object'
-            ? JSON.stringify(error.response.data, null, 2)
-            : error.response?.data || error.message
-    }`)
+    await Swal.fire({
+      title: 'Error',
+      text: `⚠️ ${
+          typeof error.response?.data === 'object'
+              ? JSON.stringify(error.response.data, null, 2)
+              : error.response?.data || error.message
+      }`,
+      icon: 'error',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#3d405b'
+    })
   }
 }
 </script>

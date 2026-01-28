@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useUsuarioStore } from '@/stores/useUsuarioStore'
+import Swal from 'sweetalert2'
 
 // Datos del beneficiario
 const usuarioStore = useUsuarioStore()
@@ -34,9 +35,14 @@ function seleccionarBanco(nombreBanco: string) {
 }
 
 // Agregar beneficiario al backend
-function agregarBeneficiario() {
+async function agregarBeneficiario() {
   if (!nombre.value || !cedula.value || !numeroCuenta.value || !bancoSeleccionado.value.nombre) {
-    alert("⚠️ Completa todos los campos")
+    await Swal.fire({
+      title: 'Campos incompletos',
+      text: '⚠️ Completa todos los campos',
+      icon: 'warning',
+      confirmButtonText: 'OK'
+    })
     return
   }
 
@@ -47,27 +53,35 @@ function agregarBeneficiario() {
     bank: bancoSeleccionado.value.nombre
   }
 
-  // Enviar datos al backend como promesa normal
-  axios.post(`http://localhost:8080/beneficiaries/${documento}`, nuevo)
-      .then(response => {
-        console.log("Respuesta del servidor:", response.data)
+  try {
+    const response = await axios.post(`http://localhost:8080/beneficiaries/${documento}`, nuevo)
+    console.log("Respuesta del servidor:", response.data)
 
-        alert("Beneficiario agregado exitosamente")
+    await Swal.fire({
+      title: '¡Éxito!',
+      text: '✅ Beneficiario agregado exitosamente',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    })
 
-        // Limpiar formulario
-        nombre.value = ''
-        cedula.value = ''
-        numeroCuenta.value = ''
-        bancoSeleccionado.value = { nombre: '', imagen: '' }
+    // Limpiar formulario
+    nombre.value = ''
+    cedula.value = ''
+    numeroCuenta.value = ''
+    bancoSeleccionado.value = { nombre: null, imagen: null }
 
-        // Lanzar evento global para recargar la lista
-        window.dispatchEvent(new CustomEvent("beneficiario-agregado"))
+    // Lanzar evento global para recargar la lista
+    window.dispatchEvent(new CustomEvent("beneficiario-agregado"))
 
-      })
-      .catch(error => {
-        console.error("❌ Error al guardar:", error)
-        alert(`⚠️ ${error.response?.data || error.message}`)
-      })
+  } catch (error) {
+    console.error("❌ Error al guardar:", error)
+    await Swal.fire({
+      title: 'Error',
+      text: `⚠️ ${error.response?.data || error.message}`,
+      icon: 'error',
+      confirmButtonText: 'OK'
+    })
+  }
 }
 </script>
 

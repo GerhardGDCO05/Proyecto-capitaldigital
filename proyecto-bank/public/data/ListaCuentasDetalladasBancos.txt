@@ -1,91 +1,60 @@
 ----------
-Cedula:30313726
-NCuenta:01230230123545521586
-Banco:Mercantil
-TipoCuenta:Ahorro
-Saldo:30.000,00
--*-*-*-*-*
-----------
-Cedula:30313726
-NCuenta:01230230123545521590
-Banco:Mercantil
-TipoCuenta:Ahorro
-Saldo:30.000,00
--*-*-*-*-*
-----------
-Cedula:30313726
-NCuenta:01230230123545521589
-Banco:Mercantil
-TipoCuenta:Corriente
-Saldo:100.000,00
--*-*-*-*-*
-----------
-Cedula:30313726 
+Cedula:31997997
 NCuenta:01021021023542547853
 Banco:Banco de Venezuela
 TipoCuenta:Corriente
-Saldo:200.000,00
+Saldo:105.000,00
+NTarjeta:9759 2484 5269 6576
+ValidoHasta:12/25
+NombreTarjeta:Simon Manjoud
 -*-*-*-*-*
 ----------
-Cedula:30313726
-NCuenta:01021021023542547852
-Banco:Banco de Venezuela
-TipoCuenta:Corriente
-Saldo:300.000,00
+Cedula:31997997
+NCuenta:01021021087922545120
+Banco:BDV
+TipoCuenta:Ahorro
+Saldo:70.000,00
+NTarjeta:9759 2484 5269 6576
+ValidoHasta:12/25
+NombreTarjeta:Simon Manjoud
 -*-*-*-*-*
 ----------
-Cedula:30313726
-NCuenta:01111881005511088452
+Cedula:31997997
+NCuenta:01231110023215412641
+Banco:Mercantil
+TipoCuenta:Ahorro
+Saldo:80.000,00
+NTarjeta:9759 2484 5269 6555
+ValidoHasta:12/29
+NombreTarjeta:Simon Manjoud
+-*-*-*-*-*
+----------
+Cedula:31997997
+NCuenta:01111881005511088447
 Banco:BBVA
 TipoCuenta:Ahorro
-Saldo:99.999,99
+Saldo:114.999,99
+NTarjeta:9759 2484 5269 6555
+ValidoHasta:12/29
+NombreTarjeta:Simon Manjoud
 -*-*-*-*-*
 ----------
-Cedula:30313726
-NCuenta:01021021023542547851
-Banco:BDV
-TipoCuenta:Ahorro
-Saldo:99.999,99
--*-*-*-*-*
-----------
-Cedula:31045045
-NCuenta:01021230111233698744
-Banco:BDV
-TipoCuenta:Corriente
-Saldo:99.999,99
--*-*-*-*-*
-----------
-Cedula:30301301
+Cedula:31997997
 NCuenta:01231110023215412655
 Banco:Mercantil
 TipoCuenta:Corriente
 Saldo:99.999,99
+NTarjeta:9759 2484 5269 6555
+ValidoHasta:12/29
+NombreTarjeta:Simon Manjoud
 -*-*-*-*-*
 ----------
-Cedula:30301301
-NCuenta:01021021087922545120
-Banco:BDV
-TipoCuenta:Corriente
-Saldo:99.999,99
--*-*-*-*-*
-----------
-Cedula:31090090
-NCuenta:01021230111233698600
-Banco:Banco de Venezuela
-TipoCuenta:Corriente
-Saldo:500.000,00
--*-*-*-*-*
-----------
-Cedula:31090090
-NCuenta:01231110023215412659
+Cedula:31997997
+NCuenta:01231110023215412670
 Banco:Mercantil
-TipoCuenta:Ahorro
-Saldo:100.000,00
--*-*-*-*-*
-----------
-Cedula:31090090
-NCuenta:01111881005511088440
-Banco:BBVA
-TipoCuenta:Ahorro
+TipoCuenta:Corriente
 Saldo:99.999,99
+NTarjeta:9759 2484 5269 6555
+ValidoHasta:12/29
+NombreTarjeta:Simon Manjoud
 -*-*-*-*-*

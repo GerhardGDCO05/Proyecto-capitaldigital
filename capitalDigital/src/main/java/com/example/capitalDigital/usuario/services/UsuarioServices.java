@@ -13,6 +13,9 @@ import java.util.Optional;
 import com.example.capitalDigital.usuario.models.UsuarioModel;
 import com.example.capitalDigital.usuario.repositories.UsuarioRepository;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+
 @Service
 public class UsuarioServices {
     @Autowired

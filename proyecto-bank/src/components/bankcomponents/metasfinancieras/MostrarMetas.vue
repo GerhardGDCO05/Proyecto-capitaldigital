@@ -1,28 +1,28 @@
 <script>
-import axios from 'axios'
-import { ref } from 'vue'
-import { useUsuarioStore } from '@/stores/useUsuarioStore'
-import Modal from "@/view/Modal.vue"
-import ModificarMeta from "@/components/bankcomponents/metasfinancieras/ModificarMeta.vue";
+import axios from 'axios';
+import { ref } from 'vue';
+import { useUsuarioStore } from '@/stores/useUsuarioStore';
+import Modal from '@/view/Modal.vue';
+import ModificarMeta from '@/components/bankcomponents/metasfinancieras/ModificarMeta.vue';
 
 export default {
   name: 'MostrarMetas',
-  components: {ModificarMeta, Modal },
+  components: { ModificarMeta, Modal },
   setup() {
-    const usuarioStore = useUsuarioStore()
-    const documento = usuarioStore.usuario.numeroDocumento
-    const showModal = ref(false)
-    const metas = ref([])
-    const metaSeleccionada = ref(null)
+    const usuarioStore = useUsuarioStore();
+    const documento = usuarioStore.usuario.numeroDocumento;
+    const showModal = ref(false);
+    const metas = ref([]);
+    const metaSeleccionada = ref(null);
 
     const cargarMetas = async () => {
       if (!documento) {
-        alert("⚠️ No hay usuario logueado")
-        return
+        alert('⚠️ No hay usuario logueado');
+        return;
       }
 
       try {
-        const response = await axios.get(`http://localhost:8080/meta/numeroDocumento/${documento}`)
+        const response = await axios.get(`http://localhost:8080/meta/numeroDocumento/${documento}`);
         metas.value = response.data.map(meta => ({
           ...meta,
           numeroDocumento: documento,
@@ -30,29 +30,35 @@ export default {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
           }) + ' Bs'
-        }))
+        }));
       } catch (error) {
-        console.error("Error al cargar metas:", error)
-        alert("❌ Error al cargar tus metas financieras")
+        console.error('Error al cargar metas:', error);
+        //alert('❌ Error al cargar tus metas financieras');
       }
-    }
+    };
 
     const abrirModal = (meta) => {
-      metaSeleccionada.value = meta
-      showModal.value = true
-    }
+      metaSeleccionada.value = meta;
+      showModal.value = true;
+    };
 
-    cargarMetas()
+    const refreshMetas = async () => {
+      await cargarMetas(); // Refresh the goals list
+      showModal.value = false; // Close the modal
+    };
+
+    cargarMetas();
 
     return {
       metas,
       documento,
       showModal,
       metaSeleccionada,
-      abrirModal
-    }
+      abrirModal,
+      refreshMetas
+    };
   }
-}
+};
 </script>
 
 <template>
@@ -83,7 +89,12 @@ export default {
 
   <!-- Modal -->
   <Modal :is-open="showModal" @close="showModal = false">
-    <ModificarMeta :meta="metaSeleccionada" />
+    <ModificarMeta
+        :meta="metaSeleccionada"
+        @meta-updated="refreshMetas"
+        @meta-deleted="refreshMetas"
+        @close="showModal = false"
+    />
   </Modal>
 </template>
 

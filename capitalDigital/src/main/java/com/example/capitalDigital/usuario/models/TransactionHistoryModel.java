@@ -2,29 +2,33 @@ package com.example.capitalDigital.usuario.models;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class TransactionHistoryModel {
     private String beneficiario;
-    private LocalDateTime fechaHora; 
+    private LocalDateTime fechaHora;
     private String monto;
     private String bancoOrigen;
     private String numCuentaOrigen;
     private String bancoDestino;
     private String numCuentaDestino;
+    private String concepto; // Nuevo campo
 
     public TransactionHistoryModel() {
-        this.fechaHora = LocalDateTime.now(); // Inicializar con fecha actual
+        this.fechaHora = LocalDateTime.now();
     }
 
-    public TransactionHistoryModel(String beneficiario, String monto, String bancoOrigen, String numCuentaOrigen, String bancoDestino, String numCuentaDestino) {
+    public TransactionHistoryModel(String beneficiario, String monto, String bancoOrigen, String numCuentaOrigen,
+                                  String bancoDestino, String numCuentaDestino, String concepto) {
         this.beneficiario = beneficiario;
         this.monto = monto;
         this.bancoOrigen = bancoOrigen;
         this.numCuentaOrigen = numCuentaOrigen;
         this.bancoDestino = bancoDestino;
         this.numCuentaDestino = numCuentaDestino;
-        this.fechaHora = LocalDateTime.now(); // Solo se establece cuando se crea una nueva transacción
+        this.concepto = concepto; // Inicializar el nuevo campo
+        this.fechaHora = LocalDateTime.now();
     }
 
     // Getters y Setters
@@ -76,6 +80,14 @@ public class TransactionHistoryModel {
         this.numCuentaDestino = numCuentaDestino;
     }
 
+    public String getConcepto() {
+        return concepto;
+    }
+
+    public void setConcepto(String concepto) {
+        this.concepto = concepto;
+    }
+
     // Getter y Setter para fechaHora (oculto del JSON)
     @JsonIgnore
     public LocalDateTime getFechaHora() {
@@ -95,4 +107,4 @@ public class TransactionHistoryModel {
         }
         return "";
     }
-} 
+}

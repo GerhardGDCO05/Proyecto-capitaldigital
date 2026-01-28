@@ -1,5 +1,8 @@
 <script>
 import $ from 'jquery';
+import { useRouter } from 'vue-router';
+import { useUsuarioStore } from '@/stores/useUsuarioStore';
+import Swal from 'sweetalert2';
 
 export default {
   name: "Sidebar",
@@ -7,7 +10,35 @@ export default {
     usuario: Object,
     cuentas: Array
   },
+  setup() {
+    const router = useRouter();
+    const usuarioStore = useUsuarioStore();
 
+    const cerrarSesion = async () => {
+      try {
+        // Limpiar el estado del usuario en el store
+        usuarioStore.$reset(); // Resetea el store a su estado inicial (ajusta si no usas Pinia)
+        await Swal.fire({
+          title: '¡Sesión cerrada!',
+          text: 'Has cerrado sesión correctamente.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+        // Redirigir a la página de login (App.vue)
+        router.push('/');
+      } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+        await Swal.fire({
+          title: 'Error',
+          text: 'Hubo un error al cerrar la sesión. Por favor, intenta de nuevo.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    };
+
+    return { cerrarSesion };
+  },
   mounted() {
     // Agregar eventos jQuery
     $(".menu > ul > li").click(function (e) {
@@ -59,12 +90,6 @@ export default {
                 <span class="text">Vista General</span>
               </router-link>
             </li>
-            <li>
-              <router-link :to="{ name: 'Cuentas', query: { popup: 'true' } }">
-                  <i class="ri-pie-chart-2-fill"></i>
-                  <span class="text">Posición Global</span>
-              </router-link>
-            </li>
           </ul>
           <p class="title">Administrar</p>
           <ul>
@@ -93,10 +118,10 @@ export default {
               </ul>
             </li>
             <li>
-              <a href="#">
+              <router-link :to="{ name: 'Tarjetas', query: { popup: 'true' } }">
                 <i class="ri-bank-card-fill"></i>
                 <span class="text">Tarjetas</span>
-              </a>
+              </router-link>
             </li>
             <li>
               <a href="#">
@@ -114,11 +139,6 @@ export default {
                   <router-link :to="{ name: 'MostrarMetas', query: { popup: 'true' } }">
                     <span>Mostrar meta financiera</span>
                   </router-link>
-                </li>
-                <li>
-                  <a href="#">
-                    <span>Eliminar meta financiera</span>
-                  </a>
                 </li>
               </ul>
             </li>
@@ -138,22 +158,22 @@ export default {
                   </router-link>
                 </li>
                 <li>
-                  <a href="#">
-                    <span>Realizar transferencia</span>
-                  </a>
+                  <router-link :to="{ name: 'Transferencias', query: { popup: 'true' } }">
+                    <span class="text">Transferencias</span>
+                  </router-link>
                 </li>
                 <li>
-                  <a href="#">
-                    <span>Historial de transferencias</span>
-                  </a>
+                  <router-link :to="{ name: 'HistorialTransferencias', query: { popup: 'true' } }">
+                    <span class="text">Historial de Transferencias</span>
+                  </router-link>
                 </li>
               </ul>
             </li>
             <li>
-              <a href="#">
+              <router-link :to="{ name: 'PatrimonioNeto', query: { popup: 'true' } }">
                 <i class="ri-line-chart-fill"></i>
                 <span class="text">Patrimonio Neto</span>
-              </a>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -161,10 +181,10 @@ export default {
           <p class="title">Configuración</p>
           <ul>
             <li>
-              <a href="#">
+              <router-link :to="{ name: 'Configuracion', query: { popup: 'true' } }">
                 <i class="ri-settings-5-fill"></i>
                 <span class="text">Configuración</span>
-              </a>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -173,10 +193,10 @@ export default {
         <p class="title">Cuenta</p>
         <ul>
           <li>
-            <a href="#">
+            <router-link :to="{ name: 'Ayuda', query: { popup: 'true' } }">
               <i class="ri-question-fill"></i>
               <span class="text">Ayuda</span>
-            </a>
+            </router-link>
           </li>
           <li v-if="usuario && usuario.nombre">
             <router-link :to="{ name: 'Perfil', query: { popup: 'true' } }">
@@ -185,10 +205,10 @@ export default {
             </router-link>
           </li>
           <li>
-            <a href="#">
+            <button @click="cerrarSesion">
               <i class="ri-logout-box-fill"></i>
               <span class="text">Cerrar Sesión</span>
-            </a>
+            </button>
           </li>
         </ul>
       </div>
@@ -254,7 +274,8 @@ body {
   margin-bottom: 5px;
 }
 
-.menu ul li a {
+.menu ul li > a,
+.menu ul li > button {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -265,9 +286,16 @@ body {
   padding: 12px 8px;
   border-radius: 8px;
   transition: all 0.3s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
 }
 
-.menu ul li > a:hover, .menu ul li.active > a {
+.menu ul li > a:hover,
+.menu ul li > button:hover,
+.menu ul li.active > a,
+.menu ul li.active > button {
   color: #000;
   background-color: #f6f6f6;
 }
@@ -291,7 +319,7 @@ body {
   border: 2px solid #f6f6f6;
 }
 
-.menu-btn:hover i{
+.menu-btn:hover i {
   color: #000;
 }
 
@@ -316,7 +344,7 @@ body {
   font-size: 12px;
 }
 
-.menu:not(:last-child){
+.menu:not(:last-child) {
   padding-bottom: 10px;
   margin-bottom: 20px;
   border-bottom: 2px solid #f6f6f6;
@@ -338,18 +366,16 @@ body {
   text-align: center;
 }
 
-.sidebar.active .menu-btn i {
-  transform: rotate(180deg);
-}
-
-.sidebar.active .menu > ul > li > a {
+.sidebar.active .menu > ul > li > a,
+.sidebar.active .menu > ul > li > button {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.sidebar.active .menu > ul > li > a .text {
+.sidebar.active .menu > ul > li > a .text,
+.sidebar.active .menu > ul > li > button .text {
   position: absolute;
   left: 70px;
   top: 50%;
@@ -362,7 +388,8 @@ body {
   visibility: hidden;
 }
 
-.sidebar.active .menu > ul > li > a .text::after {
+.sidebar.active .menu > ul > li > a .text::after,
+.sidebar.active .menu > ul > li > button .text::after {
   content: "";
   position: absolute;
   left: -5px;
@@ -375,7 +402,8 @@ body {
   z-index: -1;
 }
 
-.sidebar.active .menu > ul > li > a:hover .text {
+.sidebar.active .menu > ul > li > a:hover .text,
+.sidebar.active .menu > ul > li > button:hover .text {
   left: 60px;
   opacity: 1;
   visibility: visible;
@@ -401,7 +429,6 @@ body {
   padding: 10px;
 }
 
-
 .sidebar .logo-ent img {
   transition: opacity 0.3s ease;
 }
@@ -417,6 +444,5 @@ body {
   width: 100%;
   height: 70px; /* Ajusta según tu imagen */
 }
-
 </style>
 

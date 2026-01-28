@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -24,11 +25,12 @@ import com.example.capitalDigital.usuario.services.CuentaService;
 
 @RestController
 @RequestMapping("/cuenta")
-@Validated 
+@Validated
 public class CuentaController {
 
     private final CuentaService cuentaService;
 
+    @Autowired
     public CuentaController(CuentaService cuentaService) {
         this.cuentaService = cuentaService;
     }
@@ -67,7 +69,8 @@ public class CuentaController {
 
             if (cuentas.isEmpty()) {
                 System.out.println("El usuario no posee cuentas extras registradas.");
-                return ResponseEntity.ok("No tiene cuentas secundarias registradas.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No tiene cuentas secundarias registradas.");
             } else {
                 return ResponseEntity.ok(cuentas);
             }
@@ -78,6 +81,29 @@ public class CuentaController {
                 .body("Error interno del servidor: " + e.getMessage());
         }
     }
+
+    @GetMapping("/tarjetas/numeroDocumento/{numeroDocumento}")
+    public ResponseEntity<?> obtenerTarjetasPorNumeroDocumento(@PathVariable String numeroDocumento) {
+        try {
+            System.out.println("Recibiendo petición GET para tarjetas del documento: " + numeroDocumento);
+
+            List<CuentaModel> tarjetas = cuentaService.obtenerTarjetasPorNumeroDocumento(numeroDocumento);
+
+            if (tarjetas.isEmpty()) {
+                System.out.println("El usuario no posee tarjetas asociadas a cuentas registradas.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontraron tarjetas asociadas a cuentas registradas.");
+            } else {
+                return ResponseEntity.ok(tarjetas);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error en el controlador GET tarjetas: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error interno del servidor: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/todas")
     public ResponseEntity<?> obtenerTodasLasCuentas() {
         try {
@@ -97,8 +123,6 @@ public class CuentaController {
                 .body("Error interno del servidor: " + e.getMessage());
         }
     }
-
-
 
     @DeleteMapping("/numeroDocumento/{numeroDocumento}/numeroCuenta/{numeroCuenta}")
     public ResponseEntity<?> eliminarCuentaEnXML(@PathVariable String numeroDocumento, @PathVariable String numeroCuenta) {
@@ -156,5 +180,4 @@ public class CuentaController {
                 .body("Error interno del servidor: " + e.getMessage());
         }
     }
-
 }

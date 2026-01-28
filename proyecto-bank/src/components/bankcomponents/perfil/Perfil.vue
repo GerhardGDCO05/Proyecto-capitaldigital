@@ -1,8 +1,10 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { useUsuarioStore } from '@/stores/useUsuarioStore'
 import usuarioService from "@/services/usuarioService";
+import router from "@/router/index.js";
+import Swal from 'sweetalert2';
 
 const usuarioStore = useUsuarioStore();
 const usuarioOriginal = JSON.parse(JSON.stringify(usuarioStore.usuario)); // Hacemos una copia profunda
@@ -39,13 +41,72 @@ const guardarCambios = async () => {
 
     console.log("Respuesta del servidor:", response.data);
 
-    // Opcional: Actualizar el estado global si usas Pinia/Vuex
-    usuarioStore.actualizarUsuario(usuario.value); // Si tienes una acción `actualizarUsuario`
+    // Actualizar el estado global si usas Pinia
+    usuarioStore.actualizarUsuario(usuario.value);
 
-    alert("¡Datos actualizados correctamente!");
+    // Mostrar mensaje de éxito con SweetAlert2
+    await Swal.fire({
+      title: '¡Éxito!',
+      text: 'Datos actualizados correctamente.',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
   } catch (error) {
     console.error("Error al guardar los cambios", error);
-    alert("Hubo un error al actualizar los datos.");
+    // Mostrar mensaje de error con SweetAlert2
+    await Swal.fire({
+      title: 'Error',
+      text: 'Hubo un error al actualizar los datos.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
+  }
+};
+
+const eliminarPerfil = async () => {
+  // Mostrar confirmación con SweetAlert2
+  const result = await Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  });
+
+  if (!result.isConfirmed) return; // Si el usuario cancela, no hacemos nada
+
+  try {
+    const numeroDocumento = usuario.value.numeroDocumento;
+    console.log("Eliminando perfil del usuario con número de documento:", numeroDocumento);
+
+    // Llamada al servicio DELETE para eliminar el usuario
+    const response = await usuarioService.eliminarUsuarioPorNumeroDocumento(numeroDocumento);
+
+    console.log("Respuesta del servidor:", response.data);
+
+    // Limpiar el estado global si usas Pinia
+    usuarioStore.$reset(); // Resetea el store (ajusta según tu implementación)
+
+    // Mostrar mensaje de éxito con SweetAlert2
+    await Swal.fire({
+      title: '¡Eliminado!',
+      text: 'Tu perfil ha sido eliminado.',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
+
+    // Redirigir a la página de login
+    router.push({ path: '/', query: { popup: 'true' } }); // Ajusta la ruta según tu aplicación
+  } catch (error) {
+    console.error("Error al eliminar el perfil", error);
+    // Mostrar mensaje de error con SweetAlert2
+    await Swal.fire({
+      title: 'Error',
+      text: 'Hubo un error al eliminar el perfil.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
   }
 };
 
@@ -169,9 +230,15 @@ const guardarCambios = async () => {
         </div>
       </div>
 
-      <button class="continuebtn" type="button" @click="guardarCambios">
-        <span>Guardar</span>
-      </button>
+      <div class="buttons">
+        <button class="continuebtn" type="button" @click="guardarCambios">
+          <span>Guardar</span>
+        </button>
+
+        <button class="deletebtn" type="button" @click="eliminarPerfil"><span class="text">Borrar <br>Perfil</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+      </div>
+
+
 
 
 
@@ -257,7 +324,6 @@ p {
 
 /*---BOTON DE EDITAR---*/
 
-/* From Uiverse.io by vinodjangid07 */
 .editBtn {
   width: 55px;
   height: 55px;
@@ -328,7 +394,7 @@ p {
 /*---BOTON GUARDAR CAMBIOS---*/
 .continuebtn {
   position: relative;
-  left: 88%;
+  /*left: 88%;*/
   display: inline-block;
   border-radius: 4px;
   background-color: #3d405b;
@@ -368,5 +434,75 @@ p {
   right: 0;
 }
 /*----------------------------*/
+
+/* From Uiverse.io by cssbuttons-io */
+.deletebtn {
+  width: 150px;
+  height: 60px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: red;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+  background: #e62222;
+}
+
+.deletebtn, .deletebtn span {
+  transition: 200ms;
+}
+
+.deletebtn .text {
+  transform: translateX(35px);
+  color: white;
+  font-weight: bold;
+}
+
+.deletebtn .icon {
+  position: absolute;
+  border-left: 1px solid #c41b1b;
+  transform: translateX(100px);
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deletebtn svg {
+  width: 15px;
+  fill: #eee;
+}
+
+.deletebtn:hover {
+  background: #ff3636;
+}
+
+.deletebtn:hover .text {
+  color: transparent;
+}
+
+.deletebtn:hover .icon {
+  width: 150px;
+  border-left: none;
+  transform: translateX(0);
+}
+
+.deletebtn:focus {
+  outline: none;
+}
+
+.deletebtn:active .icon svg {
+  transform: scale(0.8);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
 
 </style>

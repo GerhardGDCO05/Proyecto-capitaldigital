@@ -46,6 +46,22 @@ public class MetaService {
         }
     }
 
+    // Método que faltaba en el controller
+    public boolean guardarMeta(String numeroDocumento, Map<String, Object> metaData) {
+        try {
+            MetaFinanciera meta = new MetaFinanciera(
+                (String) metaData.get("nombre"),
+                (String) metaData.get("fechaInicio"),
+                (String) metaData.get("fechaFin"),
+                Double.parseDouble(metaData.get("montoRequerido").toString())
+            );
+            return guardarMetaEnXML(numeroDocumento, meta);
+        } catch (Exception e) {
+            System.err.println("Error al crear meta desde map: " + e.getMessage());
+            return false;
+        }
+    }
+
     public boolean guardarMetaEnXML(String numeroDocumento, MetaFinanciera meta) {
         try {
             File file = new File(XML_FILE);

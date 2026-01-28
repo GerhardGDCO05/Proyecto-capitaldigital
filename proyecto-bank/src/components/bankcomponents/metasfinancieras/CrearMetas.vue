@@ -1,90 +1,111 @@
 <script>
-import { Calendar } from 'v-calendar'
-import axios from 'axios'
-import { ref } from 'vue'
-import { useUsuarioStore } from '@/stores/useUsuarioStore'
+import { Calendar } from 'v-calendar';
+import axios from 'axios';
+import { ref } from 'vue';
+import { useUsuarioStore } from '@/stores/useUsuarioStore';
+import Swal from 'sweetalert2';
 
 export default {
   name: 'CrearMetas',
   components: {
-    Calendar
+    Calendar,
   },
   setup() {
-    const usuarioStore = useUsuarioStore()
-    const documento = usuarioStore.usuario.numeroDocumento
+    const usuarioStore = useUsuarioStore();
+    const documento = usuarioStore.usuario.numeroDocumento;
 
     // Datos del formulario
-    const nombreMeta = ref('')
-    const selectedRange = ref(null)
-    const displayValue = ref('0,00 Bs')
-    const internalValue = ref(0)
+    const nombreMeta = ref('');
+    const selectedRange = ref(null);
+    const displayValue = ref('0,00 Bs');
+    const internalValue = ref(0);
+
+    // Fecha mínima para el calendario (hoy)
+    const minDate = new Date();
 
     // Atributos del calendario
     const attributes = ref([
       {
         key: 'selectedRange',
         highlight: true,
-        dates: null
-      }
-    ])
+        dates: null,
+      },
+    ]);
 
     // Manejar selección de fecha
-    const handleDayClick = (day) => {
+    const handleDayClick = async (day) => {
+      // Validar que la fecha no sea anterior a hoy
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Normalizar a medianoche
+      const selectedDate = new Date(day.date);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        await Swal.fire({
+          title: 'Fecha inválida',
+          text: 'No puedes seleccionar fechas anteriores a hoy.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+        return;
+      }
+
       if (!selectedRange.value || selectedRange.value.end) {
         selectedRange.value = {
           start: day.date,
-          end: null
-        }
+          end: null,
+        };
       } else {
-        const start = selectedRange.value.start
-        const end = day.date
+        const start = selectedRange.value.start;
+        const end = day.date;
 
         selectedRange.value = {
           start: start < end ? start : end,
-          end: start < end ? end : start
-        }
+          end: start < end ? end : start,
+        };
 
         attributes.value = [
           {
             key: 'selectedRange',
             highlight: true,
-            dates: selectedRange.value
-          }
-        ]
+            dates: selectedRange.value,
+          },
+        ];
       }
-    }
+    };
 
+    // Formatear fecha
     const formatDate = (date) => {
-      return new Intl.DateTimeFormat('es-ES').format(date)
-    }
+      return new Intl.DateTimeFormat('es-ES').format(date);
+    };
 
     // Formatear entrada de monto como moneda
     const handleInput = (e) => {
-      let value = e.target.value.replace(/[^0-9]/g, '')
+      let value = e.target.value.replace(/[^0-9]/g, '');
       if (!value) {
-        internalValue.value = 0
-        displayValue.value = '0,00 Bs'
-        return
+        internalValue.value = 0;
+        displayValue.value = '0,00 Bs';
+        return;
       }
 
-      const digits = value.split('').reverse()
-      let integerPart = ''
-      let decimalPart = ''
+      const digits = value.split('').reverse();
+      let integerPart = '';
+      let decimalPart = '';
 
       for (let i = 0; i < digits.length; i++) {
         if (i < 2) {
-          decimalPart = digits[i] + decimalPart
+          decimalPart = digits[i] + decimalPart;
         } else {
-          integerPart = digits[i] + integerPart
+          integerPart = digits[i] + integerPart;
         }
       }
 
-      while (decimalPart.length < 2) decimalPart += '0'
-      const formattedInteger = parseInt(integerPart || '0', 10).toLocaleString('es-VE')
+      while (decimalPart.length < 2) decimalPart += '0';
+      const formattedInteger = parseInt(integerPart || '0', 10).toLocaleString('es-VE');
 
-      displayValue.value = `${formattedInteger},${decimalPart} Bs`
-      internalValue.value = parseFloat(`${integerPart}.${decimalPart}`)
-    }
+      displayValue.value = `${formattedInteger},${decimalPart} Bs`;
+      internalValue.value = parseFloat(`${integerPart}.${decimalPart}`);
+    };
 
     // Enviar al backend
     const submitMeta = async () => {
@@ -94,43 +115,63 @@ export default {
           !selectedRange.value?.end ||
           !internalValue.value
       ) {
-        alert("Por favor complete todos los campos.")
-        return
+        await Swal.fire({
+          title: 'Campos incompletos',
+          text: 'Por favor complete todos los campos.',
+          icon: 'warning',
+          confirmButtonText: 'OK',
+        });
+        return;
       }
 
       const nuevaMeta = {
         nombre: nombreMeta.value,
         fechaInicio: selectedRange.value.start.toISOString().split('T')[0],
         fechaFin: selectedRange.value.end.toISOString().split('T')[0],
-        montoRequerido: internalValue.value
-      }
+        montoRequerido: internalValue.value,
+      };
 
       try {
         const response = await axios.post(
             `http://localhost:8080/meta/numeroDocumento/${documento}`,
             nuevaMeta
-        )
+        );
 
         if (response.status === 200) {
-          alert("✅ Meta guardada exitosamente")
+          await Swal.fire({
+            title: '¡Éxito!',
+            text: '✅ Meta guardada exitosamente',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          });
           // Limpiar formulario
-          nombreMeta.value = ''
-          selectedRange.value = null
-          internalValue.value = 0
-          displayValue.value = '0,00 Bs'
-          attributes.value = []
+          nombreMeta.value = '';
+          selectedRange.value = null;
+          internalValue.value = 0;
+          displayValue.value = '0,00 Bs';
+          attributes.value = [];
         } else {
-          alert("❌ Error al guardar la meta.")
+          await Swal.fire({
+            title: 'Error',
+            text: '❌ No se pudo guardar la meta.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
         }
       } catch (error) {
-        console.error("Error al enviar meta:", error)
-        alert(`⚠️ ${
-            typeof error.response?.data === 'object'
-                ? JSON.stringify(error.response.data, null, 2)
-                : error.response?.data || error.message
-        }`)
+        console.error('Error al enviar meta:', error);
+        await Swal.fire({
+          title: 'Error',
+          text: `⚠️ ${
+              typeof error.response?.data === 'object'
+                  ? JSON.stringify(error.response.data, null, 2)
+                  : error.response?.data || error.message
+          }`,
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
       }
-    }
+    };
 
     return {
       nombreMeta,
@@ -138,13 +179,14 @@ export default {
       displayValue,
       internalValue,
       attributes,
+      minDate,
       handleDayClick,
       formatDate,
       handleInput,
-      submitMeta
-    }
-  }
-}
+      submitMeta,
+    };
+  },
+};
 </script>
 
 <template>
@@ -157,7 +199,6 @@ export default {
       <div class="card">
         <h2 class="title">Agregar meta financiera</h2>
         <form class="form-agregarcuenta" @submit.prevent="submitMeta">
-
           <!-- Campo Nombre -->
           <p class="message">Nombre de la meta financiera</p>
           <input v-model="nombreMeta" type="text" class="input" placeholder="Compra de carro eléctrico">
@@ -167,6 +208,7 @@ export default {
           <div class="calendar-wrapper">
             <calendar
                 :attributes="attributes"
+                :min-date="minDate"
                 is-range
                 @dayclick="handleDayClick"
             />
@@ -199,7 +241,6 @@ export default {
 </template>
 
 <style scoped>
-
 .header {
   display: flex;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -222,7 +263,7 @@ export default {
 .message {
   margin-bottom: 16px;
   font-size: 24px;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .card {
@@ -287,8 +328,6 @@ export default {
   box-sizing: border-box;
 }
 
-
-/*---Boton de agregar meta---*/
 .continuebtn {
   position: absolute;
   left: 85%;
@@ -297,7 +336,7 @@ export default {
   border-radius: 4px;
   background-color: #3d405b;
   border: none;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   font-size: 17px;
   padding: 16px;
@@ -331,7 +370,4 @@ export default {
   opacity: 1;
   right: 0;
 }
-/*-----------------------------*/
-
-
 </style>

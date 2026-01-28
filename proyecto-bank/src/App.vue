@@ -1,25 +1,35 @@
 <script>
 import './assets/main.css';
-import { ref } from "vue";
+import { ref } from 'vue';
 import usuarioService from './services/usuarioService';
 import { useRouter } from 'vue-router';
-import { useUsuarioStore } from '@/stores/useUsuarioStore.js'
+import { useUsuarioStore } from '@/stores/useUsuarioStore.js';
+import Swal from 'sweetalert2';
+
 export default {
   name: 'App',
   setup() {
     const router = useRouter();
     const options = ref(['Cedula', 'Pasaporte', 'Option 3', 'Option 4']);
     const selectedOption = ref(options.value[0]);
-    const numeroDocumento = ref("");
-    const clave = ref("");
+    const numeroDocumento = ref('');
+    const clave = ref('');
     const usuario = ref({});
     const cuentas = ref([]);
-    let contador_intentos=0;
-    let activo=true;
+    let contador_intentos = 0;
+    let activo = true;
 
     const abrirbank = async () => {
       if (!numeroDocumento.value || !clave.value) {
-        alert("Debe ingresar un número de documento y clave válida.");
+        await Swal.fire({
+          title: 'Campos incompletos',
+          text: 'Debe ingresar un número de documento y clave válida.',
+          icon: 'warning',
+          confirmButtonText: 'OK',
+          customClass: {
+            popup: 'swal2-custom-zindex',
+          },
+        });
         return;
       }
 
@@ -35,9 +45,23 @@ export default {
           return;
         }
 
-        if (usuario.value && usuario.value.numeroDocumento && activo===true) {
+        if (usuario.value.activo === false) {
+          await Swal.fire({
+            title: 'Usuario Bloqueado',
+            text: 'Usuario Bloqueado Temporalmente',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+              popup: 'swal2-custom-zindex',
+            },
+          });
+          activo = false;
+          return;
+        }
+
+        if (usuario.value && usuario.value.numeroDocumento && activo === true) {
           if (usuario.value.password === clave.value) {
-            contador_intentos=0;
+            contador_intentos = 0;
 
             const usuarioStore = useUsuarioStore();
             usuarioStore.setUsuario(usuario.value);
@@ -45,51 +69,91 @@ export default {
 
             router.push({
               path: '/bank/vistageneral',
-              query: { popup: 'true' }
+              query: { popup: 'true' },
+            });
+          } else {
+            contador_intentos++;
+            await Swal.fire({
+              title: 'Error',
+              text: 'Clave Incorrecta.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+              customClass: {
+                popup: 'swal2-custom-zindex',
+              },
             });
 
-          } else {
-            alert("Error: Clave Incorrecta.");
-            contador_intentos++;
-            if (contador_intentos===3){
-              alert("Usuario Bloqueado por 24 Horas")
-              usuario.value.activo=false;
-              usuarioService.modificarUsuarioPorNumeroDocumento(usuario.value.numeroDocumento,usuario.value)
-
+            if (contador_intentos === 3) {
+              await Swal.fire({
+                title: 'Usuario Bloqueado',
+                text: 'Usuario Bloqueado por 24 Horas',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'swal2-custom-zindex',
+                },
+              });
+              usuario.value.activo = false;
+              await usuarioService.modificarUsuarioPorNumeroDocumento(usuario.value.numeroDocumento, usuario.value);
             }
-            console.log("contador de intentos: "+contador_intentos);
+            console.log('contador de intentos: ' + contador_intentos);
           }
         } else {
-          alert("Error: No se encontró información del usuario.");
+          await Swal.fire({
+            title: 'Error',
+            text: 'No se encontró información del usuario.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+              popup: 'swal2-custom-zindex',
+            },
+          });
         }
       } catch (error) {
-        console.error("Error al obtener usuario:", error);
-        alert("Error del servidor: " + JSON.stringify(error.response?.data || error.message));
+        console.error('Error al obtener usuario:', error);
+        let errorMessage = 'Error en el servidor. Por favor, intenta de nuevo.';
+        if (error.response) {
+          if (typeof error.response.data === 'string') {
+            errorMessage = error.response.data;
+          } else if (error.response.data?.message) {
+            errorMessage = error.response.data.message;
+          } else {
+            errorMessage = 'Usuario no encontrado o error en la solicitud.';
+          }
+        }
+        await Swal.fire({
+          title: 'Error del servidor',
+          text: errorMessage,
+          icon: 'error',
+          confirmButtonText: 'OK',
+          customClass: {
+            popup: 'swal2-custom-zindex',
+          },
+        });
       }
     };
 
+    document.addEventListener('DOMContentLoaded', function () {
+      let currentIndex = 0;
+      const items = document.querySelectorAll('.carrusel-item');
+      const totalItems = items.length;
 
-  document.addEventListener('DOMContentLoaded', function() {
-    let currentIndex = 0;
-    const items = document.querySelectorAll('.carrusel-item');
-    const totalItems = items.length;
-
-    function showNext() {
-      currentIndex = (currentIndex + 1) % totalItems;
-      updateCarrusel();
-    }
-
-    function updateCarrusel() {
-      const carruselElement = document.querySelector('.carrusel');
-      if (carruselElement) {
-        const offset = -currentIndex * 100;
-        carruselElement.style.transform = `translateX(${offset}%)`;
+      function showNext() {
+        currentIndex = (currentIndex + 1) % totalItems;
+        updateCarrusel();
       }
-    }
 
-    // Automatically change image every 10 seconds
-    setInterval(showNext, 30000);
-  });
+      function updateCarrusel() {
+        const carruselElement = document.querySelector('.carrusel');
+        if (carruselElement) {
+          const offset = -currentIndex * 100;
+          carruselElement.style.transform = `translateX(${offset}%)`;
+        }
+      }
+
+      // Automatically change image every 30 seconds
+      setInterval(showNext, 30000);
+    });
 
     const abrirRegistro = () => {
       router.push({ path: '/registrar', query: { popup: 'true' } });
@@ -98,7 +162,6 @@ export default {
     return { router, options, selectedOption, numeroDocumento, clave, usuario, cuentas, abrirbank, abrirRegistro };
   },
 };
-
 </script>
 
 <template>
@@ -117,7 +180,7 @@ export default {
         <header class="header">
           <nav class="nav-bar">
             <div class="cap-social">
-              <img class="bank-icon" src="../bankicon.ico" alt="logo banco">
+              <img class="bank-icon" src="./images/bankicon.ico" alt="logo banco">
               <p class="nav-text cap-social-text">CAPITAL</p>
               <p class="nav-text cap-social-text">SOCIAL</p>
             </div>
@@ -153,7 +216,7 @@ export default {
           </div>
         </header>
 
-        
+
         <div class="container">
             <h2 class="subtitle">TU PATRIMONIO EN UN SITIO</h2>
             <nav class="nav-container">
@@ -222,11 +285,11 @@ export default {
         </div>
         <footer class="barra-final">
           <div class="cap-digital">
-            
+
             <div class="cap-digital-title">
-              <img class="bank-icon icon-cap-digital" src="../public/bankicon.ico" alt="logo banco">
+              <img class="bank-icon icon-cap-digital" src="./images/bankicon.ico" alt="logo banco">
               <h2>CAPITAL DIGITAL</h2>
-            </div>        
+            </div>
             <div class="info-terminos-condiciones">
               <div>
                 <p>Legal Terminos y Condiciones</p>

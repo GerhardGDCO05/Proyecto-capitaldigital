@@ -69,10 +69,6 @@ public class BeneficiaryService {
         BeneficiaryModel Nuevobeneficiary = new BeneficiaryModel(beneficiaryName, id, accountNumber, bank);
         return modifyBeneficiary.updateBeneficiary(Nuevobeneficiary, holder, oldAccountNumber,XML_FILE);
     }
-
-    // Los demás métodos (deleteBeneficiary, getBeneficiariesByDocumento, getBeneficiary) 
-    // permanecen exactamente iguales a como los tenías originalmente
-    // ...
     
     public boolean deleteBeneficiary(String holder, String accountNumber) {
         try {

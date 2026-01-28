@@ -2,7 +2,8 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
-import {useUsuarioStore} from "@/stores/useUsuarioStore.js";
+import { useUsuarioStore } from "@/stores/useUsuarioStore.js"
+import Swal from 'sweetalert2'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,7 +17,12 @@ const bancoSeleccionado = ref('')
 
 onMounted(async () => {
   if (!numeroCuenta.value) {
-    alert("⚠️ Número de cuenta inválido")
+    await Swal.fire({
+      title: 'Error',
+      text: '⚠️ Número de cuenta inválido',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    })
     router.push('/cuentas')
     return
   }
@@ -29,7 +35,12 @@ onMounted(async () => {
     const cuentaEncontrada = response.data.find(c => c.numeroCuenta === numeroCuenta.value)
 
     if (!cuentaEncontrada) {
-      alert("❌ Cuenta no encontrada")
+      await Swal.fire({
+        title: 'Error',
+        text: '❌ Cuenta no encontrada',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
       router.push('/cuentas')
       return
     }
@@ -40,13 +51,24 @@ onMounted(async () => {
 
   } catch (error) {
     console.error("❌ Error al cargar cuenta:", error)
-    alert("⚠️ No se pudieron cargar los datos de la cuenta")
+    await Swal.fire({
+      title: 'Error',
+      text: '⚠️ No se pudieron cargar los datos de la cuenta',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    })
     router.push('/cuentas')
   }
 })
+
 async function guardarCambios() {
   if (!nombreCuenta.value.trim()) {
-    alert("⚠️ El nombre no puede estar vacío")
+    await Swal.fire({
+      title: 'Campos incompletos',
+      text: '⚠️ El nombre no puede estar vacío',
+      icon: 'warning',
+      confirmButtonText: 'OK'
+    })
     return
   }
 
@@ -58,25 +80,34 @@ async function guardarCambios() {
     }
 
     const response = await axios.put(
-        `http://localhost:8080/cuenta/numeroDocumento/${documento}/nombreCuenta/${nombreActual.value}`, // ✅ Nombre original
+        `http://localhost:8080/cuenta/numeroDocumento/${documento}/nombreCuenta/${nombreActual.value}`,
         payload
     )
 
     if (response.status === 200) {
-      alert("✅ Nombre actualizado exitosamente")
+      await Swal.fire({
+        title: '¡Éxito!',
+        text: '✅ Nombre actualizado exitosamente',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
       router.back()
     }
 
   } catch (error) {
     console.error("❌ Error al guardar cambios:", error)
-    alert(`Hubo un error al actualizar el nombre de la cuenta: ${
-        typeof error.response?.data === 'object'
-            ? JSON.stringify(error.response.data, null, 2)
-            : error.response?.data || error.message
-    }`)
+    await Swal.fire({
+      title: 'Error',
+      text: `⚠️ Hubo un error al actualizar el nombre de la cuenta: ${
+          typeof error.response?.data === 'object'
+              ? JSON.stringify(error.response.data, null, 2)
+              : error.response?.data || error.message
+      }`,
+      icon: 'error',
+      confirmButtonText: 'OK'
+    })
   }
 }
-
 </script>
 
 <template>
@@ -121,53 +152,156 @@ async function guardarCambios() {
   border-bottom: 2px solid black;
 }
 
+/* Contenedor principal del formulario */
 .editar-cuenta {
+  position: absolute;
+  top: 15%;
+  left: 25%;
   display: flex;
   flex-direction: column;
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  max-width: 500px;
-  height: 500px;
+  gap: 1.5rem;
+  min-width: 1280px;
+  /*width: 90%;*/
   margin: 2rem auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  color: black;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, #ffffff, #f7f7f7);
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
 }
 
-.form label {
+/* Título del formulario */
+.editar-cuenta h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1a3c8f;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Estilo de las etiquetas */
+.editar-cuenta label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.5rem;
   display: block;
-  margin-top: 1rem;
-  font-weight: bold;
 }
 
-.form input[type="text"] {
+/* Estilo de los inputs */
+.editar-cuenta input {
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  display: block;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
 }
 
+/* Input activo */
+.editar-cuenta input:focus {
+  outline: none;
+  border-color: #3d405b;
+  box-shadow: 0 0 8px rgba(61, 64, 91, 0.3);
+}
+
+/* Input deshabilitado */
+.editar-cuenta input:disabled {
+  background-color: #f0f0f0;
+  border-color: #ddd;
+  color: #888;
+  cursor: not-allowed;
+}
+
+/* Contenedor de botones */
 .botones {
-  margin-top: 1.5rem;
   display: flex;
-  gap: 10px;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
+/* Estilo de los botones, inspirado en .editar-btn de MostrarCuentas.vue */
 .botones button {
-  background-color: #3d405b;
-  color: white;
+  position: relative;
+  padding: 0.75rem 1.5rem;
   border: none;
-  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #3d405b;
+  border-radius: 50px;
   cursor: pointer;
-  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Efecto de círculo en hover, similar a .editar-btn */
+.botones button span:last-child {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: #2196f3;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Texto del botón */
+.botones button span:first-child {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hover del botón */
 .botones button:hover {
   background-color: #2f3147;
+  box-shadow: 0 6px 12px rgba(33, 150, 243, 0.3);
+}
+
+/* Efecto de círculo en hover */
+.botones button:hover span:last-child {
+  width: 150px;
+  height: 150px;
+  opacity: 1;
+}
+
+/* Botón de Cancelar con estilo diferente */
+.botones button:last-child {
+  background-color: #ed9eb2;
+}
+
+/* Hover del botón Cancelar */
+.botones button:last-child:hover {
+  background-color: #d88a9d;
+  box-shadow: 0 6px 12px rgba(237, 158, 178, 0.3);
+}
+
+/* Animación al hacer clic */
+.botones button:active {
+  transform: scale(0.95);
+}
+
+/* Media queries para responsividad */
+@media (max-width: 600px) {
+  .editar-cuenta {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .editar-cuenta h2 {
+    font-size: 1.5rem;
+  }
+
+  .botones button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
 }
 </style>
